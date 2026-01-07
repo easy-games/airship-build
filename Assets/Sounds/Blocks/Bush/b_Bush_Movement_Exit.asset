@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1233149941 &-4248743918309528854
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Bush_Movement_01_{-4248743918309528854}
+  m_AudioClip: {fileID: 8300000, guid: f5c760ec35e1091408daae1b7dafd615, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &4662158012063130503
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Bush_Movement_02_{4662158012063130503}
+  m_AudioClip: {fileID: 8300000, guid: f0f56f51c8853cb4dbd681a9f6504a4d, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &6283870944642805761
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Bush_Movement_04_{6283870944642805761}
+  m_AudioClip: {fileID: 8300000, guid: d4407c155262dbe4abcce30d99b66f9d, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &6378393957168001828
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Bush_Movement_03_{6378393957168001828}
+  m_AudioClip: {fileID: 8300000, guid: 18f0ecde442213c48bc5e1c267874b7d, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1307931743 &6418180475301049370
+AudioRandomContainer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Bush_Movement_Exit
+  m_Volume: -13
+  m_Pitch: 0
+  m_AutomaticTriggerTime: 0
+  m_LoopCount: 1
+  m_VolumeRandomizationRange: {x: -4, y: 0}
+  m_PitchRandomizationRange: {x: 0, y: 150}
+  m_AutomaticTriggerTimeRandomizationRange: {x: 0, y: 0}
+  m_LoopCountRandomizationRange: {x: 0, y: 0}
+  m_Elements:
+  - {fileID: -4248743918309528854}
+  - {fileID: 4662158012063130503}
+  - {fileID: 6378393957168001828}
+  - {fileID: 6283870944642805761}
+  - {fileID: 6568529860795000738}
+  m_AvoidRepeatingLast: 3
+  m_PlaybackMode: 2
+  m_TriggerMode: 0
+  m_AutomaticTriggerMode: 1
+  m_LoopMode: 2
+  m_VolumeRandomizationEnabled: 1
+  m_PitchRandomizationEnabled: 1
+  m_AutomaticTriggerTimeRandomizationEnabled: 0
+  m_LoopCountRandomizationEnabled: 0
+--- !u!1233149941 &6568529860795000738
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Bush_Movement_05_{6568529860795000738}
+  m_AudioClip: {fileID: 8300000, guid: 81667871b3ac334439a17104d46ca92f, type: 3}
+  m_Volume: 0
+  m_Enabled: 1

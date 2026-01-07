@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1233149941 &-8652617705553737836
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Slime_Jump_01_{-8652617705553737836}
+  m_AudioClip: {fileID: 8300000, guid: b906aeb7adc19ea43990a7bc7100c1af, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &-5485487754940606811
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Slime_Jump_06_{-5485487754940606811}
+  m_AudioClip: {fileID: 8300000, guid: 523dbc24e9f7e6e49ab6bcd445719ab8, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &2317690135140392166
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Slime_Jump_03_{2317690135140392166}
+  m_AudioClip: {fileID: 8300000, guid: 212e22201bcd5e64e9c7bcb830063eb5, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &2358876528775622603
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Slime_Jump_02_{2358876528775622603}
+  m_AudioClip: {fileID: 8300000, guid: e38ff5aa332bf0a4a91e75f3d6fdb91a, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1307931743 &6418180475301049370
+AudioRandomContainer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SlimeLand
+  m_Volume: 0
+  m_Pitch: 0
+  m_AutomaticTriggerTime: 0
+  m_LoopCount: 1
+  m_VolumeRandomizationRange: {x: 0, y: 0}
+  m_PitchRandomizationRange: {x: 0, y: 0}
+  m_AutomaticTriggerTimeRandomizationRange: {x: 0, y: 0}
+  m_LoopCountRandomizationRange: {x: 0, y: 0}
+  m_Elements:
+  - {fileID: -8652617705553737836}
+  - {fileID: 2358876528775622603}
+  - {fileID: 2317690135140392166}
+  - {fileID: 9172029096461555121}
+  - {fileID: 8315123521664541960}
+  - {fileID: -5485487754940606811}
+  m_AvoidRepeatingLast: 0
+  m_PlaybackMode: 2
+  m_TriggerMode: 0
+  m_AutomaticTriggerMode: 1
+  m_LoopMode: 2
+  m_VolumeRandomizationEnabled: 0
+  m_PitchRandomizationEnabled: 0
+  m_AutomaticTriggerTimeRandomizationEnabled: 0
+  m_LoopCountRandomizationEnabled: 0
+--- !u!1233149941 &8315123521664541960
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Slime_Jump_05_{8315123521664541960}
+  m_AudioClip: {fileID: 8300000, guid: 85f3cd0373db7a048953f69a35fc789b, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &9172029096461555121
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Slime_Jump_04_{9172029096461555121}
+  m_AudioClip: {fileID: 8300000, guid: 87c891d168af4a944a86124fa4efa5bf, type: 3}
+  m_Volume: 0
+  m_Enabled: 1

@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1233149941 &-8524293237683400322
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Block_Ceramic_Hit_01_{-8524293237683400322}
+  m_AudioClip: {fileID: 8300000, guid: 746f0b8c2646ce941b26ff91ffa0468d, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &-789682533332489758
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Block_Ceramic_Hit_03_{-789682533332489758}
+  m_AudioClip: {fileID: 8300000, guid: 93ae1b9d63d0bd54a9db974c80ad22c0, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &5691873263868266758
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Block_Ceramic_Hit_02_{5691873263868266758}
+  m_AudioClip: {fileID: 8300000, guid: be55cc12172ac0f418e05b9533ba0d5c, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1307931743 &6418180475301049370
+AudioRandomContainer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Block_Ceramic_Hit
+  m_Volume: -5
+  m_Pitch: 0
+  m_AutomaticTriggerTime: 0
+  m_LoopCount: 1
+  m_VolumeRandomizationRange: {x: 0, y: 1}
+  m_PitchRandomizationRange: {x: -175, y: 175}
+  m_AutomaticTriggerTimeRandomizationRange: {x: 0, y: 0}
+  m_LoopCountRandomizationRange: {x: 0, y: 0}
+  m_Elements:
+  - {fileID: -8524293237683400322}
+  - {fileID: 5691873263868266758}
+  - {fileID: -789682533332489758}
+  m_AvoidRepeatingLast: 1
+  m_PlaybackMode: 2
+  m_TriggerMode: 0
+  m_AutomaticTriggerMode: 1
+  m_LoopMode: 2
+  m_VolumeRandomizationEnabled: 1
+  m_PitchRandomizationEnabled: 1
+  m_AutomaticTriggerTimeRandomizationEnabled: 0
+  m_LoopCountRandomizationEnabled: 0

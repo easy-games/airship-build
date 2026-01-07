@@ -1,0 +1,117 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 242626de727c4fe4ab54046da100263e, type: 3}
+  m_Name: Obsidian
+  m_EditorClassIdentifier: 
+  _scriptPath: Assets/Code/BlockSound/BlockSoundConfig.lua
+  _script: {fileID: -7024747316805708842, guid: 624b8804d9b394e748bae0985107d1f3, type: 3}
+  metadata:
+    name: BlockSoundConfig
+    singleton: 0
+    decorators:
+    - name: CreateAssetMenu
+      parameters:
+      - type: string
+        serializedValue: '"Block Sound Config"'
+    properties:
+    - name: blockMaterial
+      type: StringEnum
+      objectType: 
+      items:
+        type: 
+        objectType: 
+        serializedItems: []
+        objectRefs: []
+      refPath: Code/Item/BlockMaterialType@BlockMaterialType
+      fileRef: 
+      jsDocs:
+        text: []
+        tags: []
+      decorators: []
+      nullable: 0
+      serializedValue: Sand
+      serializedObject: {fileID: 0}
+      modified: 1
+    - name: hit
+      type: object
+      objectType: AudioResource
+      items:
+        type: 
+        objectType: 
+        serializedItems: []
+        objectRefs: []
+      refPath: 
+      fileRef: 
+      jsDocs:
+        text: []
+        tags: []
+      decorators: []
+      nullable: 0
+      serializedValue: 
+      serializedObject: {fileID: 6418180475301049370, guid: 25240ea6259a52f4eb6d1571e6a56eb6, type: 2}
+      modified: 1
+    - name: break
+      type: object
+      objectType: AudioResource
+      items:
+        type: 
+        objectType: 
+        serializedItems: []
+        objectRefs: []
+      refPath: 
+      fileRef: 
+      jsDocs:
+        text: []
+        tags: []
+      decorators: []
+      nullable: 0
+      serializedValue: 
+      serializedObject: {fileID: 6418180475301049370, guid: 1addccfa7bd753544abf09b7e4bdf126, type: 2}
+      modified: 1
+    - name: place
+      type: object
+      objectType: AudioResource
+      items:
+        type: 
+        objectType: 
+        serializedItems: []
+        objectRefs: []
+      refPath: 
+      fileRef: 
+      jsDocs:
+        text: []
+        tags: []
+      decorators: []
+      nullable: 0
+      serializedValue: 
+      serializedObject: {fileID: 6418180475301049370, guid: cd025d664e24b6b46a9e6dadbd62c370, type: 2}
+      modified: 1
+    - name: hitNegated
+      type: object
+      objectType: AudioResource
+      items:
+        type: 
+        objectType: 
+        serializedItems: []
+        objectRefs: []
+      refPath: 
+      fileRef: 
+      jsDocs:
+        text: []
+        tags: []
+      decorators: []
+      nullable: 0
+      serializedValue: 
+      serializedObject: {fileID: 0}
+      modified: 0
+    displayIcon: {fileID: 0}
+    displayName: 

@@ -1,0 +1,246 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba323a6048de1a5408ffef08e844ed0c, type: 3}
+  m_Name: LobbyWorld
+  m_EditorClassIdentifier: 
+  chunks: []
+  blockIdToScopeName:
+  - id: 0
+    name: air
+  - id: 1
+    name: '@Easy/Default:DefaultDirt'
+  - id: 2
+    name: '@Easy/Default:DefaultGrass'
+  - id: 3
+    name: '@Easy/VoxelWorld:Grass'
+  - id: 4
+    name: '@Easy/VoxelWorld:StairBlock'
+  - id: 5
+    name: '@Easy/VoxelWorld:StairCorner'
+  - id: 6
+    name: '@Easy/VoxelWorld:Dirt'
+  - id: 7
+    name: '@Easy/VoxelWorld:Stone'
+  - id: 8
+    name: '@Easy/VoxelWorld:Bark'
+  - id: 9
+    name: '@Easy/VoxelWorld:Canopy'
+  - id: 10
+    name: '@Easy/VoxelWorld:WhiteWool'
+  - id: 11
+    name: '@Easy/VoxelWorld:Ceramic'
+  - id: 12
+    name: '@Easy/VoxelWorld:StoneBrick'
+  - id: 13
+    name: '@Easy/VoxelWorld:Cracked Stone'
+  - id: 14
+    name: '@Easy/VoxelWorld:Redirect'
+  - id: 15
+    name: '@Easy/VoxelWorld:DiamondBlock'
+  - id: 16
+    name: '@Easy/VoxelWorld:BlueWool'
+  - id: 17
+    name: '@Easy/VoxelWorld:OrangeWool'
+  - id: 18
+    name: '@Easy/VoxelWorld:PinkWool'
+  - id: 19
+    name: '@Easy/VoxelWorld:YellowWool'
+  - id: 20
+    name: '@Easy/VoxelWorld:Marble'
+  - id: 21
+    name: '@Easy/VoxelWorld:Slate'
+  - id: 22
+    name: '@Easy/VoxelWorld:Grass 1'
+  - id: 23
+    name: '@Easy/VoxelWorld:Siding'
+  - id: 24
+    name: '@Easy/VoxelWorld:Stucco'
+  - id: 25
+    name: '@Easy/VoxelWorld:Stone - Foundation'
+  - id: 26
+    name: '@Easy/VoxelWorld:Wood - Post'
+  - id: 27
+    name: '@Easy/VoxelWorld:Wood - Post - Dark'
+  - id: 28
+    name: '@Easy/VoxelWorld:Plank - Dark'
+  - id: 29
+    name: '@Easy/VoxelWorld:Thatch'
+  - id: 30
+    name: '@Easy/VoxelWorld:Window'
+  - id: 31
+    name: '@Easy/VoxelWorld:Wood - Post - Horizontal'
+  - id: 32
+    name: '@Easy/VoxelWorld:Wood - Post - Stair'
+  - id: 33
+    name: '@Easy/VoxelWorld:Wood - Post -  Vertical'
+  - id: 34
+    name: '@Easy/VoxelWorld:Wood - Post -  Vertical - Cherry'
+  - id: 35
+    name: '@Easy/VoxelWorld:Cobblestone'
+  - id: 36
+    name: '@Easy/VoxelWorld:Plank'
+  - id: 37
+    name: '@Easy/VoxelWorld:Wood - Post - Horizontal - Cherry'
+  - id: 38
+    name: '@Easy/VoxelWorld:Brick - Irregular'
+  - id: 39
+    name: '@Easy/VoxelWorld:Stone Stacked'
+  - id: 40
+    name: '@Easy/VoxelWorld:Brick'
+  - id: 41
+    name: '@Easy/VoxelWorld:Brick - Multicolor'
+  - id: 42
+    name: '@Easy/VoxelWorld:Brick - Sand'
+  - id: 43
+    name: '@Easy/VoxelWorld:Moss'
+  - id: 44
+    name: '@Easy/VoxelWorld:Sandstone'
+  - id: 45
+    name: '@Easy/VoxelWorld:Rock'
+  - id: 46
+    name: '@Easy/VoxelWorld:GreenWool'
+  - id: 47
+    name: '@Easy/VoxelWorld:Sand'
+  - id: 48
+    name: '@Easy/VoxelWorld:Sand - Cracked Ground'
+  - id: 49
+    name: '@Easy/VoxelWorld:Red Rock'
+  - id: 50
+    name: '@Easy/VoxelWorld:Desert Brick'
+  - id: 51
+    name: '@Easy/VoxelWorld:Canvas'
+  - id: 52
+    name: '@Easy/VoxelWorld:Cactus'
+  - id: 53
+    name: '@Easy/VoxelWorld:Marble - Block'
+  - id: 54
+    name: '@Easy/VoxelWorld:Marble - Floor'
+  - id: 55
+    name: '@Easy/VoxelWorld:Marble - Column'
+  - id: 56
+    name: '@Easy/VoxelWorld:Marble - Corner'
+  - id: 57
+    name: '@Easy/VoxelWorld:Marble - Facade'
+  - id: 58
+    name: '@Easy/VoxelWorld:Stone - Decorative - Brick'
+  - id: 59
+    name: '@Easy/VoxelWorld:Stone - Decorative - Brick Edge'
+  - id: 60
+    name: '@Easy/VoxelWorld:Stone - Decorative - Brick Facade'
+  - id: 61
+    name: '@Easy/VoxelWorld:Stone Decorative - Corner'
+  - id: 62
+    name: '@Easy/VoxelWorld:Stone Decorative - Corner Trim'
+  - id: 63
+    name: '@Easy/VoxelWorld:Test Block 1'
+  - id: 64
+    name: '@Easy/VoxelWorld:Test Block 2'
+  - id: 65
+    name: '@Easy/VoxelWorld:Test Block 3'
+  - id: 66
+    name: '@Easy/VoxelWorld:Stucco Half'
+  - id: 67
+    name: '@Easy/VoxelWorld:Plank Half'
+  - id: 68
+    name: '@Easy/VoxelWorld:Siding Half'
+  - id: 69
+    name: '@Easy/VoxelWorld:Obsidian'
+  - id: 70
+    name: '@Easy/VoxelWorld:Permafrost'
+  - id: 71
+    name: '@Easy/VoxelWorld:Tundra Rock Ground'
+  - id: 72
+    name: '@Easy/VoxelWorld:Tundra Ice Flow'
+  - id: 73
+    name: '@Easy/VoxelWorld:Tundra Ice Ground'
+  - id: 74
+    name: '@Easy/VoxelWorld:Tundra Permafrost'
+  - id: 75
+    name: '@Easy/VoxelWorld:Tundra Rock Face'
+  - id: 76
+    name: '@Easy/VoxelWorld:Tundra Ice Outcrop'
+  - id: 77
+    name: '@Easy/VoxelWorld:Castle Stone Brick'
+  - id: 78
+    name: '@Easy/VoxelWorld:Castle Deco Block Large'
+  - id: 79
+    name: '@Easy/VoxelWorld:Castle Stone'
+  - id: 80
+    name: '@Easy/VoxelWorld:Winter Wood'
+  - id: 81
+    name: '@Easy/VoxelWorld:Castle Stone Wall'
+  - id: 82
+    name: '@Easy/VoxelWorld:Castle Shingles'
+  - id: 83
+    name: '@Easy/VoxelWorld:Castle Window'
+  - id: 84
+    name: '@Easy/VoxelWorld:Castle Floor'
+  - id: 85
+    name: '@Easy/VoxelWorld:Jungle Rock - Rock Face'
+  - id: 86
+    name: '@Easy/VoxelWorld:Jungle Floor - Grass'
+  - id: 87
+    name: '@Easy/VoxelWorld:Temple Stone - Large'
+  - id: 88
+    name: '@Easy/VoxelWorld:Temple Stone - Medium'
+  - id: 89
+    name: '@Easy/VoxelWorld:Temple Stone - Small'
+  - id: 90
+    name: '@Easy/VoxelWorld:Temple Stone - Red'
+  - id: 91
+    name: '@Easy/VoxelWorld:Temple Floor'
+  - id: 92
+    name: '@Easy/VoxelWorld:Jungle Dirt'
+  - id: 93
+    name: '@Easy/VoxelWorld:Emerald'
+  - id: 94
+    name: '@Easy/VoxelWorld:Temple Stone - Trim - Horizontal'
+  - id: 95
+    name: '@Easy/VoxelWorld:Temple Stone - Trim - Corner'
+  - id: 96
+    name: '@Easy/VoxelWorld:Temple Stone - Trim - Jade'
+  - id: 97
+    name: '@Easy/VoxelWorld:Bookshelf'
+  - id: 98
+    name: '@Easy/VoxelWorld:Lantern'
+  - id: 99
+    name: '@Easy/VoxelWorld:Stone Tile -  Blossom'
+  - id: 100
+    name: '@Easy/VoxelWorld:Stone Tile - Mossy'
+  - id: 101
+    name: '@Easy/VoxelWorld:Stone Tile - Mossy Blossom'
+  - id: 102
+    name: '@Easy/VoxelWorld:Bamboo'
+  - id: 103
+    name: '@Easy/VoxelWorld:Divider'
+  - id: 104
+    name: '@Easy/VoxelWorld:Green Tile - Worn'
+  - id: 105
+    name: '@Easy/VoxelWorld:Stone - Mossy'
+  - id: 106
+    name: '@Easy/VoxelWorld:Grass - Spirit'
+  - id: 107
+    name: '@Easy/VoxelWorld:Wooden Crate'
+  - id: 108
+    name: '@Easy/VoxelWorld:Grass - Blossom'
+  - id: 109
+    name: '@Easy/VoxelWorld:Torii'
+  - id: 110
+    name: '@Easy/VoxelWorld:Mushroom - Body'
+  - id: 111
+    name: '@Easy/VoxelWorld:Wooden Crate - Spirit'
+  - id: 112
+    name: '@Easy/VoxelWorld:Green Tile'
+  - id: 113
+    name: '@Easy/VoxelWorld:TNT'
+  chunksCompressed: 28b52ffda05680010075040012030a15c0a735ffff7ffd9cbda1b9735f2faa8b39e52b760a6bf888173ba0fc18dd582e24c136426b3d4d21a000af820e71ae899d59d836e6abe7884ff16c8c260ffd6700fe3239dfcb35f313ffa8e23c01bec1ee831ca7fe28e88d5f6526eed53ba157c90a40ece3bcf57ec03e0ed0df5fa5bfc5a730b800b313a090cbff1703f63c224d90f8a9f9fff8d8693f
+  chunksCompressedV2: 1
