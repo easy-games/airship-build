@@ -1,5 +1,2 @@
-# Airship Template Game
-Use this repo as a starting point for your future Airship game!
-
-## Getting started
-[Check out our docs](https://docs.airship.gg/) for information on getting started and how to develop on Airship.
+# Game Page
+https://airship.gg/g/57615770-0de5-4990-b9b8-29fe65087b4a
