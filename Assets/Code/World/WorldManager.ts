@@ -1,6 +1,6 @@
 export default class WorldManager extends AirshipSingleton {
 	/** World the player is currently inside. */
-	public currentWorld: VoxelWorld = VoxelWorld.GetFirstInstance();
+	public currentWorld: VoxelWorld;
 
 	override Start(): void {}
 

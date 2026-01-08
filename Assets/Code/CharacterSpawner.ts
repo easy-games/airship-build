@@ -44,5 +44,6 @@ export default class CharacterSpawner extends AirshipSingleton {
 		const inv = character.inventory;
 		inv.AddItem(new ItemStack(ItemType.Dirt));
 		inv.AddItem(new ItemStack(ItemType.Stone));
+		inv.AddItem(new ItemStack(ItemType.Obsidian));
 	}
 }

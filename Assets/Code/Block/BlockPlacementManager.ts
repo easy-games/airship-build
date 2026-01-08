@@ -49,6 +49,7 @@ export default class BlockPlacementManager extends AirshipSingleton {
 
 	override Start(): void {
 		if (Game.IsClient()) this.StartClient();
+		if (Game.IsServer()) this.StartServer();
 
 		task.spawn(() => {
 			WorldManager.Get().WaitForWorldLoaded();
@@ -62,15 +63,17 @@ export default class BlockPlacementManager extends AirshipSingleton {
 		// 	this.blockPlacerIndicator.SetActive(false);
 		// 	this.blockPlacerIndicatorEnabled = isEnabled;
 		// });
-
-		this.placeBlockNS.server.OnClientEvent((player, pos, blockId) => {
-			this.HandleClientBlockPlaceRequest(player, pos, blockId);
-		});
 	}
 
 	public IsBlockPlacerIndicatorEnabled(): boolean {
 		return false;
 		// return this.blockPlacerIndicatorEnabled;
+	}
+
+	public StartServer() {
+		this.placeBlockNS.server.OnClientEvent((player, pos, blockId) => {
+			this.HandleClientBlockPlaceRequest(player, pos, blockId);
+		});
 	}
 
 	public StartClient() {

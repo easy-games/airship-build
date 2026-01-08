@@ -124,5 +124,5 @@ export default class BlockPredictionManager extends AirshipSingleton {
 }
 
 export function LogBlockPrediction(msg: string) {
-	print(msg);
+	// print(msg);
 }
