@@ -15,16 +15,13 @@ export default class CacheManager extends AirshipSingleton {
 	@NonSerialized()
 	public projectileLayerMask: number; // Projectile and Default (e.g. cacti)
 	@NonSerialized()
-	public kitSelectionLayerMask: number;
-	@NonSerialized()
 	public worldUILayerMask: number;
 
-	protected override Start(): void {
+	protected override Awake(): void {
 		this.voxelWorldLayerMask = LayerMask.GetMask("VoxelWorld");
 		this.terrainLayerMask = LayerMask.GetMask("Default", "VoxelWorld");
 		this.characterLayerMask = LayerMask.GetMask("Character");
 		this.projectileLayerMask = LayerMask.GetMask("Projectile");
-		this.kitSelectionLayerMask = LayerMask.GetMask("KitSelectionScreen");
 		this.worldUILayerMask = LayerMask.GetMask("WorldUI");
 	}
 

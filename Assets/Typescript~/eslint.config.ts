@@ -23,6 +23,7 @@ export default tseslint.config(
 			"@typescript-eslint/ban-ts-comment": "error", // AirshipTS does not allow this
 			"@typescript-eslint/no-namespace": "off", // Namespace syntax is allowed
 			"no-empty": "off",
+			"no-case-declarations": "off",
 		},
 	},
 );

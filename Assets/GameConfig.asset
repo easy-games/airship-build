@@ -63,8 +63,8 @@ MonoBehaviour:
   - 
   - 
   - 
-  - GameLayer0
-  - GameLayer1
+  - VoxelWorld
+  - Projectile
   - GameLayer2
   - GameLayer3
   - GameLayer4
