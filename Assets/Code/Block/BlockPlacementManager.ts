@@ -132,6 +132,7 @@ export default class BlockPlacementManager extends AirshipSingleton {
 	public CanPlaceBlockAtPosition(position: Vector3, blockId: number, logFailure = false): boolean {
 		const world = WorldManager.Get().currentWorld;
 		if (BlockUtil.VoxelDataToBlockId(world.GetVoxelAt(position)) !== 0) {
+			// note: this will always happen in shared.
 			if (logFailure) print(`Cannot place: inside existing block pos=${position} blockId=${blockId}`);
 			return false;
 		}
@@ -183,7 +184,7 @@ export default class BlockPlacementManager extends AirshipSingleton {
 	public HandleClientBlockPlaceRequest(player: Player, position: Vector3, blockId: number) {
 		position = BlockUtil.FloorPos(position);
 
-		if (!this.CanPlaceBlockAtPosition(position, blockId, true)) {
+		if (!this.CanPlaceBlockAtPosition(position, blockId)) {
 			return false;
 		}
 

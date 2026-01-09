@@ -13,7 +13,7 @@ import { ItemType } from "./ItemType";
 
 type ItemHandlerConstructor = { new (): ItemHandler };
 
-const DISABLED_BLOCKS = ["Redirect", "DefaultGrass", "DefaultDirt"];
+const DISABLED_BLOCKS = ["Redirect", "DefaultGrass", "DefaultDirt", "Chest", "JumpPad", "SlimeBlock"];
 
 // ********************************* //
 // **** PUT ITEM HANDLERS HERE ***** //

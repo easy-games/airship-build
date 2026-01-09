@@ -207,6 +207,7 @@ export default class BlockItemHandler extends ItemHandler {
 		if (!pos) return;
 
 		const blockPlacement = BlockPlacementManager.Get();
+		this.PlayPlaceEffect(pos);
 		blockPlacement.ClientPredictBlockPlace(pos, this.blockId);
 		blockPlacement.placeBlockNS.client.FireServer(pos, this.blockId);
 	}
@@ -531,13 +532,13 @@ export default class BlockItemHandler extends ItemHandler {
 				}
 			}
 
-			// const hookResult = this.HookPlacementCheck();
-			// if (hookResult) {
-			// 	this.lastHookPlacementPos = hookResult;
-			// 	this.placementPosition = hookResult;
-			// 	this.indicatorPosition = hookResult;
-			// 	return hookResult;
-			// }
+			const hookResult = this.HookPlacementCheck();
+			if (hookResult) {
+				this.lastHookPlacementPos = hookResult;
+				this.placementPosition = hookResult;
+				this.indicatorPosition = hookResult;
+				return hookResult;
+			}
 
 			if (this.lastHookPlacementPos) {
 				if (this.CanPlaceAt(this.lastHookPlacementPos)) {
