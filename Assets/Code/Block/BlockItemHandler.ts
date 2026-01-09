@@ -7,6 +7,7 @@ import { SignalPriority } from "@Easy/Core/Shared/Util/Signal";
 import { OnLateUpdate, OnUpdate } from "@Easy/Core/Shared/Util/Timer";
 import BlockSoundManager from "Code/BlockSound/BlockSoundManager";
 import { ActionId } from "Code/Input/ActionId";
+import { SettingId } from "Code/Input/SettingId";
 import ItemManager from "Code/Item/ItemManager";
 import { ItemType } from "Code/Item/ItemType";
 import ItemHandler from "Code/ItemHandler/ItemHandler";
@@ -532,12 +533,14 @@ export default class BlockItemHandler extends ItemHandler {
 				}
 			}
 
-			const hookResult = this.HookPlacementCheck();
-			if (hookResult) {
-				this.lastHookPlacementPos = hookResult;
-				this.placementPosition = hookResult;
-				this.indicatorPosition = hookResult;
-				return hookResult;
+			if (Airship.Settings.GetToggle(SettingId.BW2_Placement)) {
+				const hookResult = this.HookPlacementCheck();
+				if (hookResult) {
+					this.lastHookPlacementPos = hookResult;
+					this.placementPosition = hookResult;
+					this.indicatorPosition = hookResult;
+					return hookResult;
+				}
 			}
 
 			if (this.lastHookPlacementPos) {

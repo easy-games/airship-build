@@ -1,5 +1,6 @@
 import { Airship } from "@Easy/Core/Shared/Airship";
 import { Game } from "@Easy/Core/Shared/Game";
+import { SettingId } from "Code/Input/SettingId";
 import { ItemType } from "Code/Item/ItemType";
 import CacheManager from "Code/Misc/CacheManager";
 import WorldManager from "Code/World/WorldManager";
@@ -39,9 +40,17 @@ export class BlockUtil {
 	public static RaycastForBlock(): BlockRaycastResult | undefined {
 		const localChar = Game.localPlayer.character;
 		if (!localChar) return;
-		const crouchYOffset = localChar.movement.currentMoveSnapshot.isCrouching ? -0.6 : 0;
-		const originPos = localChar.transform.position.add(new Vector3(0, 1.5 + crouchYOffset, 0));
-		const direction = localChar.movement.GetLookVector();
+
+		let originPos: Vector3;
+		let direction: Vector3;
+		if (Airship.Settings.GetToggle(SettingId.BW2_Placement)) {
+			const crouchYOffset = localChar.movement.currentMoveSnapshot.isCrouching ? -0.6 : 0;
+			originPos = localChar.transform.position.add(new Vector3(0, 1.5 + crouchYOffset, 0));
+			direction = localChar.movement.GetLookVector();
+		} else {
+			originPos = CacheManager.Get().mainCameraPosition;
+			direction = Camera.main.transform.forward;
+		}
 
 		// const cameraRay = CameraReferences.mainCamera!.ViewportPointToRay(new Vector3(0.5, 0.5, 0));
 		const dist = this.GetBlockReach();
