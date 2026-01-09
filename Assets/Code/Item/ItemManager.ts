@@ -13,6 +13,8 @@ import { ItemType } from "./ItemType";
 
 type ItemHandlerConstructor = { new (): ItemHandler };
 
+const DISABLED_BLOCKS = ["Redirect", "DefaultGrass", "DefaultDirt"];
+
 // ********************************* //
 // **** PUT ITEM HANDLERS HERE ***** //
 // ********************************* //
@@ -114,11 +116,14 @@ export default class ItemManager extends AirshipSingleton {
 	}
 
 	private RegisterItems(): void {
-		const voxelBlocks = VoxelWorld.GetFirstInstance().voxelBlocks;
+		const voxelBlocks = WorldManager.Get().currentWorld.voxelBlocks;
 		for (const blockList of voxelBlocks.blockDefinitionLists) {
 			const scope = blockList.scope;
 			for (const blockDef of blockList.blockDefinitions) {
 				const blockName = blockDef.ToString().split(" (VoxelBlockDefinition)")[0];
+				if (DISABLED_BLOCKS.includes(blockName)) {
+					continue;
+				}
 				const voxelName = `${scope}:${blockName}`;
 				Airship.Inventory.RegisterItem(blockName, {
 					displayName: blockName,

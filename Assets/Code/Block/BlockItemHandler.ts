@@ -531,13 +531,13 @@ export default class BlockItemHandler extends ItemHandler {
 				}
 			}
 
-			const hookResult = this.HookPlacementCheck();
-			if (hookResult) {
-				this.lastHookPlacementPos = hookResult;
-				this.placementPosition = hookResult;
-				this.indicatorPosition = hookResult;
-				return hookResult;
-			}
+			// const hookResult = this.HookPlacementCheck();
+			// if (hookResult) {
+			// 	this.lastHookPlacementPos = hookResult;
+			// 	this.placementPosition = hookResult;
+			// 	this.indicatorPosition = hookResult;
+			// 	return hookResult;
+			// }
 
 			if (this.lastHookPlacementPos) {
 				if (this.CanPlaceAt(this.lastHookPlacementPos)) {

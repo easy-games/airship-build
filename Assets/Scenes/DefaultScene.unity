@@ -585,9 +585,9 @@ MonoBehaviour:
         tags: []
       decorators: []
       nullable: 0
-      serializedValue: 1
+      serializedValue: 0
       serializedObject: {fileID: 0}
-      modified: 0
+      modified: 1
     - name: inventoryUIPrefab
       type: object
       objectType: GameObject
@@ -604,8 +604,8 @@ MonoBehaviour:
       decorators: []
       nullable: 0
       serializedValue: 
-      serializedObject: {fileID: 0}
-      modified: 0
+      serializedObject: {fileID: 4255256188965886362, guid: 8a8db1d32b6cd4633acd921ea0199992, type: 3}
+      modified: 1
     - name: useSprintFOV
       type: boolean
       objectType: 
