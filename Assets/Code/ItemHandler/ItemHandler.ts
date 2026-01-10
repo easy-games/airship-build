@@ -114,7 +114,7 @@ export default class ItemHandler {
 		}
 
 		if (this.equipAnimation) {
-			this.character.animationHelper.PlayAnimation(this.equipAnimation, CharacterAnimationLayer.OVERRIDE_1, 0.05);
+			this.character.animationHelper.PlayAnimation(this.equipAnimation, CharacterAnimationLayer.OVERRIDE_2, 0.05);
 		}
 	}
 

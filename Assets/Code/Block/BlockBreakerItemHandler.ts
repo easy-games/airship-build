@@ -13,7 +13,6 @@ import { BlockRaycastResult, BlockUtil } from "./BlockUtil";
 
 export default class BlockBreakerItemReferences extends AirshipSingleton {
 	public idleAnimation: AnimationClip;
-	public swingToolAnim: AnimationClip;
 
 	// public sparkVfx?: GameObject;
 	// public debrisVfx?: GameObject;
@@ -104,26 +103,35 @@ export class BlockBreakerItemHandler extends ItemHandler {
 			task.spawn(() => {
 				this.SendBlockHit();
 			});
-
-			// Lock look direction while swinging
-			this.aimRotation?.AimInfluence(this.aimRotation.generalInfluence, 1, this.tweenAimEntry);
-			this.gameCharacter.LockCharacterRotation(true);
-			task.delay(this.aimDisableDelay, () => {
-				this.aimRotation?.AimInfluence(this.aimRotation.generalInfluence, 0, this.tweenAimExit);
-				this.gameCharacter.LockCharacterRotation(false);
-			});
 		}
 	}
 
 	public SendBlockHit() {
-		print("hit.1");
+		// Lock look direction while swinging
+		this.aimRotation?.AimInfluence(this.aimRotation.generalInfluence, 1, this.tweenAimEntry);
+		this.gameCharacter.LockCharacterRotation(true);
+		task.delay(this.aimDisableDelay, () => {
+			this.aimRotation?.AimInfluence(this.aimRotation.generalInfluence, 0, this.tweenAimExit);
+			this.gameCharacter.LockCharacterRotation(false);
+		});
+
 		const info = this.GetTargetVoxelPositionAndRaycastInfo();
 		if (info) {
-			print("hit.2");
 			BlockHitManager.Get().hitBlockNetSig.client.FireServer(
 				info.voxelPosition,
 				info.raycastResult.point,
 				info.raycastResult.normal,
+			);
+
+			const blockId = WorldManager.Get().currentWorld.GetVoxelAt(info.voxelPosition);
+			BlockHitManager.Get().PlayHitEffect(
+				this.character,
+				info.voxelPosition,
+				info.raycastResult.point,
+				info.raycastResult.normal,
+				blockId,
+				false,
+				true,
 			);
 		}
 	}

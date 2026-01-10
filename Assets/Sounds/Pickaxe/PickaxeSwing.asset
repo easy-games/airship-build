@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1233149941 &-7601711703023083928
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Pickaxe_Swing_02_{-7601711703023083928}
+  m_AudioClip: {fileID: 8300000, guid: b35607db9033e412a8da4ffb881de401, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &-3666779790809122776
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Pickaxe_Swing_03_{-3666779790809122776}
+  m_AudioClip: {fileID: 8300000, guid: a1812747cb15e45a1bdaada67443a6d1, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &1161411990613216837
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Pickaxe_Swing_01_{1161411990613216837}
+  m_AudioClip: {fileID: 8300000, guid: d34a1e132ba404575bfbe45467795a4f, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1307931743 &6418180475301049370
+AudioRandomContainer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: PickaxeSwing
+  m_Volume: 0
+  m_Pitch: 0
+  m_AutomaticTriggerTime: 0
+  m_LoopCount: 1
+  m_VolumeRandomizationRange: {x: 0, y: 0}
+  m_PitchRandomizationRange: {x: 0, y: 0}
+  m_AutomaticTriggerTimeRandomizationRange: {x: 0, y: 0}
+  m_LoopCountRandomizationRange: {x: 0, y: 0}
+  m_Elements:
+  - {fileID: 1161411990613216837}
+  - {fileID: -7601711703023083928}
+  - {fileID: -3666779790809122776}
+  - {fileID: 7861028324645380721}
+  m_AvoidRepeatingLast: 1
+  m_PlaybackMode: 2
+  m_TriggerMode: 1
+  m_AutomaticTriggerMode: 1
+  m_LoopMode: 1
+  m_VolumeRandomizationEnabled: 0
+  m_PitchRandomizationEnabled: 0
+  m_AutomaticTriggerTimeRandomizationEnabled: 0
+  m_LoopCountRandomizationEnabled: 0
+--- !u!1233149941 &7861028324645380721
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Pickaxe_Swing_04_{7861028324645380721}
+  m_AudioClip: {fileID: 8300000, guid: f9f71758e2c1e45949ac4e99fb8afaab, type: 3}
+  m_Volume: 0
+  m_Enabled: 1

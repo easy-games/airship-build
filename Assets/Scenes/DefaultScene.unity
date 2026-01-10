@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: d234d628c649a413da6e4d7d11903d8b, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 242b92eaa5382482b8af0b88d0d07578, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -1147,6 +1147,115 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 241cf930257357542a77bc6d7fb552e4, type: 3}
+--- !u!1 &889625352
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 889625353}
+  - component: {fileID: 889625354}
+  m_Layer: 0
+  m_Name: BlockBreakRefs
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &889625353
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 889625352}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 940374581}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &889625354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 889625352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa4feffba88dce746a2607f0ec6233b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: 25ee06a3-40f8-4683-9946-775395fda292
+  script: {fileID: 8276413347158885156, guid: 8a9147446880c4480866a21cd9895eb9, type: 3}
+  scriptPath: Assets/Code/Block/BlockBreakerItemHandler.lua
+  forceContext: 0
+  metadata:
+    name: BlockBreakerItemReferences
+    singleton: 0
+    decorators: []
+    properties:
+    - name: idleAnimation
+      type: object
+      objectType: AnimationClip
+      items:
+        type: 
+        objectType: 
+        serializedItems: []
+        objectRefs: []
+      refPath: 
+      fileRef: 
+      jsDocs:
+        text: []
+        tags: []
+      decorators: []
+      nullable: 0
+      serializedValue: 
+      serializedObject: {fileID: 7400000, guid: 89d13e573b99e41ab8a6f28b0b5823d7, type: 2}
+      modified: 1
+    - name: clipReplacer
+      type: object
+      objectType: AnimatorClipReplacer
+      items:
+        type: 
+        objectType: 
+        serializedItems: []
+        objectRefs: []
+      refPath: 
+      fileRef: 
+      jsDocs:
+        text: []
+        tags: []
+      decorators: []
+      nullable: 0
+      serializedValue: 
+      serializedObject: {fileID: 0}
+      modified: 0
+    - name: equipAnimation
+      type: object
+      objectType: AnimationClip
+      items:
+        type: 
+        objectType: 
+        serializedItems: []
+        objectRefs: []
+      refPath: 
+      fileRef: 
+      jsDocs:
+        text: []
+        tags: []
+      decorators: []
+      nullable: 0
+      serializedValue: 
+      serializedObject: {fileID: 9213287324853063632, guid: 0c254e57d85368c4683138be3bce0619, type: 3}
+      modified: 1
+    displayIcon: {fileID: 0}
+    displayName: 
 --- !u!1 &940374580
 GameObject:
   m_ObjectHideFlags: 0
@@ -1184,8 +1293,138 @@ Transform:
   - {fileID: 545153604}
   - {fileID: 1914019222}
   - {fileID: 1779669960}
+  - {fileID: 2010154319}
+  - {fileID: 889625353}
+  - {fileID: 1082384519}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1082384518
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1082384519}
+  - component: {fileID: 1082384520}
+  m_Layer: 0
+  m_Name: BlockHitManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1082384519
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1082384518}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 940374581}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1082384520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1082384518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa4feffba88dce746a2607f0ec6233b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: 020aef84-e67f-44a6-a8c9-9d71ec987f35
+  script: {fileID: -2801376377742532741, guid: 5c9bf07d700a34677ac724925e801994, type: 3}
+  scriptPath: Assets/Code/Block/BlockHitManager.lua
+  forceContext: 0
+  metadata:
+    name: BlockHitManager
+    singleton: 0
+    decorators: []
+    properties:
+    - name: swingSound
+      type: object
+      objectType: AudioResource
+      items:
+        type: 
+        objectType: 
+        serializedItems: []
+        objectRefs: []
+      refPath: 
+      fileRef: 
+      jsDocs:
+        text: []
+        tags: []
+      decorators: []
+      nullable: 0
+      serializedValue: 
+      serializedObject: {fileID: 6418180475301049370, guid: 50cae9a75c1d1490caa3b45a5b24480d, type: 2}
+      modified: 1
+    - name: swingAnim
+      type: object
+      objectType: AnimationClip
+      items:
+        type: 
+        objectType: 
+        serializedItems: []
+        objectRefs: []
+      refPath: 
+      fileRef: 
+      jsDocs:
+        text: []
+        tags: []
+      decorators: []
+      nullable: 0
+      serializedValue: 
+      serializedObject: {fileID: 7400000, guid: 129d3c4707251413a9fedd472484e6ff, type: 2}
+      modified: 1
+    - name: destroyedVfx
+      type: object
+      objectType: GameObject
+      items:
+        type: 
+        objectType: 
+        serializedItems: []
+        objectRefs: []
+      refPath: 
+      fileRef: 
+      jsDocs:
+        text: []
+        tags: []
+      decorators: []
+      nullable: 0
+      serializedValue: 
+      serializedObject: {fileID: 7462876477176351415, guid: 7c31a5add3ff14838bf8cc1ab1c250b5, type: 3}
+      modified: 1
+    - name: negatedDebrisVfx
+      type: object
+      objectType: GameObject
+      items:
+        type: 
+        objectType: 
+        serializedItems: []
+        objectRefs: []
+      refPath: 
+      fileRef: 
+      jsDocs:
+        text: []
+        tags: []
+      decorators: []
+      nullable: 0
+      serializedValue: 
+      serializedObject: {fileID: 5524315952122064900, guid: 7b16f27013e14411a982b7ee25de74a0, type: 3}
+      modified: 1
+    displayIcon: {fileID: 0}
+    displayName: 
 --- !u!1 &1095177384
 GameObject:
   m_ObjectHideFlags: 0
@@ -1219,9 +1458,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useSimplifiedVoxels: 0
   useCameraAsFocusPosition: 1
-  autoLoad: 1
+  autoLoad: 0
   voxelWorldFile: {fileID: 11400000, guid: 2f2bb5e6df7314507bf9ecd4e1f8ba24, type: 2}
-  worldNetworker: {fileID: 0}
+  worldNetworker: {fileID: 1095177387}
   chunksFolder: {fileID: 0}
   lightsFolder: {fileID: 0}
   finishedReplicatingChunksFromServer: 0
@@ -1552,12 +1791,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa4feffba88dce746a2607f0ec6233b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  guid: 
+  guid: 71b1caf4-bcb0-475f-92d8-1e18490c3666
   script: {fileID: 5147965455002289474, guid: 99f6e31e9d1c74fe7a8406ca78ddb725, type: 3}
   scriptPath: Assets/Code/Misc/CacheManager.lua
   forceContext: 0
   metadata:
-    name: 
+    name: CacheManager
     singleton: 0
     decorators: []
     properties: []
@@ -1807,6 +2046,115 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1971081860}
   m_CullTransparentMesh: 1
+--- !u!1 &2010154318
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2010154319}
+  - component: {fileID: 2010154320}
+  m_Layer: 0
+  m_Name: BlockRefs
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2010154319
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010154318}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 940374581}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2010154320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010154318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa4feffba88dce746a2607f0ec6233b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: 0200ffcc-1b9b-410b-9f99-db46dd6b23d3
+  script: {fileID: -3035522549782264618, guid: 31f5938d6165c4114a23ca6e07d432c6, type: 3}
+  scriptPath: Assets/Code/Block/BlockRefs.lua
+  forceContext: 0
+  metadata:
+    name: BlockRefs
+    singleton: 0
+    decorators: []
+    properties:
+    - name: idleAnimation
+      type: object
+      objectType: AnimationClip
+      items:
+        type: 
+        objectType: 
+        serializedItems: []
+        objectRefs: []
+      refPath: 
+      fileRef: 
+      jsDocs:
+        text: []
+        tags: []
+      decorators: []
+      nullable: 0
+      serializedValue: 
+      serializedObject: {fileID: -5005666944645603178, guid: 115f36d2a83fda74eb98f8a09125b12a, type: 3}
+      modified: 1
+    - name: equipAnimation
+      type: object
+      objectType: AnimationClip
+      items:
+        type: 
+        objectType: 
+        serializedItems: []
+        objectRefs: []
+      refPath: 
+      fileRef: 
+      jsDocs:
+        text: []
+        tags: []
+      decorators: []
+      nullable: 0
+      serializedValue: 
+      serializedObject: {fileID: 808884098736697041, guid: 115f36d2a83fda74eb98f8a09125b12a, type: 3}
+      modified: 1
+    - name: placeAnimation
+      type: object
+      objectType: AnimationClip
+      items:
+        type: 
+        objectType: 
+        serializedItems: []
+        objectRefs: []
+      refPath: 
+      fileRef: 
+      jsDocs:
+        text: []
+        tags: []
+      decorators: []
+      nullable: 0
+      serializedValue: 
+      serializedObject: {fileID: 7802425552240051189, guid: 115f36d2a83fda74eb98f8a09125b12a, type: 3}
+      modified: 1
+    displayIcon: {fileID: 0}
+    displayName: 
 --- !u!1 &2019946517
 GameObject:
   m_ObjectHideFlags: 0

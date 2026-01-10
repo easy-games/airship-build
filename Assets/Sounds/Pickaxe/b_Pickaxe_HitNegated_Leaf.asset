@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1233149941 &-2032085362408530412
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Pickaxe_HitNegated_Leaf_01_{-2032085362408530412}
+  m_AudioClip: {fileID: 8300000, guid: 06c56014d7b30a945b39512bff07bda1, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &-488163299358204908
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Pickaxe_HitNegated_Leaf_03_{-488163299358204908}
+  m_AudioClip: {fileID: 8300000, guid: f1a7a8f1875453540b78a4c235c43d4d, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &2811209261999255745
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Pickaxe_HitNegated_Leaf_02_{2811209261999255745}
+  m_AudioClip: {fileID: 8300000, guid: 072c45c1de7cc2a4eb843faf24b75c12, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1307931743 &6418180475301049370
+AudioRandomContainer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Pickaxe_HitNegated_Leaf
+  m_Volume: -6
+  m_Pitch: 0
+  m_AutomaticTriggerTime: 0
+  m_LoopCount: 1
+  m_VolumeRandomizationRange: {x: -3, y: 0}
+  m_PitchRandomizationRange: {x: -400, y: 400}
+  m_AutomaticTriggerTimeRandomizationRange: {x: 0, y: 0}
+  m_LoopCountRandomizationRange: {x: 0, y: 0}
+  m_Elements:
+  - {fileID: -2032085362408530412}
+  - {fileID: 2811209261999255745}
+  - {fileID: -488163299358204908}
+  m_AvoidRepeatingLast: 1
+  m_PlaybackMode: 2
+  m_TriggerMode: 0
+  m_AutomaticTriggerMode: 1
+  m_LoopMode: 2
+  m_VolumeRandomizationEnabled: 1
+  m_PitchRandomizationEnabled: 1
+  m_AutomaticTriggerTimeRandomizationEnabled: 0
+  m_LoopCountRandomizationEnabled: 0

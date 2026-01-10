@@ -256,18 +256,14 @@ export default class BlockHitManager extends AirshipSingleton {
 		let lenientCooldown = cooldown;
 		const elapsedTime = (tick - lastActionTick) * Time.fixedDeltaTime;
 		if (asServer) {
-			print("server.1");
 			if (registerNewAction) {
-				print("server.2");
 				//Check against hackers abusing the margin of error
 				let marginHits = MapUtil.GetOrCreate(this.marginHits, player, 0);
 				if (elapsedTime < cooldown && cooldown - elapsedTime <= this.cooldownMarginInSeconds) {
-					print("server.3");
 					//Was in margin of error
 					marginHits++;
 					//print("Hit perfect margin hit " + marginHits + " times on tick: " + tick);
 					if (marginHits > 3) {
-						print("server.4");
 						//Too good to use
 						if (marginHits > 6) {
 							//This is neferiaus behaviour
@@ -286,9 +282,7 @@ export default class BlockHitManager extends AirshipSingleton {
 			//Add a 4 frame margin for error on the server so it feels better with a small amount of lag
 			lenientCooldown -= this.cooldownMarginInSeconds;
 		}
-		print("cooldown.1 (server: " + asServer + ")");
 		if (elapsedTime >= lenientCooldown) {
-			print("cooldown.2 (server: " + asServer + ")");
 			if (registerNewAction) {
 				(asServer ? this.lastActionTickServer : this.lastActionTickClient).set(player, tick);
 				if (player.IsLocalPlayer() && !Game.IsServer) {

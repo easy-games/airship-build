@@ -149,7 +149,7 @@ export default class ItemManager extends AirshipSingleton {
 			accessoryPaths: ["Assets/Resources/Items/Pickaxe/EmeraldPickaxeAcc.prefab"],
 			image: "Assets/Resources/ItemRenders/EmeraldPickaxe.png",
 			data: {
-				blockBreaker: { damagePerHit: 7, secsPerHit: 0.32 },
+				blockBreaker: { damagePerHit: 7, secsPerHit: 0.25 },
 				description: "Fitted with a polished emerald head, designed to maximize break speed.",
 			},
 		});

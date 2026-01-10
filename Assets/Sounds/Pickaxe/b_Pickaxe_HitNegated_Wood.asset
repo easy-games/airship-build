@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1233149941 &-4265247958024216184
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Pickaxe_HitNegated_Wood_03_{-4265247958024216184}
+  m_AudioClip: {fileID: 8300000, guid: 6bc5221b6e37623439ee99bed2498ffd, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &5737392014652499908
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Pickaxe_HitNegated_Wood_04_{5737392014652499908}
+  m_AudioClip: {fileID: 8300000, guid: 527b37e36cb6efb4f993a5d06c0ceb13, type: 3}
+  m_Volume: 0
+  m_Enabled: 0
+--- !u!1233149941 &5910080345656238746
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Pickaxe_HitNegated_Wood_02_{5910080345656238746}
+  m_AudioClip: {fileID: 8300000, guid: 27039084820285a448c6f2c96f9d176f, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1307931743 &6418180475301049370
+AudioRandomContainer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Pickaxe_HitNegated_Wood
+  m_Volume: -5
+  m_Pitch: 0
+  m_AutomaticTriggerTime: 0
+  m_LoopCount: 1
+  m_VolumeRandomizationRange: {x: -3, y: 0}
+  m_PitchRandomizationRange: {x: -300, y: 400}
+  m_AutomaticTriggerTimeRandomizationRange: {x: 0, y: 0}
+  m_LoopCountRandomizationRange: {x: 0, y: 0}
+  m_Elements:
+  - {fileID: 6749320687499752170}
+  - {fileID: 5910080345656238746}
+  - {fileID: -4265247958024216184}
+  - {fileID: 5737392014652499908}
+  m_AvoidRepeatingLast: 1
+  m_PlaybackMode: 2
+  m_TriggerMode: 0
+  m_AutomaticTriggerMode: 1
+  m_LoopMode: 2
+  m_VolumeRandomizationEnabled: 1
+  m_PitchRandomizationEnabled: 1
+  m_AutomaticTriggerTimeRandomizationEnabled: 0
+  m_LoopCountRandomizationEnabled: 0
+--- !u!1233149941 &6749320687499752170
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Pickaxe_HitNegated_Wood_01_{6749320687499752170}
+  m_AudioClip: {fileID: 8300000, guid: 427c9f273e7020f4182216e6a8369ff0, type: 3}
+  m_Volume: 0
+  m_Enabled: 1

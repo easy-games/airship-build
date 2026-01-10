@@ -1,5 +1,4 @@
 import { Airship } from "@Easy/Core/Shared/Airship";
-import { Asset } from "@Easy/Core/Shared/Asset";
 import { Game } from "@Easy/Core/Shared/Game";
 import { ItemDef } from "@Easy/Core/Shared/Item/ItemDefinitionTypes";
 import { Bin } from "@Easy/Core/Shared/Util/Bin";
@@ -16,6 +15,7 @@ import { MobileUtil } from "Code/Misc/MobileUtil";
 import WorldManager from "Code/World/WorldManager";
 import BlockPlacementManager, { MAX_BLOCKS_PER_SECOND } from "./BlockPlacementManager";
 import { BlockRaycast } from "./BlockRaycast";
+import BlockRefs from "./BlockRefs";
 import { BlockUtil } from "./BlockUtil";
 
 export default class BlockItemHandler extends ItemHandler {
@@ -42,11 +42,11 @@ export default class BlockItemHandler extends ItemHandler {
 
 	public OnInit(): void {
 		super.OnInit();
-		this.blockPlaceAnimation = Asset.LoadAsset("Assets/Resources/Animations/Block/Character_BlockItem__Place.anim");
-		this.idleAnimation = Asset.LoadAsset(
-			"Assets/Resources/Animations/Block/Character_BlockItem__Jog-Sprint_Idle.anim",
-		);
-		this.equipAnimation = Asset.LoadAsset("Assets/Resources/Animations/Block/Character_BlockItem__Equip.anim");
+
+		const refs = BlockRefs.Get();
+		this.idleAnimation = refs.idleAnimation;
+		this.equipAnimation = refs.equipAnimation;
+		this.blockPlaceAnimation = refs.placeAnimation;
 
 		const itemDef = this.itemStack.itemDef;
 		const worldManager = WorldManager.Get();

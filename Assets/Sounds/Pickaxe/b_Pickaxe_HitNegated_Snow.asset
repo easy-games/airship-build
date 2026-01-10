@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1233149941 &-716742209062411482
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Pickaxe_HitNegated_Snow_01_{-716742209062411482}
+  m_AudioClip: {fileID: 8300000, guid: 1ba7dac8685be1949af88715af64f48d, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &5146469151571266023
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Pickaxe_HitNegated_Snow_03_{5146469151571266023}
+  m_AudioClip: {fileID: 8300000, guid: becf64d0cba254842bf02733ad4acdba, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1307931743 &6418180475301049370
+AudioRandomContainer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Pickaxe_HitNegated_Snow
+  m_Volume: -6
+  m_Pitch: 200
+  m_AutomaticTriggerTime: 0
+  m_LoopCount: 1
+  m_VolumeRandomizationRange: {x: -3, y: 0}
+  m_PitchRandomizationRange: {x: -300, y: 300}
+  m_AutomaticTriggerTimeRandomizationRange: {x: 0, y: 0}
+  m_LoopCountRandomizationRange: {x: 0, y: 0}
+  m_Elements:
+  - {fileID: -716742209062411482}
+  - {fileID: 7312709052331461185}
+  - {fileID: 5146469151571266023}
+  m_AvoidRepeatingLast: 1
+  m_PlaybackMode: 2
+  m_TriggerMode: 0
+  m_AutomaticTriggerMode: 1
+  m_LoopMode: 2
+  m_VolumeRandomizationEnabled: 1
+  m_PitchRandomizationEnabled: 1
+  m_AutomaticTriggerTimeRandomizationEnabled: 0
+  m_LoopCountRandomizationEnabled: 0
+--- !u!1233149941 &7312709052331461185
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: b_Pickaxe_HitNegated_Snow_02_{7312709052331461185}
+  m_AudioClip: {fileID: 8300000, guid: a9c20b42d5c43d041b2b71a9a8bcb7ff, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
