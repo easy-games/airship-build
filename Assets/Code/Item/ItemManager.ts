@@ -3,6 +3,7 @@ import Character from "@Easy/Core/Shared/Character/Character";
 import { ItemDefExtraData } from "@Easy/Core/Shared/Item/ItemDefinitionTypes";
 import { Bin } from "@Easy/Core/Shared/Util/Bin";
 import { SignalPriority } from "@Easy/Core/Shared/Util/Signal";
+import { BlockBreakerItemHandler } from "Code/Block/BlockBreakerItemHandler";
 import BlockItemHandler from "Code/Block/BlockItemHandler";
 import { BlockUtil } from "Code/Block/BlockUtil";
 import GameCharacter from "Code/Character/GameCharacter";
@@ -18,7 +19,7 @@ const DISABLED_BLOCKS = ["Redirect", "DefaultGrass", "DefaultDirt", "Chest", "Sl
 // ********************************* //
 // **** PUT ITEM HANDLERS HERE ***** //
 // ********************************* //
-const itemHandlerConstructors: ItemHandlerConstructor[] = [BlockItemHandler];
+const itemHandlerConstructors: ItemHandlerConstructor[] = [BlockItemHandler, BlockBreakerItemHandler];
 
 export default class ItemManager extends AirshipSingleton {
 	@NonSerialized() public itemTypeToItemHandlerConstructor = new Map<ItemType, ItemHandlerConstructor>();
@@ -142,6 +143,16 @@ export default class ItemManager extends AirshipSingleton {
 		this.SetBlockMaterial(BlockMaterialType.Grass, ["Grass", "Dirt"]);
 		this.SetBlockMaterial(BlockMaterialType.Ceramic, ["Ceramic"]);
 		this.SetBlockMaterial(BlockMaterialType.Obsidian, ["Obsidian"]);
+
+		Airship.Inventory.RegisterItem(ItemType.EmeraldPickaxe, {
+			displayName: "Emerald Pickaxe",
+			accessoryPaths: ["Assets/Resources/Items/Pickaxe/EmeraldPickaxeAcc.prefab"],
+			image: "Assets/Resources/ItemRenders/EmeraldPickaxe.png",
+			data: {
+				blockBreaker: { damagePerHit: 7, secsPerHit: 0.32 },
+				description: "Fitted with a polished emerald head, designed to maximize break speed.",
+			},
+		});
 	}
 
 	private SetBlockMaterial(material: BlockMaterialType, itemIds: string[]): void {

@@ -34,6 +34,12 @@ declare module "@Easy/Core/Shared/Item/ItemDefinitionTypes" {
 		/** Is this a wool block */
 		wool?: boolean;
 
+		/** Block breakers like pickaxe/axe/shears */
+		blockBreaker?: {
+			damagePerHit: number;
+			secsPerHit: number;
+		};
+
 		item?: {
 			idleAnimation?: AnimationClip;
 			// equipAnimation?: string;

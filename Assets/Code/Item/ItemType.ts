@@ -42,4 +42,6 @@ export enum ItemType {
 	Bookshelf = "Bookshelf",
 	Moss = "Moss",
 	Thatch = "Thatch",
+
+	EmeraldPickaxe = "EmeraldPickaxe",
 }
