@@ -77,15 +77,12 @@ export class BlockBreakerItemHandler extends ItemHandler {
 		// Get a valid block target character is aiming at
 		const targetInfo = this.GetTargetVoxelPositionAndRaycastInfo();
 		if (targetInfo) {
-			//Position the selection outline around our target
+			// Position the selection outline around our target
 			const selectionOutline = BlockPlacementManager.Get().selectionOutline;
 			selectionOutline.SetActive(true);
 			selectionOutline.transform.position = targetInfo.voxelPosition.add(Vector3.one.div(2));
 		} else {
-			// if (BlockPlacement.Get().getBlockPlacerIndicatorEnabled()) {
-			// 	BlockPlacement.Get().selectionOutline.SetActive(false);
-			// }
-			// BlockPlacement.Get().blockPlacerIndicator.SetActive(false);
+			BlockPlacementManager.Get().selectionOutline.SetActive(false);
 		}
 
 		// Do we want to use this item?

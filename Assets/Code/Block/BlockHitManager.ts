@@ -177,8 +177,7 @@ export default class BlockHitManager extends AirshipSingleton {
 		let containedPositions: Vector3[] = [position];
 		const blockItemType = ItemManager.Get().GetItemTypeFromVoxelId(blockId);
 		if (blockItemType !== undefined && BlockUtil.HasContainedVoxels(blockItemType)) {
-			const flipBits = VoxelWorld.GetVoxelFlippedBits(voxelData);
-			const rot = VoxelWorld.FlipBitsToQuaternion(flipBits);
+			const rot = VoxelWorld.GetVoxelDataRotation(voxelData);
 			containedPositions = BlockUtil.GetContainedVoxels(blockItemType, position, rot);
 		}
 
@@ -209,8 +208,7 @@ export default class BlockHitManager extends AirshipSingleton {
 		let containedPositions: Vector3[] = [position];
 		const blockItemType = ItemManager.Get().GetItemTypeFromVoxelId(blockId);
 		if (blockItemType !== undefined && BlockUtil.HasContainedVoxels(blockItemType)) {
-			const flipBits = VoxelWorld.GetVoxelFlippedBits(voxelData);
-			const rot = VoxelWorld.FlipBitsToQuaternion(flipBits);
+			const rot = VoxelWorld.GetVoxelDataRotation(voxelData);
 			containedPositions = BlockUtil.GetContainedVoxels(blockItemType, position, rot);
 		}
 

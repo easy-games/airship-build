@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7124091312930647041, guid: 4bfcf38072e582e42b941b472d5f3dcb, type: 3}
+      propertyPath: scriptPath
+      value: Assets/AirshipPackages/@Easy/Core/Shared/Character/Animation/CharacterAnimation.lua
+      objectReference: {fileID: 0}
     - target: {fileID: 7270479773071441371, guid: 4bfcf38072e582e42b941b472d5f3dcb, type: 3}
       propertyPath: groundCollisionLayerMask.m_Bits
       value: 131329
