@@ -1,11 +1,16 @@
 import { Airship } from "@Easy/Core/Shared/Airship";
 import { Game } from "@Easy/Core/Shared/Game";
+import { ItemStack } from "@Easy/Core/Shared/Inventory/ItemStack";
+import { NetworkFunction } from "@Easy/Core/Shared/Network/NetworkFunction";
 import { NetworkSignal } from "@Easy/Core/Shared/Network/NetworkSignal";
 import { Player } from "@Easy/Core/Shared/Player/Player";
 import { MapUtil } from "@Easy/Core/Shared/Util/MapUtil";
 import { Signal } from "@Easy/Core/Shared/Util/Signal";
+import { ActionId } from "Code/Input/ActionId";
 import ItemManager from "Code/Item/ItemManager";
+import { ItemType } from "Code/Item/ItemType";
 import WorldManager from "Code/World/WorldManager";
+import { BlockBreakerItemHandler } from "./BlockBreakerItemHandler";
 import BlockDataManager, { BlockData, GetBlockData } from "./BlockDataManager";
 import BlockPredictionManager, { VoxelUpdatePredictionType } from "./BlockPredictionManager";
 import { BlockUtil } from "./BlockUtil";
@@ -45,7 +50,10 @@ export default class BlockPlacementManager extends AirshipSingleton {
 	@NonSerialized()
 	public isLocalBlockQueued = false;
 
-	public placeBlockNS = new NetworkSignal<[pos: Vector3, blockId: number]>("BlockPlacementManager:PlaceBlock");
+	public placeBlockNetSig = new NetworkSignal<[pos: Vector3, blockId: number]>("BlockPlacementManager:PlaceBlock");
+	public selectBlockNetFunc = new NetworkFunction<[itemType: ItemType], [slot: number | undefined]>(
+		"BlockPlacementManager:SelectBlock",
+	);
 
 	override Start(): void {
 		if (Game.IsClient()) this.StartClient();
@@ -71,8 +79,30 @@ export default class BlockPlacementManager extends AirshipSingleton {
 	}
 
 	public StartServer() {
-		this.placeBlockNS.server.OnClientEvent((player, pos, blockId) => {
+		this.placeBlockNetSig.server.OnClientEvent((player, pos, blockId) => {
 			this.HandleClientBlockPlaceRequest(player, pos, blockId);
+		});
+
+		this.selectBlockNetFunc.server.SetCallback((player, itemType) => {
+			if (!player.character) return undefined;
+
+			const openSlot = player.character.inventory.GetFirstOpenSlot();
+			let slotToUse = player.character.heldSlot;
+			if (openSlot < 8) {
+				slotToUse = openSlot;
+			} else {
+				// no room on hotbar so find first block
+				for (let i = 0; i <= 8; i++) {
+					const itemStack = player.character.inventory.GetItem(i);
+					if (itemStack?.itemDef.data?.block) {
+						slotToUse = i;
+						break;
+					}
+				}
+			}
+
+			player.character.inventory.SetItem(slotToUse, new ItemStack(itemType));
+			return slotToUse;
 		});
 	}
 
@@ -95,6 +125,32 @@ export default class BlockPlacementManager extends AirshipSingleton {
 
 				if (requiresWrite) this.WriteVoxelAndContainedVoxels(position, block, false, extra?.r);
 			}
+		});
+
+		Airship.Input.OnDown(ActionId.SelectBlock).Connect((e) => {
+			task.spawn(() => {
+				if (!Game.localPlayer.character) return;
+				const info = BlockBreakerItemHandler.GetTargetVoxelPositionAndRaycastInfo();
+				if (info) {
+					const voxelId = WorldManager.Get().currentWorld.GetVoxelIdAt(info.voxelPosition);
+					const itemType = ItemManager.Get().GetItemTypeFromVoxelId(voxelId);
+					if (!itemType) return;
+
+					// Look for existing on hotbar
+					for (let i = 0; i <= 8; i++) {
+						const itemStack = Game.localPlayer.character.inventory.GetItem(i);
+						if (itemStack?.itemType === itemType) {
+							Game.localPlayer.character.SetHeldSlot(i);
+							return;
+						}
+					}
+
+					const slot = this.selectBlockNetFunc.client.FireServer(itemType);
+					if (slot !== undefined) {
+						Game.localPlayer.character?.SetHeldSlot(slot);
+					}
+				}
+			});
 		});
 	}
 

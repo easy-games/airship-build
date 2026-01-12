@@ -4,4 +4,5 @@ export enum ActionId {
 	PlaceBlock = "PlaceBlock",
 	BreakBlock = "BreakBlock",
 	DropItem = "DropItem",
+	SelectBlock = "SelectBlock",
 }

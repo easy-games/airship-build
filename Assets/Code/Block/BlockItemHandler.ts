@@ -210,7 +210,7 @@ export default class BlockItemHandler extends ItemHandler {
 		const blockPlacement = BlockPlacementManager.Get();
 		this.PlayPlaceEffect(pos);
 		blockPlacement.ClientPredictBlockPlace(pos, this.blockId);
-		blockPlacement.placeBlockNS.client.FireServer(pos, this.blockId);
+		blockPlacement.placeBlockNetSig.client.FireServer(pos, this.blockId);
 	}
 
 	public OnUnequip(): void {

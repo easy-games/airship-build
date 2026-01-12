@@ -75,7 +75,7 @@ export class BlockBreakerItemHandler extends ItemHandler {
 		}
 
 		// Get a valid block target character is aiming at
-		const targetInfo = this.GetTargetVoxelPositionAndRaycastInfo();
+		const targetInfo = BlockBreakerItemHandler.GetTargetVoxelPositionAndRaycastInfo();
 		if (targetInfo) {
 			// Position the selection outline around our target
 			const selectionOutline = BlockPlacementManager.Get().selectionOutline;
@@ -112,7 +112,7 @@ export class BlockBreakerItemHandler extends ItemHandler {
 			this.gameCharacter.LockCharacterRotation(false);
 		});
 
-		const info = this.GetTargetVoxelPositionAndRaycastInfo();
+		const info = BlockBreakerItemHandler.GetTargetVoxelPositionAndRaycastInfo();
 		if (info) {
 			BlockHitManager.Get().hitBlockNetSig.client.FireServer(
 				info.voxelPosition,
@@ -155,7 +155,7 @@ export class BlockBreakerItemHandler extends ItemHandler {
 		}
 	}
 
-	public GetTargetVoxelPositionAndRaycastInfo():
+	public static GetTargetVoxelPositionAndRaycastInfo():
 		| { voxelPosition: Vector3; raycastResult: BlockRaycastResult }
 		| undefined {
 		const raycastResult = BlockUtil.RaycastForBlock();
