@@ -10,6 +10,7 @@ import { Signal } from "@Easy/Core/Shared/Util/Signal";
 import BlockSoundManager from "Code/BlockSound/BlockSoundManager";
 import ItemManager from "Code/Item/ItemManager";
 import { ItemType } from "Code/Item/ItemType";
+import LoadedWorld from "Code/World/LoadedWorld";
 import WorldManager from "Code/World/WorldManager";
 import BlockDataManager from "./BlockDataManager";
 import BlockPredictionManager from "./BlockPredictionManager";
@@ -59,11 +60,11 @@ export default class BlockHitManager extends AirshipSingleton {
 
 	public hitBlockNetSig = new NetworkSignal<[blockPosition: Vector3, hitPoint: Vector3, normal: Vector3]>("BlockHit");
 	private destroyBlockNetSig = new NetworkSignal<
-		[positions: Vector3[], voxelDatas: number[], characterId: number | undefined]
+		[worldNetId: number, positions: Vector3[], voxelDatas: number[], characterId: number | undefined]
 	>("DestroyBlock");
 
 	public readonly onBlockDestroyedServer = new Signal<
-		[blockPos: Vector3, blockId: number, character: Character | undefined]
+		[worldNetId: number, blockPos: Vector3, blockId: number, character: Character | undefined]
 	>();
 
 	override Start(): void {
@@ -75,6 +76,8 @@ export default class BlockHitManager extends AirshipSingleton {
 		this.hitBlockNetSig.server.OnClientEvent((player, blockPos, hitPoint, normal) => {
 			if (!player.character) return;
 
+			const world = WorldManager.Get().GetLoadedWorldFromPlayer(player);
+			if (!world) return;
 			const redirectedPosition = BlockUtil.GetRedirectedBlockPosition(blockPos);
 			const voxelData = WorldManager.Get().currentWorld.GetVoxelAt(redirectedPosition);
 			const hitBlockId = BlockUtil.VoxelDataToBlockId(voxelData);
@@ -113,7 +116,7 @@ export default class BlockHitManager extends AirshipSingleton {
 				0,
 			);
 
-			this.DestroyBlockServer(hitBlockId, voxelData, blockPos, player.character, true);
+			this.DestroyBlockServer(world, hitBlockId, voxelData, blockPos, player.character, true);
 		});
 	}
 
@@ -199,6 +202,7 @@ export default class BlockHitManager extends AirshipSingleton {
 	}
 
 	private DestroyBlockServer(
+		loadedWorld: LoadedWorld,
 		blockId: number,
 		voxelData: number,
 		position: Vector3,
@@ -214,11 +218,16 @@ export default class BlockHitManager extends AirshipSingleton {
 
 		for (const containedPosition of containedPositions) {
 			BlockDataManager.Get().UnregisterBlockData(containedPosition);
-			WorldManager.Get().currentWorld.WriteVoxelAt(containedPosition, 0, priority);
+			loadedWorld.voxelWorld.WriteVoxelAt(containedPosition, 0, priority);
 		}
-		this.onBlockDestroyedServer.Fire(position, blockId, character);
+		this.onBlockDestroyedServer.Fire(loadedWorld.networkIdentity.netId, position, blockId, character);
 
-		this.destroyBlockNetSig.server.FireAllClients([position], [voxelData], character?.id);
+		this.destroyBlockNetSig.server.FireAllClients(
+			loadedWorld.networkIdentity.netId,
+			[position],
+			[voxelData],
+			character?.id,
+		);
 	}
 
 	public PlayBlockBreakEffect(blockType: number, position: Vector3) {

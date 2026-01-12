@@ -6,7 +6,9 @@ export default class LoadedWorld extends AirshipBehaviour {
 	@NonSerialized() public worldProfile: WorldProfile;
 	public voxelWorld: VoxelWorld;
 	public networkIdentity: NetworkIdentity;
-	private playersInWorld: Player[] = [];
+	public playersInWorld: Player[] = [];
+
+	public offset: Vector3 = Vector3.zero;
 
 	protected Awake(): void {
 		this.voxelWorld.voxelBlocks = WorldManager.Get().voxelBlocks;

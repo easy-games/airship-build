@@ -29,9 +29,22 @@ export default class WorldManager extends AirshipSingleton {
 		// if (Game.IsServer()) {
 		// 	this.currentWorld.LoadWorldFromSaveFile(this.currentWorld.voxelWorldFile);
 		// }
-		if (Game.IsClient()) {
-			this.StartClient();
-		}
+		if (Game.IsClient()) this.StartClient();
+		if (Game.IsServer()) this.StartServer();
+	}
+
+	@Server()
+	private StartServer() {
+		Airship.Players.onPlayerDisconnected.Connect((player) => {
+			const world = this.GetLoadedWorldFromPlayer(player);
+			if (world) {
+				world.ExitWorld(player);
+				this.exitWorldNetSig.server.FireAllClients(player.userId, world.networkIdentity.netId);
+				if (world.playersInWorld.size() === 0) {
+					this.UnloadWorld(world);
+				}
+			}
+		});
 	}
 
 	@Client()
@@ -42,13 +55,25 @@ export default class WorldManager extends AirshipSingleton {
 		});
 
 		this.enterWorldNetSig.client.OnServerEvent((userId, worldNetId) => {
-			print("enter world net sig");
 			const loadedWorld = this.WaitForLoadedWorldFromNetId(worldNetId);
 			const player = Airship.Players.FindByUserId(userId);
 			if (player) {
 				loadedWorld.EnterWorld(player);
 			}
 		});
+	}
+
+	@Server()
+	public UnloadWorld(world: LoadedWorld): void {
+		this.removeLoadedWorldNetSig.server.FireAllClients(world.networkIdentity.netId);
+		NetworkServer.Destroy(world.gameObject);
+	}
+
+	public GetLoadedWorldFromPlayer(player: Player): LoadedWorld | undefined {
+		if (this.uidToLoadedWorldMap.has(player.userId)) {
+			return this.uidToLoadedWorldMap.get(player.userId);
+		}
+		return undefined;
 	}
 
 	public WaitForLoadedWorldFromNetId(netId: number) {
@@ -86,6 +111,7 @@ export default class WorldManager extends AirshipSingleton {
 		const character = player.SpawnCharacter(spawnPos, {
 			lookDirection: loadedWorld.transform.forward,
 		});
+		this.uidToLoadedWorldMap.set(player.userId, loadedWorld);
 		loadedWorld.EnterWorld(player);
 		this.enterWorldNetSig.server.FireAllClients(player.userId, loadedWorld.networkIdentity.netId);
 
