@@ -206,14 +206,14 @@ export default class BlockItemHandler extends ItemHandler {
 	public SendPlaceBlock(): void {
 		if (!this.blockId) return;
 
-		const pos = this.GetPlacementPosition();
-		if (!pos) return;
+		const worldPos = this.GetPlacementWorldPosition();
+		if (!worldPos) return;
 
 		const blockPlacement = BlockPlacementManager.Get();
-		this.PlayPlaceEffect(pos);
-		blockPlacement.ClientPredictBlockPlace(pos, this.blockId);
+		this.PlayPlaceEffect(worldPos);
+		blockPlacement.ClientPredictBlockPlace(worldPos, this.blockId);
 		blockPlacement.placeBlockNetSig.client.FireServer(
-			pos,
+			worldPos,
 			this.blockId,
 			WorldManager.Get().currentLoadedWorld.networkIdentity.netId,
 		);
@@ -277,14 +277,14 @@ export default class BlockItemHandler extends ItemHandler {
 		}
 	}
 
-	public PlayPlaceEffect(blockPos: Vector3): void {
+	public PlayPlaceEffect(worldPos: Vector3): void {
 		this.character.animationHelper.PlayAnimation(
 			this.blockPlaceAnimation,
 			CharacterAnimationLayer.OVERRIDE_2,
 			0.05,
 		);
 
-		BlockSoundManager.Get().PlayPlaceSound(this.itemStack.itemType as ItemType, blockPos);
+		BlockSoundManager.Get().PlayPlaceSound(this.itemStack.itemType as ItemType, worldPos);
 	}
 
 	protected TryPlaceBlock() {
@@ -395,7 +395,7 @@ export default class BlockItemHandler extends ItemHandler {
 	/**
 	 * Get the placement position. If we have a tap placement position for , use that instead of the normal placement position.
 	 */
-	public GetPlacementPosition() {
+	public GetPlacementWorldPosition() {
 		if (this.tapPlacementPosition) {
 			return this.tapPlacementPosition;
 		}
@@ -418,7 +418,7 @@ export default class BlockItemHandler extends ItemHandler {
 
 	public RefreshOutline() {
 		const selectionOutline = BlockPlacementManager.Get().selectionOutline;
-		const placementPos = this.GetPlacementPosition();
+		const placementPos = this.GetPlacementWorldPosition();
 		if (placementPos) {
 			selectionOutline.SetActive(true);
 			selectionOutline.transform.position = placementPos;
@@ -666,8 +666,9 @@ export default class BlockItemHandler extends ItemHandler {
 			const checkPos = blockRaycast.Next(0.51);
 			if (checkPos.sub(charPos).magnitude > BlockUtil.maxBlockReach) break; // Too far!
 			if (!this.CanPlaceAt(checkPos)) {
+				const world = WorldManager.Get().currentLoadedWorld;
 				// If we can't place at empty void location this no longer is a void bridge (so break)
-				if (!WorldManager.Get().currentWorld.GetVoxelAt(checkPos)) break;
+				if (!world.voxelWorld.GetVoxelAt(checkPos.add(world.offset))) break;
 				continue;
 			}
 			if (blockWillBePlacedHereNow) this.lastVoidPlacement = os.clock();
@@ -675,13 +676,14 @@ export default class BlockItemHandler extends ItemHandler {
 		}
 	}
 
-	private CanPlaceAt(pos: Vector3) {
-		if (WorldManager.Get().currentWorld.GetVoxelAt(pos)) return false;
+	private CanPlaceAt(worldPos: Vector3) {
+		const world = WorldManager.Get().currentLoadedWorld;
+		if (world.voxelWorld.GetVoxelAt(worldPos.sub(world.offset))) return false;
 
 		const localPlayerPos = Game.localPlayer.character?.transform.position;
 		if (localPlayerPos) {
 			const itemData = this.GetItemData();
-			const blockPos = BlockUtil.FloorPos(pos);
+			const blockPos = BlockUtil.FloorPos(worldPos.sub(world.offset));
 			// todo: map boundary
 			// const inDenyRegion = DenyRegionManager.Get().IsContainedByRegion(blockPos);
 			// if (inDenyRegion) {
@@ -713,7 +715,7 @@ export default class BlockItemHandler extends ItemHandler {
 
 			if (itemData?.block?.disallowPlaceOverVoid) {
 				const belowPos = blockPos.sub(new Vector3(0, 1, 0));
-				const blockBelow = WorldManager.Get().currentWorld.GetVoxelAt(belowPos);
+				const blockBelow = world.voxelWorld.GetVoxelAt(belowPos);
 				if (blockBelow === 0) {
 					return false;
 				}
@@ -724,12 +726,11 @@ export default class BlockItemHandler extends ItemHandler {
 			if (playerBlockPos.sub(blockPos).magnitude < 0.01) {
 				//Check 1 and 2 blocks above to handle the case of being surrounded by blocks and crouch jumping
 				for (let i = 1; i < 3; i++) {
-					const roofVoxelData = WorldManager.Get().currentWorld.GetVoxelAt(pos.add(new Vector3(0, i, 0)));
+					const roofVoxelData = world.voxelWorld.GetVoxelAt(
+						worldPos.sub(world.offset).add(new Vector3(0, i, 0)),
+					);
 					// Does roof have collisions
-					if (
-						roofVoxelData > 0 &&
-						WorldManager.Get().currentWorld.GetCollisionType(roofVoxelData) !== CollisionType.None
-					) {
+					if (roofVoxelData > 0 && world.voxelWorld.GetCollisionType(roofVoxelData) !== CollisionType.None) {
 						return false;
 					}
 				}
@@ -741,8 +742,7 @@ export default class BlockItemHandler extends ItemHandler {
 			}
 		}
 
-		if (!BlockUtil.IsPositionAttachedToExistingBlock(WorldManager.Get().currentWorld, pos)) return false; // Do this last, it is slowest!
-
+		if (!BlockUtil.IsPositionAttachedToExistingBlock(world.voxelWorld, worldPos.sub(world.offset))) return false; // Do this last, it is slowest!
 		return true;
 	}
 

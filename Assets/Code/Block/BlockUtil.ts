@@ -144,7 +144,7 @@ export class BlockUtil {
 	}
 
 	/** Returns a list of contained voxels for blocks which occupy multiple voxels (such as a bed) */
-	public static GetContainedVoxels(itemType: ItemType, position: Vector3, rotation: Quaternion) {
+	public static GetContainedVoxels(itemType: ItemType, blockPos: Vector3, rotation: Quaternion) {
 		const size = Airship.Inventory.GetItemDef(itemType).data?.block?.size ?? Vector3.zero;
 		const rotatedSize = rotation.mul(size);
 		const containedVoxels: Vector3[] = [];
@@ -156,7 +156,7 @@ export class BlockUtil {
 						y * math.sign(rotatedSize.y),
 						z * math.sign(rotatedSize.z),
 					);
-					containedVoxels.push(position.add(offset));
+					containedVoxels.push(blockPos.add(offset));
 				}
 			}
 		}
@@ -178,10 +178,10 @@ export class BlockUtil {
 	 * Returns true if a block can be placed at the passed in position (it
 	 * is attached to an existing block).
 	 */
-	public static IsPositionAttachedToExistingBlock(voxelWorld: VoxelWorld, position: Vector3): boolean {
+	public static IsPositionAttachedToExistingBlock(voxelWorld: VoxelWorld, voxelPos: Vector3): boolean {
 		// This is slow! It'd be nice to swap this to a single bulk bridge call
 		for (const supportPos of this.requiredNeighborForPlacement) {
-			if (voxelWorld.ReadVoxelAt(position.add(supportPos)) > 0) return true;
+			if (voxelWorld.ReadVoxelAt(voxelPos.add(supportPos)) > 0) return true;
 		}
 		return false;
 	}

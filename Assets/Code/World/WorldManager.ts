@@ -20,7 +20,9 @@ export default class WorldManager extends AirshipSingleton {
 
 	private enterWorldNetSig = new NetworkSignal<[userId: string, worldNetId: number]>("WorldManager:EnterWorld");
 	private exitWorldNetSig = new NetworkSignal<[userId: string, worldNetId: number]>("WorldManager:ExitWorld");
-	private addLoadedWorldNetSig = new NetworkSignal<[worldNetId: number]>("WorldManager:AddLoadedWorld");
+	private addLoadedWorldNetSig = new NetworkSignal<[worldNetId: number, offset: Vector3]>(
+		"WorldManager:AddLoadedWorld",
+	);
 	private removeLoadedWorldNetSig = new NetworkSignal<[worldNetId: number]>("WorldManager:RemoveLoadedWorld");
 
 	private loadedWorlds: LoadedWorld[] = [];
@@ -49,8 +51,9 @@ export default class WorldManager extends AirshipSingleton {
 
 	@Client()
 	private StartClient() {
-		this.addLoadedWorldNetSig.client.OnServerEvent((worldNetId) => {
+		this.addLoadedWorldNetSig.client.OnServerEvent((worldNetId, offset) => {
 			const loadedWorld = this.WaitForLoadedWorldFromNetId(worldNetId);
+			loadedWorld.offset = offset;
 			this.loadedWorlds.push(loadedWorld);
 		});
 
@@ -88,16 +91,18 @@ export default class WorldManager extends AirshipSingleton {
 		if (ownerPlayer) {
 			go.name = "VoxelWorld - " + ownerPlayer.username;
 		}
+		const loadedWorld = go.GetAirshipComponent<LoadedWorld>()!;
+		loadedWorld.offset = new Vector3(500, 0, 500);
+		loadedWorld.transform.position = loadedWorld.offset;
 		NetworkServer.Spawn(go);
 
-		const loadedWorld = go.GetAirshipComponent<LoadedWorld>()!;
 		if (worldProfile.saveFileData === undefined) {
 			loadedWorld.voxelWorld.voxelWorldFile = this.starterSaveFile;
 			loadedWorld.voxelWorld.LoadWorldFromSaveFile(this.starterSaveFile);
 		}
 
 		this.loadedWorlds.push(loadedWorld);
-		this.addLoadedWorldNetSig.server.FireAllClients(loadedWorld.networkIdentity.netId);
+		this.addLoadedWorldNetSig.server.FireAllClients(loadedWorld.networkIdentity.netId, loadedWorld.offset);
 
 		return loadedWorld;
 	}

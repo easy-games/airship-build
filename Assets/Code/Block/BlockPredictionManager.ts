@@ -95,7 +95,7 @@ export default class BlockPredictionManager extends AirshipSingleton {
 			case VoxelUpdatePredictionType.DestroyBlock: {
 				const oldBlockData = prediction.oldBlockData;
 				BlockPlacementManager.Get().WriteVoxelAndContainedVoxels(
-					WorldManager.Get().currentWorld,
+					WorldManager.Get().currentLoadedWorld,
 					prediction.position,
 					oldBlockData,
 					true,

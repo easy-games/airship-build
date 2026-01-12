@@ -35,7 +35,7 @@ export default class BlockPlacementManager extends AirshipSingleton {
 		[
 			worldNetId: number,
 			placerConnId: number | undefined,
-			position: Vector3,
+			worldPosition: Vector3,
 			block: number,
 			lastCommandId: number | undefined,
 			extra?: BlockAddedExtraDto,
@@ -111,25 +111,24 @@ export default class BlockPlacementManager extends AirshipSingleton {
 	}
 
 	public StartClient() {
-		this.blockAddedNS.client.OnServerEvent((worldNetId, connectionId, position, block, lastCommandId, extra) => {
-			const loadedWorld = WorldManager.Get().WaitForLoadedWorldFromNetId(worldNetId);
+		this.blockAddedNS.client.OnServerEvent((worldNetId, connectionId, worldPos, block, lastCommandId, extra) => {
+			const world = WorldManager.Get().WaitForLoadedWorldFromNetId(worldNetId);
 			const placer = connectionId ? Airship.Players.FindByConnectionId(connectionId) : undefined;
-			this.onBlockPlace.Fire(new BlockPlaceEvent(position, placer, block));
+			this.onBlockPlace.Fire(new BlockPlaceEvent(worldPos, placer, block));
 			if (!Game.IsHosting()) {
 				if (extra?.d) {
 					// Copy over health from predicted block damage
-					const health = BlockDataManager.Get().GetBlockData(position)?.h;
+					const health = BlockDataManager.Get().GetBlockData(worldPos)?.h;
 					extra.d.h = health;
-					BlockDataManager.Get().RegisterBlockData(position, extra.d);
+					BlockDataManager.Get().RegisterBlockData(worldPos, extra.d);
 				}
 
 				// Require write for non-local writes or local writes where we have a bad local block
 				const requiresWrite =
 					connectionId !== Game.localPlayer.connectionId ||
-					BlockUtil.VoxelDataToBlockId(WorldManager.Get().currentWorld.GetVoxelAt(position)) !== block;
+					BlockUtil.VoxelDataToBlockId(world.voxelWorld.GetVoxelAt(worldPos.sub(world.offset))) !== block;
 
-				if (requiresWrite)
-					this.WriteVoxelAndContainedVoxels(loadedWorld.voxelWorld, position, block, false, extra?.r);
+				if (requiresWrite) this.WriteVoxelAndContainedVoxels(world, worldPos, block, false, extra?.r);
 			}
 		});
 
@@ -193,14 +192,14 @@ export default class BlockPlacementManager extends AirshipSingleton {
 
 	public CanPlaceBlockAtPosition(
 		loadedWorld: LoadedWorld,
-		position: Vector3,
+		worldPos: Vector3,
 		blockId: number,
 		logFailure = false,
 	): boolean {
 		const world = loadedWorld.voxelWorld;
-		if (BlockUtil.VoxelDataToBlockId(world.GetVoxelAt(position)) !== 0) {
+		if (BlockUtil.VoxelDataToBlockId(world.GetVoxelAt(worldPos.sub(loadedWorld.offset))) !== 0) {
 			// note: this will always happen in shared.
-			if (logFailure) print(`Cannot place: inside existing block pos=${position} blockId=${blockId}`);
+			if (logFailure) print(`Cannot place: inside existing block pos=${worldPos} blockId=${blockId}`);
 			return false;
 		}
 
@@ -223,8 +222,8 @@ export default class BlockPlacementManager extends AirshipSingleton {
 		// }
 
 		if (blockData && (blockData.disallowPlaceOverVoid || blockData.disallowPlaceOverItemTypes)) {
-			const belowPos = position.sub(new Vector3(0, 1, 0));
-			const blockBelow = loadedWorld.voxelWorld.GetVoxelAt(belowPos);
+			const belowPos = worldPos.sub(new Vector3(0, 1, 0));
+			const blockBelow = loadedWorld.voxelWorld.GetVoxelAt(belowPos.sub(loadedWorld.offset));
 			if (blockBelow === 0 && blockData.disallowPlaceOverVoid) {
 				if (logFailure) print("Cannot place: place over void");
 				return false;
@@ -241,20 +240,20 @@ export default class BlockPlacementManager extends AirshipSingleton {
 			}
 		}
 
-		if (!BlockUtil.IsPositionAttachedToExistingBlock(loadedWorld.voxelWorld, position)) {
+		if (!BlockUtil.IsPositionAttachedToExistingBlock(loadedWorld.voxelWorld, worldPos.sub(loadedWorld.offset))) {
 			if (logFailure) print("Cannot place: not attached to block");
 			return false;
 		}
 		return true;
 	}
 
-	public HandleClientBlockPlaceRequest(player: Player, position: Vector3, blockId: number, worldNetId: number) {
+	public HandleClientBlockPlaceRequest(player: Player, worldPos: Vector3, blockId: number, worldNetId: number) {
 		const loadedWorld = WorldManager.Get().WaitForLoadedWorldFromNetId(worldNetId);
 		const voxelWorld = loadedWorld.voxelWorld;
 
-		position = BlockUtil.FloorPos(position);
+		worldPos = BlockUtil.FloorPos(worldPos);
 
-		if (!this.CanPlaceBlockAtPosition(loadedWorld, position, blockId, false)) {
+		if (!this.CanPlaceBlockAtPosition(loadedWorld, worldPos, blockId, false)) {
 			return false;
 		}
 
@@ -282,7 +281,7 @@ export default class BlockPlacementManager extends AirshipSingleton {
 			return false;
 		}
 
-		const event = this.onBlockPlace.Fire(new BlockPlaceEvent(position, player, blockId));
+		const event = this.onBlockPlace.Fire(new BlockPlaceEvent(worldPos, player, blockId));
 		if (event.IsCancelled()) {
 			print("Cannot place: onBlockPlace event cancelled");
 			return false;
@@ -294,16 +293,16 @@ export default class BlockPlacementManager extends AirshipSingleton {
 		// 	return false;
 		// }
 
-		this.SpawnBlockServer(loadedWorld, position, blockId, player, GetBlockData({ breakable: true }), undefined);
+		this.SpawnBlockServer(loadedWorld, worldPos, blockId, player, GetBlockData({ breakable: true }), undefined);
 		return true;
 	}
 
-	public ClientPredictBlockPlace(placementPos: Vector3, blockId: number): (() => void) | undefined {
-		WorldManager.Get().currentWorld.WriteVoxelAt(placementPos, blockId, true);
+	public ClientPredictBlockPlace(voxelPos: Vector3, blockId: number): (() => void) | undefined {
+		WorldManager.Get().currentWorld.WriteVoxelAt(voxelPos, blockId, true);
 		// Predict block data of breakable. This could be made a more precise prediciton if needed (for example predicting redirect)
-		BlockDataManager.Get().RegisterBlockData(placementPos, GetBlockData({ breakable: true })!);
+		BlockDataManager.Get().RegisterBlockData(voxelPos, GetBlockData({ breakable: true })!);
 
-		const flooredPos = BlockUtil.FloorPos(placementPos);
+		const flooredPos = BlockUtil.FloorPos(voxelPos);
 		const undoPrediction = BlockPredictionManager.Get().RegisterPrediction({
 			position: flooredPos,
 			predictionType: VoxelUpdatePredictionType.PlaceBlock,
@@ -353,12 +352,12 @@ export default class BlockPlacementManager extends AirshipSingleton {
 			BlockDataManager.Get().RegisterBlockData(position, blockData, true);
 		}
 
-		this.WriteVoxelAndContainedVoxels(loadedWorld.voxelWorld, position, blockId, true, rotation);
+		this.WriteVoxelAndContainedVoxels(loadedWorld, position, blockId, true, rotation);
 	}
 
 	public WriteVoxelAndContainedVoxels(
-		voxelWorld: VoxelWorld,
-		position: Vector3,
+		world: LoadedWorld,
+		worldPos: Vector3,
 		voxelData: number,
 		priority: boolean,
 		rotation?: Quaternion,
@@ -371,16 +370,16 @@ export default class BlockPlacementManager extends AirshipSingleton {
 			rotation = BlockUtil.FlipBitsToQuaternion(BlockUtil.GetVoxelFlippedBits(voxelData));
 		}
 
-		voxelWorld.WriteVoxelAt(position, voxelData, priority);
+		world.voxelWorld.WriteVoxelAt(worldPos.sub(world.offset), voxelData, priority);
 
 		const blockItem = ItemManager.Get().GetItemTypeFromVoxelId(BlockUtil.VoxelDataToBlockId(voxelData));
 		if (blockItem) {
-			const containedVoxels = BlockUtil.GetContainedVoxels(blockItem, position, rotation ?? Quaternion.identity);
+			const containedVoxels = BlockUtil.GetContainedVoxels(blockItem, worldPos, rotation ?? Quaternion.identity);
 			for (const v of containedVoxels) {
-				if (v.sub(position).magnitude < 0.001) continue; // Don't create a redirect block at root
+				if (v.sub(worldPos).magnitude < 0.001) continue; // Don't create a redirect block at root
 
-				voxelWorld.WriteVoxelAt(v, this.redirectId, priority);
-				const blockData = GetBlockData({ breakable: true, redirect: position });
+				world.voxelWorld.WriteVoxelAt(v.sub(world.offset), this.redirectId, priority);
+				const blockData = GetBlockData({ breakable: true, redirect: worldPos });
 				if (blockData) {
 					BlockDataManager.Get().RegisterBlockData(v, blockData);
 				}
