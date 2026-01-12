@@ -9,6 +9,7 @@ import { Signal } from "@Easy/Core/Shared/Util/Signal";
 import { ActionId } from "Code/Input/ActionId";
 import ItemManager from "Code/Item/ItemManager";
 import { ItemType } from "Code/Item/ItemType";
+import LoadedWorld from "Code/World/LoadedWorld";
 import WorldManager from "Code/World/WorldManager";
 import { BlockBreakerItemHandler } from "./BlockBreakerItemHandler";
 import BlockDataManager, { BlockData, GetBlockData } from "./BlockDataManager";
@@ -32,6 +33,7 @@ export default class BlockPlacementManager extends AirshipSingleton {
 	/** lastCommandId is used to map the block placement to this client's timeline */
 	public blockAddedNS = new NetworkSignal<
 		[
+			worldNetId: number,
 			placerConnId: number | undefined,
 			position: Vector3,
 			block: number,
@@ -50,7 +52,9 @@ export default class BlockPlacementManager extends AirshipSingleton {
 	@NonSerialized()
 	public isLocalBlockQueued = false;
 
-	public placeBlockNetSig = new NetworkSignal<[pos: Vector3, blockId: number]>("BlockPlacementManager:PlaceBlock");
+	public placeBlockNetSig = new NetworkSignal<[pos: Vector3, blockId: number, worldNetId: number]>(
+		"BlockPlacementManager:PlaceBlock",
+	);
 	public selectBlockNetFunc = new NetworkFunction<[itemType: ItemType], [slot: number | undefined]>(
 		"BlockPlacementManager:SelectBlock",
 	);
@@ -79,8 +83,8 @@ export default class BlockPlacementManager extends AirshipSingleton {
 	}
 
 	public StartServer() {
-		this.placeBlockNetSig.server.OnClientEvent((player, pos, blockId) => {
-			this.HandleClientBlockPlaceRequest(player, pos, blockId);
+		this.placeBlockNetSig.server.OnClientEvent((player, pos, blockId, worldNetId) => {
+			this.HandleClientBlockPlaceRequest(player, pos, blockId, worldNetId);
 		});
 
 		this.selectBlockNetFunc.server.SetCallback((player, itemType) => {
@@ -107,7 +111,8 @@ export default class BlockPlacementManager extends AirshipSingleton {
 	}
 
 	public StartClient() {
-		this.blockAddedNS.client.OnServerEvent((connectionId, position, block, lastCommandId, extra) => {
+		this.blockAddedNS.client.OnServerEvent((worldNetId, connectionId, position, block, lastCommandId, extra) => {
+			const loadedWorld = WorldManager.Get().WaitForLoadedWorldFromNetId(worldNetId);
 			const placer = connectionId ? Airship.Players.FindByConnectionId(connectionId) : undefined;
 			this.onBlockPlace.Fire(new BlockPlaceEvent(position, placer, block));
 			if (!Game.IsHosting()) {
@@ -123,7 +128,8 @@ export default class BlockPlacementManager extends AirshipSingleton {
 					connectionId !== Game.localPlayer.connectionId ||
 					BlockUtil.VoxelDataToBlockId(WorldManager.Get().currentWorld.GetVoxelAt(position)) !== block;
 
-				if (requiresWrite) this.WriteVoxelAndContainedVoxels(position, block, false, extra?.r);
+				if (requiresWrite)
+					this.WriteVoxelAndContainedVoxels(loadedWorld.voxelWorld, position, block, false, extra?.r);
 			}
 		});
 
@@ -185,8 +191,13 @@ export default class BlockPlacementManager extends AirshipSingleton {
 		return false;
 	}
 
-	public CanPlaceBlockAtPosition(position: Vector3, blockId: number, logFailure = false): boolean {
-		const world = WorldManager.Get().currentWorld;
+	public CanPlaceBlockAtPosition(
+		loadedWorld: LoadedWorld,
+		position: Vector3,
+		blockId: number,
+		logFailure = false,
+	): boolean {
+		const world = loadedWorld.voxelWorld;
 		if (BlockUtil.VoxelDataToBlockId(world.GetVoxelAt(position)) !== 0) {
 			// note: this will always happen in shared.
 			if (logFailure) print(`Cannot place: inside existing block pos=${position} blockId=${blockId}`);
@@ -213,7 +224,7 @@ export default class BlockPlacementManager extends AirshipSingleton {
 
 		if (blockData && (blockData.disallowPlaceOverVoid || blockData.disallowPlaceOverItemTypes)) {
 			const belowPos = position.sub(new Vector3(0, 1, 0));
-			const blockBelow = WorldManager.Get().currentWorld.GetVoxelAt(belowPos);
+			const blockBelow = loadedWorld.voxelWorld.GetVoxelAt(belowPos);
 			if (blockBelow === 0 && blockData.disallowPlaceOverVoid) {
 				if (logFailure) print("Cannot place: place over void");
 				return false;
@@ -230,17 +241,20 @@ export default class BlockPlacementManager extends AirshipSingleton {
 			}
 		}
 
-		if (!BlockUtil.IsPositionAttachedToExistingBlock(position)) {
+		if (!BlockUtil.IsPositionAttachedToExistingBlock(loadedWorld.voxelWorld, position)) {
 			if (logFailure) print("Cannot place: not attached to block");
 			return false;
 		}
 		return true;
 	}
 
-	public HandleClientBlockPlaceRequest(player: Player, position: Vector3, blockId: number) {
+	public HandleClientBlockPlaceRequest(player: Player, position: Vector3, blockId: number, worldNetId: number) {
+		const loadedWorld = WorldManager.Get().WaitForLoadedWorldFromNetId(worldNetId);
+		const voxelWorld = loadedWorld.voxelWorld;
+
 		position = BlockUtil.FloorPos(position);
 
-		if (!this.CanPlaceBlockAtPosition(position, blockId)) {
+		if (!this.CanPlaceBlockAtPosition(loadedWorld, position, blockId, false)) {
 			return false;
 		}
 
@@ -262,7 +276,7 @@ export default class BlockPlacementManager extends AirshipSingleton {
 			return false;
 		}
 
-		const heldBlockId = WorldManager.Get().currentWorld.voxelBlocks.GetBlockIdFromStringId(blockType);
+		const heldBlockId = voxelWorld.voxelBlocks.GetBlockIdFromStringId(blockType);
 		if (blockId !== heldBlockId) {
 			print("Cannot place: requested to place different block then in hand");
 			return false;
@@ -280,7 +294,7 @@ export default class BlockPlacementManager extends AirshipSingleton {
 		// 	return false;
 		// }
 
-		this.SpawnBlockServer(position, blockId, player, GetBlockData({ breakable: true }), undefined);
+		this.SpawnBlockServer(loadedWorld, position, blockId, player, GetBlockData({ breakable: true }), undefined);
 		return true;
 	}
 
@@ -302,14 +316,13 @@ export default class BlockPlacementManager extends AirshipSingleton {
 	 * @param fromCmdId This should only be included when block is spawned from BlockPlaceCmd
 	 */
 	public SpawnBlockServer(
+		loadedWorld: LoadedWorld,
 		position: Vector3,
 		blockId: number,
 		placer?: Player,
 		blockData?: BlockData,
 		rotation?: Quaternion,
 	) {
-		WorldManager.Get().WaitForWorldLoaded();
-
 		position = BlockUtil.FloorPos(position);
 		if (!Game.IsServer()) {
 			warn("Cannot call SpawnBlockServer from client.");
@@ -324,6 +337,7 @@ export default class BlockPlacementManager extends AirshipSingleton {
 		for (const player of Airship.Players.GetPlayers()) {
 			this.blockAddedNS.server.FireClient(
 				player,
+				loadedWorld.networkIdentity.netId,
 				placer?.connectionId,
 				position,
 				blockId,
@@ -339,10 +353,11 @@ export default class BlockPlacementManager extends AirshipSingleton {
 			BlockDataManager.Get().RegisterBlockData(position, blockData, true);
 		}
 
-		this.WriteVoxelAndContainedVoxels(position, blockId, true, rotation);
+		this.WriteVoxelAndContainedVoxels(loadedWorld.voxelWorld, position, blockId, true, rotation);
 	}
 
 	public WriteVoxelAndContainedVoxels(
+		voxelWorld: VoxelWorld,
 		position: Vector3,
 		voxelData: number,
 		priority: boolean,
@@ -356,7 +371,7 @@ export default class BlockPlacementManager extends AirshipSingleton {
 			rotation = BlockUtil.FlipBitsToQuaternion(BlockUtil.GetVoxelFlippedBits(voxelData));
 		}
 
-		WorldManager.Get().currentWorld.WriteVoxelAt(position, voxelData, priority);
+		voxelWorld.WriteVoxelAt(position, voxelData, priority);
 
 		const blockItem = ItemManager.Get().GetItemTypeFromVoxelId(BlockUtil.VoxelDataToBlockId(voxelData));
 		if (blockItem) {
@@ -364,7 +379,7 @@ export default class BlockPlacementManager extends AirshipSingleton {
 			for (const v of containedVoxels) {
 				if (v.sub(position).magnitude < 0.001) continue; // Don't create a redirect block at root
 
-				WorldManager.Get().currentWorld.WriteVoxelAt(v, this.redirectId, priority);
+				voxelWorld.WriteVoxelAt(v, this.redirectId, priority);
 				const blockData = GetBlockData({ breakable: true, redirect: position });
 				if (blockData) {
 					BlockDataManager.Get().RegisterBlockData(v, blockData);

@@ -178,11 +178,10 @@ export class BlockUtil {
 	 * Returns true if a block can be placed at the passed in position (it
 	 * is attached to an existing block).
 	 */
-	public static IsPositionAttachedToExistingBlock(position: Vector3): boolean {
+	public static IsPositionAttachedToExistingBlock(voxelWorld: VoxelWorld, position: Vector3): boolean {
 		// This is slow! It'd be nice to swap this to a single bulk bridge call
-		const vw = WorldManager.Get().currentWorld;
 		for (const supportPos of this.requiredNeighborForPlacement) {
-			if (vw.ReadVoxelAt(position.add(supportPos)) > 0) return true;
+			if (voxelWorld.ReadVoxelAt(position.add(supportPos)) > 0) return true;
 		}
 		return false;
 	}

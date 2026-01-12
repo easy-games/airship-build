@@ -117,7 +117,7 @@ export default class ItemManager extends AirshipSingleton {
 	}
 
 	private RegisterItems(): void {
-		const voxelBlocks = WorldManager.Get().currentWorld.voxelBlocks;
+		const voxelBlocks = WorldManager.Get().voxelBlocks;
 		for (const blockList of voxelBlocks.blockDefinitionLists) {
 			const scope = blockList.scope;
 			for (const blockDef of blockList.blockDefinitions) {
@@ -236,7 +236,7 @@ export default class ItemManager extends AirshipSingleton {
 	 * @returns Item type that matches voxel item type, if it exists. Otherwise `undefined`.
 	 */
 	public GetItemTypeFromVoxelId(voxelId: number): ItemType | undefined {
-		const name = WorldManager.Get().currentWorld.voxelBlocks.GetStringIdFromBlockId(voxelId);
+		const name = WorldManager.Get().voxelBlocks.GetStringIdFromBlockId(voxelId);
 		return this.GetItemTypeFromVoxelName(name);
 	}
 
@@ -248,7 +248,7 @@ export default class ItemManager extends AirshipSingleton {
 		const voxelName = Airship.Inventory.GetItemDef(itemType).data?.block?.voxelName;
 		if (!voxelName) return;
 
-		return WorldManager.Get().currentWorld.voxelBlocks.GetBlockIdFromStringId(voxelName);
+		return WorldManager.Get().voxelBlocks.GetBlockIdFromStringId(voxelName);
 	}
 
 	public GetWoolFromTeamId(teamId: string): ItemType {

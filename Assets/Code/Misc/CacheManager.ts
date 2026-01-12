@@ -23,7 +23,9 @@ export default class CacheManager extends AirshipSingleton {
 		this.characterLayerMask = LayerMask.GetMask("Character");
 		this.projectileLayerMask = LayerMask.GetMask("Projectile");
 		this.worldUILayerMask = LayerMask.GetMask("WorldUI");
-		this.UpdateCamera();
+		if (Game.IsClient()) {
+			this.UpdateCamera();
+		}
 	}
 
 	override Update(dt: number): void {

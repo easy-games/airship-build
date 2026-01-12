@@ -173,11 +173,13 @@ export default class BlockItemHandler extends ItemHandler {
 			}
 
 			this.bin.Add(
-				BlockPlacementManager.Get().blockAddedNS.client.OnServerEvent((connId, blockPos, blockId) => {
-					if (this.character.player?.connectionId !== connId) return;
-					if (this.character === Game.localPlayer.character) return; // Don't re-play locally
-					this.PlayPlaceEffect(blockPos);
-				}),
+				BlockPlacementManager.Get().blockAddedNS.client.OnServerEvent(
+					(worldNetId, connId, blockPos, blockId) => {
+						if (this.character.player?.connectionId !== connId) return;
+						if (this.character === Game.localPlayer.character) return; // Don't re-play locally
+						this.PlayPlaceEffect(blockPos);
+					},
+				),
 			);
 
 			const weaponRight = this.character.rig.handR.Find("weapon.R");
@@ -210,7 +212,11 @@ export default class BlockItemHandler extends ItemHandler {
 		const blockPlacement = BlockPlacementManager.Get();
 		this.PlayPlaceEffect(pos);
 		blockPlacement.ClientPredictBlockPlace(pos, this.blockId);
-		blockPlacement.placeBlockNetSig.client.FireServer(pos, this.blockId);
+		blockPlacement.placeBlockNetSig.client.FireServer(
+			pos,
+			this.blockId,
+			WorldManager.Get().currentLoadedWorld.networkIdentity.netId,
+		);
 	}
 
 	public OnUnequip(): void {
@@ -735,7 +741,7 @@ export default class BlockItemHandler extends ItemHandler {
 			}
 		}
 
-		if (!BlockUtil.IsPositionAttachedToExistingBlock(pos)) return false; // Do this last, it is slowest!
+		if (!BlockUtil.IsPositionAttachedToExistingBlock(WorldManager.Get().currentWorld, pos)) return false; // Do this last, it is slowest!
 
 		return true;
 	}

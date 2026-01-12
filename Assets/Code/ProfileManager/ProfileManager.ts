@@ -11,11 +11,13 @@ export default class ProfileManager extends AirshipSingleton {
 	public onProfileLoaded = new Signal<[player: Player, Profile: PlayerProfile]>();
 
 	override Start(): void {
-		Airship.Players.ObservePlayers((player) => {
-			task.spawn(() => {
-				this.LoadPlayer(player);
-			});
-		}, SignalPriority.HIGHEST);
+		if (Game.IsServer()) {
+			Airship.Players.ObservePlayers((player) => {
+				task.spawn(() => {
+					this.LoadPlayer(player);
+				});
+			}, SignalPriority.HIGHEST);
+		}
 	}
 
 	private LoadPlayer(player: Player): void {
