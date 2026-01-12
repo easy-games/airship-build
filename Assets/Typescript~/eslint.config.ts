@@ -24,6 +24,7 @@ export default tseslint.config(
 			"@typescript-eslint/no-namespace": "off", // Namespace syntax is allowed
 			"no-empty": "off",
 			"no-case-declarations": "off",
+			"no-constant-condition": "off",
 		},
 	},
 );
