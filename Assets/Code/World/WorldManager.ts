@@ -112,6 +112,8 @@ export default class WorldManager extends AirshipSingleton {
 		if (worldProfile.saveFileData === undefined) {
 			loadedWorld.voxelWorld.voxelWorldFile = this.starterSaveFile;
 			loadedWorld.voxelWorld.LoadWorldFromSaveFile(this.starterSaveFile);
+		} else {
+			loadedWorld.voxelWorld.DecodeFromString(worldProfile.saveFileData);
 		}
 
 		this.loadedWorlds.push(loadedWorld);

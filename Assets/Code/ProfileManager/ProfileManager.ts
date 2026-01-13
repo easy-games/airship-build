@@ -74,7 +74,7 @@ export default class ProfileManager extends AirshipSingleton {
 	}
 
 	public MakeNewWorldProfile(owner: Player): WorldProfile {
-		const id = "1";
+		const id = Guid.NewGuid().ToString();
 		return {
 			id,
 			createTime: os.time(),
