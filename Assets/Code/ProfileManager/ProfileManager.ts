@@ -68,7 +68,7 @@ export default class ProfileManager extends AirshipSingleton {
 			// pull from datastore
 			const wp = await Platform.Server.DataStore.GetKey<WorldProfile>(`World:${profile.worldIds[0]}`);
 			if (!wp) {
-				player.Kick(ChatColor.Red("Failed to load world."));
+				// player.SendMessage(ChatColor.Red("Failed to load world."));
 				Game.BroadcastMessage(ChatColor.Red("Failed to load world for player: " + player.username));
 				return;
 			}

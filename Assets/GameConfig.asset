@@ -111,5 +111,5 @@ MonoBehaviour:
   callbacksOnDisable2D: 1
   reuseCollisionCallbacks2D: 1
   autoSyncTransforms2D: 0
-  supportsMobile: 0
+  supportsMobile: 1
   compileURPShaders: 0
