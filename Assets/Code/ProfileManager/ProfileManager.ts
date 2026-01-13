@@ -1,6 +1,7 @@
 import { Airship, Platform } from "@Easy/Core/Shared/Airship";
 import { Game } from "@Easy/Core/Shared/Game";
 import { Player } from "@Easy/Core/Shared/Player/Player";
+import { ChatColor } from "@Easy/Core/Shared/Util/ChatColor";
 import { Signal, SignalPriority } from "@Easy/Core/Shared/Util/Signal";
 import WorldManager from "Code/World/WorldManager";
 import { PlayerProfile } from "./PlayerProfile";
@@ -13,21 +14,21 @@ export default class ProfileManager extends AirshipSingleton {
 	override Start(): void {
 		if (Game.IsServer()) {
 			Airship.Players.ObservePlayers((player) => {
-				task.spawn(() => {
-					this.LoadPlayer(player);
+				task.spawn(async () => {
+					await this.LoadPlayer(player);
 				});
 			}, SignalPriority.HIGHEST);
 		}
 	}
 
-	private LoadPlayer(player: Player): void {
+	private async LoadPlayer(player: Player): Promise<void> {
 		let profile: PlayerProfile;
 		if (Game.IsEditor()) {
 			profile = this.MakeNewPlayerProfile(player);
 		} else {
 			// Real server
 			try {
-				const data = Platform.Server.DataStore.GetKey<PlayerProfile>("player:" + player.userId).expect();
+				const data = await Platform.Server.DataStore.GetKey<PlayerProfile>("player:" + player.userId);
 				if (data) {
 					profile = data;
 				} else {
@@ -43,11 +44,18 @@ export default class ProfileManager extends AirshipSingleton {
 		this.profiles.set(player.userId, profile);
 
 		let worldProfile: WorldProfile;
-		if (profile.worldIds.size() === 0 || true) {
+		if (profile.worldIds.size() === 0) {
 			worldProfile = this.MakeNewWorldProfile(player);
 			profile.worldIds.push(worldProfile.id);
 		} else {
 			// pull from datastore
+			const wp = await Platform.Server.DataStore.GetKey<WorldProfile>(`World:${profile.worldIds[0]}`);
+			if (!wp) {
+				player.Kick(ChatColor.Red("Failed to load world."));
+				Game.BroadcastMessage(ChatColor.Red("Failed to load world for player: " + player.username));
+				return;
+			}
+			worldProfile = wp;
 		}
 
 		this.onProfileLoaded.Fire(player, profile);
