@@ -20,9 +20,9 @@ export default class WorldManager extends AirshipSingleton {
 
 	private enterWorldNetSig = new NetworkSignal<[userId: string, worldNetId: number]>("WorldManager:EnterWorld");
 	private exitWorldNetSig = new NetworkSignal<[userId: string, worldNetId: number]>("WorldManager:ExitWorld");
-	private addLoadedWorldNetSig = new NetworkSignal<[worldNetId: number, offset: Vector3]>(
-		"WorldManager:AddLoadedWorld",
-	);
+	private addLoadedWorldNetSig = new NetworkSignal<
+		[worldNetId: number, offset: Vector3, worldId: string, ownerUserId: string]
+	>("WorldManager:AddLoadedWorld");
 	private removeLoadedWorldNetSig = new NetworkSignal<[worldNetId: number]>("WorldManager:RemoveLoadedWorld");
 
 	private loadedWorlds: LoadedWorld[] = [];
@@ -53,7 +53,7 @@ export default class WorldManager extends AirshipSingleton {
 				world.ExitWorld(player);
 				this.exitWorldNetSig.server.FireAllClients(player.userId, world.networkIdentity.netId);
 				if (world.playersInWorld.size() === 0) {
-					this.UnloadWorld(world);
+					this.UnloadWorld(world, true);
 				}
 			}
 		});
@@ -61,9 +61,9 @@ export default class WorldManager extends AirshipSingleton {
 
 	@Client()
 	private StartClient() {
-		this.addLoadedWorldNetSig.client.OnServerEvent((worldNetId, offset) => {
+		this.addLoadedWorldNetSig.client.OnServerEvent((worldNetId, offset, worldId, ownerUserId) => {
 			const loadedWorld = this.WaitForLoadedWorldFromNetId(worldNetId);
-			loadedWorld.offset = offset;
+			loadedWorld.InitClient(worldId, offset, ownerUserId);
 			this.loadedWorlds.push(loadedWorld);
 		});
 
@@ -97,6 +97,7 @@ export default class WorldManager extends AirshipSingleton {
 		}
 		const offset = this.availableOffsets[0];
 		this.availableOffsets.remove(0);
+		print("Selected offset: " + offset);
 
 		const go = Instantiate(this.playerWorldPrefab);
 		if (ownerPlayer) {
@@ -104,8 +105,8 @@ export default class WorldManager extends AirshipSingleton {
 		}
 		const loadedWorld = go.GetAirshipComponent<LoadedWorld>()!;
 
-		loadedWorld.offset = offset;
-		loadedWorld.transform.position = loadedWorld.offset;
+		loadedWorld.InitServer(worldProfile, offset);
+		go.transform.position = offset;
 		NetworkServer.Spawn(go);
 
 		if (worldProfile.saveFileData === undefined) {
@@ -114,13 +115,26 @@ export default class WorldManager extends AirshipSingleton {
 		}
 
 		this.loadedWorlds.push(loadedWorld);
-		this.addLoadedWorldNetSig.server.FireAllClients(loadedWorld.networkIdentity.netId, loadedWorld.offset);
+		this.addLoadedWorldNetSig.server.FireAllClients(
+			loadedWorld.networkIdentity.netId,
+			loadedWorld.offset,
+			loadedWorld.worldId,
+			loadedWorld.ownerUid,
+		);
 
 		return loadedWorld;
 	}
 
 	@Server()
-	public UnloadWorld(world: LoadedWorld): void {
+	public async UnloadWorld(world: LoadedWorld, save: boolean): Promise<void> {
+		if (save) {
+			try {
+				await world.SaveAsync();
+			} catch (err) {
+				Debug.LogError(err);
+			}
+		}
+
 		const offset = world.offset;
 		this.removeLoadedWorldNetSig.server.FireAllClients(world.networkIdentity.netId);
 		NetworkServer.Destroy(world.gameObject);

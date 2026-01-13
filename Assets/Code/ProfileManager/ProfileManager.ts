@@ -60,12 +60,18 @@ export default class ProfileManager extends AirshipSingleton {
 		}
 	}
 
-	private MakeNewWorldProfile(owner: Player): WorldProfile {
+	public async SaveProfile(player: Player): Promise<void> {
+		const profile = await this.GetProfileAsync(player);
+		await Platform.Server.DataStore.SetKey(`Player:${player.userId}`, profile);
+	}
+
+	public MakeNewWorldProfile(owner: Player): WorldProfile {
 		const id = "1";
 		return {
 			id,
 			createTime: os.time(),
 			ownerUid: owner.userId,
+			lastSaveTime: os.time(),
 		};
 	}
 
@@ -74,6 +80,17 @@ export default class ProfileManager extends AirshipSingleton {
 			worldIds: [],
 			firstJoinTime: os.time(),
 		};
+	}
+
+	public async GetProfileAsync(player: Player): Promise<PlayerProfile> {
+		return this.WaitForProfile(player);
+	}
+
+	public WaitForProfile(player: Player): PlayerProfile {
+		while (!this.profiles.has(player.userId)) {
+			task.wait();
+		}
+		return this.profiles.get(player.userId)!;
 	}
 
 	override OnDestroy(): void {}
