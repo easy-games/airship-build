@@ -75,6 +75,7 @@ export default class Dashboard extends AirshipSingleton {
 
 		this.onlinePlayerContent.gameObject.ClearChildren();
 		Airship.Players.ObservePlayers((player) => {
+			if (player.userId === "loading") return;
 			const onlinePlayerComp = Instantiate(
 				this.onlinePlayerPrefab,
 				this.onlinePlayerContent,
