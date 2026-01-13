@@ -14,7 +14,21 @@ import { ItemType } from "./ItemType";
 
 type ItemHandlerConstructor = { new (): ItemHandler };
 
-const DISABLED_BLOCKS = ["Redirect", "DefaultGrass", "DefaultDirt", "Chest", "Slime", "LaunchPad"];
+const DISABLED_BLOCKS = [
+	"Redirect",
+	"DefaultGrass",
+	"DefaultDirt",
+	"Chest",
+	"Slime",
+	"LaunchPad",
+	"StairBlock",
+	"StairCorner",
+	"Wood - Post - Stair",
+	"Wood - Post - Horizontal",
+	"Wood - Post - Vertical - Cherry",
+	"Wood - Post - Dark",
+	"Wood - Post - Horizontal - Cherry",
+];
 
 // ********************************* //
 // **** PUT ITEM HANDLERS HERE ***** //
@@ -162,8 +176,8 @@ export default class ItemManager extends AirshipSingleton {
 			"TNT",
 		]);
 		this.SetBlockMaterial(BlockMaterialType.Wood, [
-			"Wood - Post -  Vertical",
-			"Wood - Post - Stair",
+			// "Wood - Post -  Vertical",
+			// "Wood - Post - Stair",
 			"Winter Wood",
 			"Bark",
 		]);
