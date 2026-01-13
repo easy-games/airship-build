@@ -113,19 +113,19 @@ export default class WorldManager extends AirshipSingleton {
 		// 	worldProfile.saveFileData =
 		// 		"KLUv/WDsDh0qAPZ5zkmw2E0H/CE9c08fGndOeUr/JnXoGF/KM5UXpqBAQj9ZCkJbrjWSXJsJzSbZSbz8NA51prKmBw15BMVjxxn0pZWYwZJD50eVQh3JrgCxALAAP0U9av9Dnfx3V5vLp1GPev6eqeBFsdw5uHzttSUwogh8V4zj+KZr7WbrMXYRB3T5ThnA5aqlCpRYBrP5x3pnO9Nmi66vdaoaal0nVv3xTAI68WqZ56cR71i1fzlzBv+Hvm8ulOHK+ly/BHOATldZjOffNgE4M4D2rP+LTRid+Fimb922BfMlyWL9IfYVb4VgupBk1U06E8DWd5a0cVmxfEbERVamDgpmi77VZZYBlGgqCU0OGxxnmWjR1KB1d9Uv+ox6QzOD2ypWWhKGPJb4PzqR9D+mXaAeZTAtkOUWK5BVK9ePAt3aSZ9NoNapjmwuXzc9mEZFm/TcR5TddZMEnfhUXgSS/NqQzdUmpB+/eDcua0FAEHTFJc61fqIedTAfHM0fH9Lx7fZfD5fWnvuoR42mA1zFu7VbUaDZwGdSXHd+Fle/U9BksPU235AnJ+6aA3d0ueKpmE7XGfXogk0GdMRZf6jTbq/WnaX4v41VdnNcJPk13PgkiS+IlWuUY2HPkbp/mXVboURv3sarwWpx1T4yoThhwjrVFcZ1tJUYy2u9RsLLGh0cQT36M0V4JVSI0Ip0jMs3V4VxDSlIte98QxuV43SNAoE3Wb+prNfiLqWkXKy0BvNDLWrLxScPVdtcglCbfI1VR+1PuV57yZuUk61TOTGXNarJx4ttNKYZFq5O9JsgO1oyopt0sMN4NRgxOrZ4lLLo7Fy6aAZgBMxg0uPKzgkSkCgwYkDY3CQbOTiwAV02NKhMaVLDA0kIyhAWGq/GUrijwm5CenZuxHZJgnjFljxkib3AZna7JTJKTACBN0eUprh4FRUJipEQE/qS+dihYib50bL11ZDpulJy5EbMjBONUI6NF0+OqsoEydCVD9GPCycyUORUPYkRm1+VmiFWYHSQcLyQQo12TrCvr6+vnRO4C3fhhM2XCaBrwrSYLTurLixERIDmnEbAD+DN3KTmsi/71zmyrKm4Vz+Y9b6z5331zbJRL4DpqHGtYabKSJIsY1AiIYaqzAMSAAJJDkMQiIEQhgBkcGdEEkmaZQ0hDBOT7/HRSmOBQs41OLR9LXcVxi8XxNuxFhIRqIMQBPUa+uw11gOmMmIequVmh1xUAdbOdJO6eJ0s4VzZbTsSh/BQrLkSHE9imcKl+dwF1jqZlRM4SCx2TWMpyH5wYI1Iyz8pRpen1rsLSGdX0FgYfcOiqLnM23FkNJ1/+9ZLHSTQaefkWWkbT7HLd4dvtn8MQveV6s9pBq+OAyG5N5aEZgGradwB9wc13ANRDtgy+CkqTz7fQRE7xlKeXCj6pJPQcGzRjv6/Bsjkngfs2tdJ3Qb0WcyIomeJur5kpoPfLZtWhvtbbA2gPWgsUVFruXWlLdEYRMMAhVCP+S7UKpvx1maBjMqyjA3sqY/AY16DoccIPCUyYuK5GQ+UFGwQxist3kvDxwOVAWA9HS6TQuVA9S24BujZQ0tWp9gx3ZGozQyLj5kXbL7yz4tH9AmjRorD/nAisV89WV7eX08T3lE9kDW9afBswO20w33mQ3mB0rlftl6NnErwO1ukcCdNeXaKhL77oVdxeoPCxmFOuI94AilUKl65QnqIaGcBMBAXeiQm4rUOVqB/H+I0omr+fzoOg+gH5ISNnKybhDZttRI4w/uDrOBg9DfuOMKrkIfqq89fJvIkAcPKz4mOUQF3CQ==";
 		// }
-		if (worldProfile.saveFileData === undefined) {
+		if (worldProfile.saveFileData === undefined || true) {
 			print("Missing save file data. Loading world from starter file.");
 			loadedWorld.voxelWorld.voxelWorldFile = this.starterSaveFile;
 			loadedWorld.voxelWorld.LoadWorldFromSaveFile(this.starterSaveFile);
 		} else {
-			print("Decoding world from string.");
-			loadedWorld.voxelWorld.voxelBlocks.Reload(false);
-			(
-				loadedWorld.voxelWorld as unknown as {
-					CreateEmptyWorld(): void;
-				}
-			).CreateEmptyWorld();
-			loadedWorld.voxelWorld.DecodeFromString(worldProfile.saveFileData);
+			// print("Decoding world from string.");
+			// loadedWorld.voxelWorld.voxelBlocks.Reload(false);
+			// (
+			// 	loadedWorld.voxelWorld as unknown as {
+			// 		CreateEmptyWorld(): void;
+			// 	}
+			// ).CreateEmptyWorld();
+			// loadedWorld.voxelWorld.DecodeFromString(worldProfile.saveFileData);
 		}
 
 		this.loadedWorlds.push(loadedWorld);
