@@ -110,9 +110,11 @@ export default class WorldManager extends AirshipSingleton {
 		NetworkServer.Spawn(go);
 
 		if (worldProfile.saveFileData === undefined) {
+			print("Missing save file data. Loading world from starter file.");
 			loadedWorld.voxelWorld.voxelWorldFile = this.starterSaveFile;
 			loadedWorld.voxelWorld.LoadWorldFromSaveFile(this.starterSaveFile);
 		} else {
+			print("Decoding world from string.");
 			loadedWorld.voxelWorld.DecodeFromString(worldProfile.saveFileData);
 		}
 

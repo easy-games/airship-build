@@ -45,7 +45,7 @@ export default class ProfileManager extends AirshipSingleton {
 		} else {
 			// Real server
 			try {
-				const data = await Platform.Server.DataStore.GetKey<PlayerProfile>("player:" + player.userId);
+				const data = await Platform.Server.DataStore.GetKey<PlayerProfile>(`Player:${player.userId}`);
 				if (data) {
 					profile = data;
 				} else {
