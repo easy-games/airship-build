@@ -60,6 +60,14 @@ export default class Dashboard extends AirshipSingleton {
 				WorldManager.Get().MovePlayerToLoadedWorld(player, world);
 			}
 		});
+
+		Airship.Players.ObservePlayers((player) => {
+			player.SendMessage(
+				"Welcome to " +
+					ChatColor.Aqua(ChatColor.Bold("The Build Server")) +
+					ChatColor.White("! This is your private world where all progress is saved."),
+			);
+		});
 	}
 
 	StartClient() {
