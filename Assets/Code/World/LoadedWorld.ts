@@ -32,12 +32,18 @@ export default class LoadedWorld extends AirshipBehaviour {
 	}
 
 	public EnterWorld(player: Player): void {
-		print("Enter World: " + player.username);
 		this.playersInWorld.push(player);
 		if (player.IsLocalPlayer()) {
 			WorldManager.Get().currentWorld = this.voxelWorld;
 			WorldManager.Get().currentLoadedWorld = this;
 		}
+	}
+
+	public GetSpawnLocation(): { position: Vector3; forward: Vector3 } {
+		return {
+			position: this.transform.position.add(new Vector3(0.5, 14, 0.5)),
+			forward: this.transform.forward,
+		};
 	}
 
 	public ExitWorld(player: Player): void {

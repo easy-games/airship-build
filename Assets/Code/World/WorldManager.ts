@@ -16,7 +16,7 @@ export default class WorldManager extends AirshipSingleton {
 	public starterSaveFile: WorldSaveFile;
 	public voxelBlocks: VoxelBlocks;
 
-	public uidToLoadedWorldMap = new Map<string, LoadedWorld>();
+	public uidToCurrentLoadedWorldMap = new Map<string, LoadedWorld>();
 
 	private enterWorldNetSig = new NetworkSignal<[userId: string, worldNetId: number]>("WorldManager:EnterWorld");
 	private exitWorldNetSig = new NetworkSignal<[userId: string, worldNetId: number]>("WorldManager:ExitWorld");
@@ -76,9 +76,23 @@ export default class WorldManager extends AirshipSingleton {
 		});
 	}
 
+	/**
+	 * Gets the world the player is currently in
+	 * @param player
+	 * @returns
+	 */
 	public GetLoadedWorldFromPlayer(player: Player): LoadedWorld | undefined {
-		if (this.uidToLoadedWorldMap.has(player.userId)) {
-			return this.uidToLoadedWorldMap.get(player.userId);
+		if (this.uidToCurrentLoadedWorldMap.has(player.userId)) {
+			return this.uidToCurrentLoadedWorldMap.get(player.userId);
+		}
+		return undefined;
+	}
+
+	public GetLoadedWorldOwnedByPlayer(player: Player): LoadedWorld | undefined {
+		for (const loadedWorld of this.loadedWorlds) {
+			if (loadedWorld.IsOwner(player)) {
+				return loadedWorld;
+			}
 		}
 		return undefined;
 	}
@@ -160,7 +174,7 @@ export default class WorldManager extends AirshipSingleton {
 		const character = player.SpawnCharacter(spawnPos, {
 			lookDirection: loadedWorld.transform.forward,
 		});
-		this.uidToLoadedWorldMap.set(player.userId, loadedWorld);
+		this.uidToCurrentLoadedWorldMap.set(player.userId, loadedWorld);
 		loadedWorld.EnterWorld(player);
 		this.enterWorldNetSig.server.FireAllClients(player.userId, loadedWorld.networkIdentity.netId);
 

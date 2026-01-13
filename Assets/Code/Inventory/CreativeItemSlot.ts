@@ -1,9 +1,9 @@
 import { Asset } from "@Easy/Core/Shared/Asset";
-import { AudioManager } from "@Easy/Core/Shared/Audio/AudioManager";
 import { ItemDef } from "@Easy/Core/Shared/Item/ItemDefinitionTypes";
 import { Bin } from "@Easy/Core/Shared/Util/Bin";
 import { CanvasAPI, HoverState } from "@Easy/Core/Shared/Util/CanvasAPI";
 import { ItemType } from "Code/Item/ItemType";
+import SoundUtil from "Code/Misc/SoundUtil";
 import CreativeItemsWindow from "./CreativeItemsWindow";
 import InventoryManager from "./InventoryManager";
 
@@ -31,16 +31,14 @@ export default class CreativeItemSlot extends AirshipBehaviour {
 
 		this.button.onClick.Connect(() => {
 			if (this.redirectScroll.isDragging) return;
-			AudioManager.PlayClipGlobal(Asset.LoadAsset("Assets/AirshipPackages/@Easy/Core/Sound/UI_Select.wav"));
+			SoundUtil.PlayClick();
 			InventoryManager.Get().spawnItemNS.client.FireServer(this.itemDef.itemType as ItemType);
 		});
 		this.bin.AddEngineEventConnection(
 			CanvasAPI.OnHoverEvent(this.button.gameObject, (hov) => {
 				if (hov === HoverState.ENTER) {
 					this.window.SetTooltip(this);
-					AudioManager.PlayClipGlobal(
-						Asset.LoadAsset("Assets/AirshipPackages/@Easy/Core/Sound/UI_Notch.wav"),
-					);
+					SoundUtil.PlayHover();
 				} else {
 					this.window.ClearTooltip();
 				}

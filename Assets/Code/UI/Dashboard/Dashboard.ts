@@ -6,6 +6,8 @@ import { AppManager } from "@Easy/Core/Shared/Util/AppManager";
 import { Bin } from "@Easy/Core/Shared/Util/Bin";
 import { ChatColor } from "@Easy/Core/Shared/Util/ChatColor";
 import { ActionId } from "Code/Input/ActionId";
+import SoundUtil from "Code/Misc/SoundUtil";
+import WorldManager from "Code/World/WorldManager";
 import DashboardOnlinePlayer from "./DashboardOnlinePlayer";
 
 export default class Dashboard extends AirshipSingleton {
@@ -14,8 +16,11 @@ export default class Dashboard extends AirshipSingleton {
 	public window: RectTransform;
 	public onlinePlayerPrefab: GameObject;
 	public onlinePlayerContent: RectTransform;
+	public teleportHomeButton: Button;
+	public permissionsButton: Button;
 
-	public teleportNetSig = new NetworkSignal<[targetPlayerUid: string]>("Dashboard:Teleport");
+	public teleportNetSig = new NetworkSignal<[targetPlayerUid: string]>("Dashboard:TeleportToPlayer");
+	public teleportHomeNetSig = new NetworkSignal<[]>("Dashboard:TeleportHome");
 
 	private uidToOnlinePlayer = new Map<string, DashboardOnlinePlayer>();
 
@@ -46,6 +51,13 @@ export default class Dashboard extends AirshipSingleton {
 				targetPlayer.character.transform.forward,
 			);
 			player.SendMessage(ChatColor.Green("Teleported to " + targetPlayer.username));
+		});
+
+		this.teleportHomeNetSig.server.OnClientEvent((player) => {
+			const world = WorldManager.Get().GetLoadedWorldOwnedByPlayer(player);
+			if (world) {
+				WorldManager.Get().MovePlayerToLoadedWorld(player, world);
+			}
 		});
 	}
 
@@ -83,6 +95,15 @@ export default class Dashboard extends AirshipSingleton {
 		this.background.GetComponent<Button>().onClick.Connect(() => {
 			this.Close();
 		});
+
+		this.teleportHomeButton.onClick.Connect(() => {
+			SoundUtil.PlayClick();
+			this.teleportHomeNetSig.client.FireServer();
+		});
+
+		this.permissionsButton.onClick.Connect(() => {
+			SoundUtil.PlayError();
+		});
 	}
 
 	public Open(): void {
@@ -97,7 +118,7 @@ export default class Dashboard extends AirshipSingleton {
 		this.background.color = new Color(0, 0, 0, 0);
 		NativeTween.GraphicAlpha(this.background, 0.4, 0.18).SetEaseQuadOut();
 
-		this.window.anchoredPosition = new Vector2(480, -10);
+		this.window.anchoredPosition = new Vector2(480, 0);
 		NativeTween.AnchoredPositionX(this.window, -10, 0.18).SetEaseQuadOut();
 
 		this.openBin.Add(Mouse.AddUnlocker());
