@@ -3,6 +3,7 @@ import { Game } from "@Easy/Core/Shared/Game";
 import { Player } from "@Easy/Core/Shared/Player/Player";
 import { ChatColor } from "@Easy/Core/Shared/Util/ChatColor";
 import { Signal, SignalPriority } from "@Easy/Core/Shared/Util/Signal";
+import { SetInterval } from "@Easy/Core/Shared/Util/Timer";
 import WorldManager from "Code/World/WorldManager";
 import { PlayerProfile } from "./PlayerProfile";
 import { WorldProfile } from "./WorldProfile";
@@ -17,8 +18,24 @@ export default class ProfileManager extends AirshipSingleton {
 				task.spawn(async () => {
 					await this.LoadPlayer(player);
 				});
+				return () => {
+					task.spawn(async () => {
+						this.SaveProfile(player);
+					});
+				};
 			}, SignalPriority.HIGHEST);
 		}
+
+		// Autosave
+		SetInterval(60, async () => {
+			for (const player of Airship.Players.GetPlayers()) {
+				try {
+					await this.SaveProfile(player);
+				} catch (err) {
+					Debug.LogError(err);
+				}
+			}
+		});
 	}
 
 	private async LoadPlayer(player: Player): Promise<void> {
