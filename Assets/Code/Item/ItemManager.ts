@@ -140,9 +140,33 @@ export default class ItemManager extends AirshipSingleton {
 				});
 			}
 		}
-		this.SetBlockMaterial(BlockMaterialType.Grass, ["Grass", "Dirt"]);
+		this.SetBlockMaterial(BlockMaterialType.Grass, [
+			"Grass",
+			"Dirt",
+			"Canopy",
+			"Jungle Dirt",
+			"Grass - Spirit",
+			"Jungle Floor - Grass",
+			"Sand",
+			"Grass - Blossom",
+		]);
 		this.SetBlockMaterial(BlockMaterialType.Ceramic, ["Ceramic"]);
 		this.SetBlockMaterial(BlockMaterialType.Obsidian, ["Obsidian"]);
+		this.SetBlockMaterial(BlockMaterialType.Wool, [
+			"WhiteWool",
+			"PinkWool",
+			"BlueWool",
+			"YellowWool",
+			"OrangeWool",
+			"GreenWool",
+			"TNT",
+		]);
+		this.SetBlockMaterial(BlockMaterialType.Wood, [
+			"Wood - Post -  Vertical",
+			"Wood - Post - Stair",
+			"Winter Wood",
+			"Bark",
+		]);
 
 		Airship.Inventory.RegisterItem(ItemType.EmeraldPickaxe, {
 			displayName: "Emerald Pickaxe",

@@ -120,7 +120,9 @@ export class BlockBreakerItemHandler extends ItemHandler {
 				info.raycastResult.normal,
 			);
 
-			const blockId = WorldManager.Get().currentWorld.GetVoxelAt(info.voxelWorldPosition);
+			const blockId = WorldManager.Get().currentWorld.GetVoxelAt(
+				info.voxelWorldPosition.sub(WorldManager.Get().currentLoadedWorld.offset),
+			);
 			BlockHitManager.Get().PlayHitEffect(
 				this.character,
 				info.voxelWorldPosition,

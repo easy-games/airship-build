@@ -324,7 +324,7 @@ export default class BlockHitManager extends AirshipSingleton {
 
 	public PlayHitEffect(
 		character: Character,
-		voxelPosition: Vector3,
+		voxelWorldPosition: Vector3,
 		hitBlockPos: Vector3,
 		normal: Vector3,
 		blockId: number | undefined,
@@ -348,14 +348,14 @@ export default class BlockHitManager extends AirshipSingleton {
 
 		// Extend raycast a bit so we end up inside the block
 		const posInBlock = hitBlockPos.add(normal.mul(0.15));
-		const blockPos = voxelPosition.add(Vector3.one.mul(0.5));
+		const blockPos = voxelWorldPosition.add(Vector3.one.mul(0.5));
 
 		// Delay for impact
 		task.delay(0.05, () => {
 			// ScreenShakeManager.Get().Shake(new Vector3(-1, -0.5, 0));
 			const blockItemType = ItemManager.Get().GetItemTypeFromVoxelId(blockId);
 			if (damageNegated) {
-				BlockSoundManager.Get().PlayHitNegatedSound(voxelPosition, blockItemType);
+				BlockSoundManager.Get().PlayHitNegatedSound(voxelWorldPosition, blockItemType);
 
 				if (this.negatedDebrisVfx) {
 					const debris = PoolManager.SpawnObject(
@@ -373,7 +373,11 @@ export default class BlockHitManager extends AirshipSingleton {
 			const percentDestroyed = 1;
 
 			if (blockItemType) {
-				BlockSoundManager.Get().PlayHitSound(blockItemType, voxelPosition, math.clamp01(1 - percentDestroyed));
+				BlockSoundManager.Get().PlayHitSound(
+					blockItemType,
+					voxelWorldPosition,
+					math.clamp01(1 - percentDestroyed),
+				);
 			}
 
 			// if (!destroyed) {

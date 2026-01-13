@@ -211,7 +211,10 @@ export default class BlockItemHandler extends ItemHandler {
 
 		const blockPlacement = BlockPlacementManager.Get();
 		this.PlayPlaceEffect(worldPos);
-		blockPlacement.ClientPredictBlockPlace(worldPos, this.blockId);
+		blockPlacement.ClientPredictBlockPlace(
+			worldPos.sub(WorldManager.Get().currentLoadedWorld.offset),
+			this.blockId,
+		);
 		blockPlacement.placeBlockNetSig.client.FireServer(
 			worldPos,
 			this.blockId,
