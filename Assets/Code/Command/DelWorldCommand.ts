@@ -1,4 +1,3 @@
-import { Platform } from "@Easy/Core/Shared/Airship";
 import { ChatCommand } from "@Easy/Core/Shared/Commands/ChatCommand";
 import { Player } from "@Easy/Core/Shared/Player/Player";
 import { ChatColor } from "@Easy/Core/Shared/Util/ChatColor";
@@ -11,27 +10,27 @@ export default class DelWorldCommand extends ChatCommand {
 	}
 
 	public async Execute(player: Player, args: string[]): Promise<void> {
-		const world = WorldManager.Get().GetLoadedWorldFromPlayer(player);
-		if (!world) return;
-		if (!world.IsOwner(player)) {
-			player.SendMessage(ChatColor.Red("You are not the owner of this world."));
-			return;
+		const profile = ProfileManager.Get().WaitForProfile(player);
+		const world = WorldManager.Get().GetLoadedWorldOwnedByPlayer(player);
+		if (world) {
+			player.SendMessage("Deleting world...");
+			try {
+				// await Platform.Server.DataStore.DeleteKey(`World:${world.worldProfile!.id}`);
+				await WorldManager.Get().UnloadWorld(world, false);
+
+				const idx = profile.worldIds.indexOf(world.worldId);
+				if (idx >= 0) {
+					profile.worldIds.remove(idx);
+				}
+			} catch (err) {
+				Debug.LogError(err);
+			}
 		}
 
-		player.SendMessage("Deleting world...");
 		try {
-			await Platform.Server.DataStore.DeleteKey(`World:${world.worldProfile!.id}`);
-			await WorldManager.Get().UnloadWorld(world, false);
-
-			const profile = ProfileManager.Get().WaitForProfile(player);
-			const idx = profile.worldIds.indexOf(world.worldId);
-			if (idx >= 0) {
-				profile.worldIds.remove(idx);
-			}
-
 			// make new world profile
 			const worldProfile = ProfileManager.Get().MakeNewWorldProfile(player);
-			profile.worldIds.push(worldProfile.id);
+			profile.worldIds = [worldProfile.id];
 			try {
 				await ProfileManager.Get().SaveProfile(player);
 			} catch (err) {
