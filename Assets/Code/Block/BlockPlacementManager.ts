@@ -137,7 +137,9 @@ export default class BlockPlacementManager extends AirshipSingleton {
 				if (!Game.localPlayer.character) return;
 				const info = BlockBreakerItemHandler.GetTargetVoxelPositionAndRaycastInfo();
 				if (info) {
-					const voxelId = WorldManager.Get().currentWorld.GetVoxelIdAt(info.voxelWorldPosition);
+					const voxelId = WorldManager.Get().currentWorld.GetVoxelIdAt(
+						info.voxelWorldPosition.sub(WorldManager.Get().currentLoadedWorld.offset),
+					);
 					const itemType = ItemManager.Get().GetItemTypeFromVoxelId(voxelId);
 					if (!itemType) return;
 
