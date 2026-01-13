@@ -66,7 +66,7 @@ export default class Dashboard extends AirshipSingleton {
 			if (e.uiProcessed) return;
 
 			if (this.isOpen) {
-				this.Close();
+				AppManager.Close();
 			} else {
 				this.Open();
 			}
@@ -93,7 +93,7 @@ export default class Dashboard extends AirshipSingleton {
 		});
 
 		this.background.GetComponent<Button>().onClick.Connect(() => {
-			this.Close();
+			AppManager.Close();
 		});
 
 		this.teleportHomeButton.onClick.Connect(() => {
