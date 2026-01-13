@@ -27,6 +27,16 @@ export default class WorldManager extends AirshipSingleton {
 
 	private loadedWorlds: LoadedWorld[] = [];
 
+	private availableOffsets = new Array<Vector3>();
+
+	protected Awake(): void {
+		for (let x = -5; x <= 5; x++) {
+			for (let z = -5; z <= 5; z++) {
+				this.availableOffsets.push(new Vector3(500 * x, 0, 500 * z));
+			}
+		}
+	}
+
 	override Start(): void {
 		// if (Game.IsServer()) {
 		// 	this.currentWorld.LoadWorldFromSaveFile(this.currentWorld.voxelWorldFile);
@@ -66,12 +76,6 @@ export default class WorldManager extends AirshipSingleton {
 		});
 	}
 
-	@Server()
-	public UnloadWorld(world: LoadedWorld): void {
-		this.removeLoadedWorldNetSig.server.FireAllClients(world.networkIdentity.netId);
-		NetworkServer.Destroy(world.gameObject);
-	}
-
 	public GetLoadedWorldFromPlayer(player: Player): LoadedWorld | undefined {
 		if (this.uidToLoadedWorldMap.has(player.userId)) {
 			return this.uidToLoadedWorldMap.get(player.userId);
@@ -86,13 +90,21 @@ export default class WorldManager extends AirshipSingleton {
 	}
 
 	@Server()
-	public LoadWorldFromProfile(worldProfile: WorldProfile, ownerPlayer?: Player): LoadedWorld {
+	public LoadWorldFromProfile(worldProfile: WorldProfile, ownerPlayer?: Player): LoadedWorld | undefined {
+		if (this.availableOffsets.size() === 0) {
+			print("No world offsets available.");
+			return undefined;
+		}
+		const offset = this.availableOffsets[0];
+		this.availableOffsets.remove(0);
+
 		const go = Instantiate(this.playerWorldPrefab);
 		if (ownerPlayer) {
 			go.name = "VoxelWorld - " + ownerPlayer.username;
 		}
 		const loadedWorld = go.GetAirshipComponent<LoadedWorld>()!;
-		loadedWorld.offset = new Vector3(500, 0, 500);
+
+		loadedWorld.offset = offset;
 		loadedWorld.transform.position = loadedWorld.offset;
 		NetworkServer.Spawn(go);
 
@@ -105,6 +117,16 @@ export default class WorldManager extends AirshipSingleton {
 		this.addLoadedWorldNetSig.server.FireAllClients(loadedWorld.networkIdentity.netId, loadedWorld.offset);
 
 		return loadedWorld;
+	}
+
+	@Server()
+	public UnloadWorld(world: LoadedWorld): void {
+		const offset = world.offset;
+		this.removeLoadedWorldNetSig.server.FireAllClients(world.networkIdentity.netId);
+		NetworkServer.Destroy(world.gameObject);
+
+		// return offset to available list
+		this.availableOffsets.push(offset);
 	}
 
 	@Server()

@@ -583,7 +583,7 @@ export default class BlockItemHandler extends ItemHandler {
 		const direction = localChar.movement.GetLookVector();
 		const blockRaycast = new BlockRaycast(originPos, direction);
 
-		const voxelWorld = WorldManager.Get().currentWorld;
+		const world = WorldManager.Get().currentLoadedWorld;
 		let pos: Vector3;
 
 		// We check all possible hook positions but prioritize the one with the steepest hook angle
@@ -603,7 +603,7 @@ export default class BlockItemHandler extends ItemHandler {
 			// const lastOffsetFromRay = blockRaycast.GetLastBlockOffsetFromRay();
 			// if (lastOffsetFromRay > 0.5) continue;
 
-			if (BlockUtil.VoxelDataToBlockId(voxelWorld.GetVoxelAt(pos)) !== 0) break;
+			if (BlockUtil.VoxelDataToBlockId(world.voxelWorld.GetVoxelAt(pos.sub(world.offset))) !== 0) break;
 
 			const halfCardinalDirs = [Vector3.up, Vector3.forward, Vector3.right];
 
@@ -623,7 +623,9 @@ export default class BlockItemHandler extends ItemHandler {
 
 					const blockPos = BlockUtil.FloorPos(pos).add(Vector3.one.div(2));
 					if (
-						BlockUtil.VoxelDataToBlockId(voxelWorld.GetVoxelAt(BlockUtil.FloorPos(pos.add(dir)))) > 0 &&
+						BlockUtil.VoxelDataToBlockId(
+							world.voxelWorld.GetVoxelAt(BlockUtil.FloorPos(pos.sub(world.offset).add(dir))),
+						) > 0 &&
 						this.CanPlaceAt(blockPos)
 					) {
 						steepestHookPos = blockPos;
@@ -654,6 +656,7 @@ export default class BlockItemHandler extends ItemHandler {
 
 		// const cameraRay = Camera.main.ViewportPointToRay(new Vector3(0.5, 0.5, 0));
 
+		const world = WorldManager.Get().currentLoadedWorld;
 		const charPos = localChar.transform.position;
 		const posBelowChar = charPos.sub(new Vector3(0, 0.5, 0));
 		// const cameraDir = cameraRay.direction.WithY(0);
@@ -666,9 +669,8 @@ export default class BlockItemHandler extends ItemHandler {
 			const checkPos = blockRaycast.Next(0.51);
 			if (checkPos.sub(charPos).magnitude > BlockUtil.maxBlockReach) break; // Too far!
 			if (!this.CanPlaceAt(checkPos)) {
-				const world = WorldManager.Get().currentLoadedWorld;
 				// If we can't place at empty void location this no longer is a void bridge (so break)
-				if (!world.voxelWorld.GetVoxelAt(checkPos.add(world.offset))) break;
+				if (!world.voxelWorld.GetVoxelAt(checkPos.sub(world.offset))) break;
 				continue;
 			}
 			if (blockWillBePlacedHereNow) this.lastVoidPlacement = os.clock();

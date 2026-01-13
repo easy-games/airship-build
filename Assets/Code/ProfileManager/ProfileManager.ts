@@ -53,7 +53,11 @@ export default class ProfileManager extends AirshipSingleton {
 		this.onProfileLoaded.Fire(player, profile);
 
 		const loadedWorld = WorldManager.Get().LoadWorldFromProfile(worldProfile, player);
-		WorldManager.Get().MovePlayerToLoadedWorld(player, loadedWorld);
+		if (loadedWorld) {
+			WorldManager.Get().MovePlayerToLoadedWorld(player, loadedWorld);
+		} else {
+			// todo: spawn in another world?
+		}
 	}
 
 	private MakeNewWorldProfile(owner: Player): WorldProfile {
