@@ -119,12 +119,6 @@ export default class WorldManager extends AirshipSingleton {
 			loadedWorld.voxelWorld.LoadWorldFromSaveFile(this.starterSaveFile);
 		} else {
 			print("Decoding world from string.");
-			loadedWorld.voxelWorld.voxelBlocks.Reload(false);
-			(
-				loadedWorld.voxelWorld as unknown as {
-					CreateEmptyWorld(): void;
-				}
-			).CreateEmptyWorld();
 			loadedWorld.voxelWorld.DecodeFromString(worldProfile.saveFileData);
 		}
 
