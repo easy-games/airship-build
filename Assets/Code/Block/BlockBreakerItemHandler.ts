@@ -80,7 +80,7 @@ export class BlockBreakerItemHandler extends ItemHandler {
 			// Position the selection outline around our target
 			const selectionOutline = BlockPlacementManager.Get().selectionOutline;
 			selectionOutline.SetActive(true);
-			selectionOutline.transform.position = targetInfo.voxelPosition.add(Vector3.one.div(2));
+			selectionOutline.transform.position = targetInfo.voxelWorldPosition.add(Vector3.one.div(2));
 		} else {
 			BlockPlacementManager.Get().selectionOutline.SetActive(false);
 		}
@@ -115,15 +115,15 @@ export class BlockBreakerItemHandler extends ItemHandler {
 		const info = BlockBreakerItemHandler.GetTargetVoxelPositionAndRaycastInfo();
 		if (info) {
 			BlockHitManager.Get().hitBlockNetSig.client.FireServer(
-				info.voxelPosition,
+				info.voxelWorldPosition,
 				info.raycastResult.point,
 				info.raycastResult.normal,
 			);
 
-			const blockId = WorldManager.Get().currentWorld.GetVoxelAt(info.voxelPosition);
+			const blockId = WorldManager.Get().currentWorld.GetVoxelAt(info.voxelWorldPosition);
 			BlockHitManager.Get().PlayHitEffect(
 				this.character,
-				info.voxelPosition,
+				info.voxelWorldPosition,
 				info.raycastResult.point,
 				info.raycastResult.normal,
 				blockId,
@@ -156,7 +156,7 @@ export class BlockBreakerItemHandler extends ItemHandler {
 	}
 
 	public static GetTargetVoxelPositionAndRaycastInfo():
-		| { voxelPosition: Vector3; raycastResult: BlockRaycastResult }
+		| { voxelWorldPosition: Vector3; raycastResult: BlockRaycastResult }
 		| undefined {
 		const raycastResult = BlockUtil.RaycastForBlock();
 		const hitBlockPos = raycastResult?.point.sub(raycastResult.normal.mul(0.1));
@@ -173,6 +173,6 @@ export class BlockBreakerItemHandler extends ItemHandler {
 			math.floor(hitBlockPos.y),
 			math.floor(hitBlockPos.z),
 		);
-		return { voxelPosition: voxelPosition, raycastResult };
+		return { voxelWorldPosition: voxelPosition, raycastResult };
 	}
 }

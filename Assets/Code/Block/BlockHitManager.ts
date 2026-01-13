@@ -73,13 +73,14 @@ export default class BlockHitManager extends AirshipSingleton {
 	}
 
 	public StartServer() {
-		this.hitBlockNetSig.server.OnClientEvent((player, blockPos, hitPoint, normal) => {
+		this.hitBlockNetSig.server.OnClientEvent((player, voxelWorldPos, hitPoint, normal) => {
 			if (!player.character) return;
 
 			const world = WorldManager.Get().GetLoadedWorldFromPlayer(player);
 			if (!world) return;
-			const redirectedPosition = BlockUtil.GetRedirectedBlockPosition(blockPos);
-			const voxelData = WorldManager.Get().currentWorld.GetVoxelAt(redirectedPosition);
+
+			const redirectedPosition = BlockUtil.GetRedirectedBlockPosition(voxelWorldPos.sub(world.offset));
+			const voxelData = world.voxelWorld.GetVoxelAt(redirectedPosition);
 			const hitBlockId = BlockUtil.VoxelDataToBlockId(voxelData);
 
 			// Make sure we aren't on cooldown
@@ -89,9 +90,9 @@ export default class BlockHitManager extends AirshipSingleton {
 			}
 
 			// Validate distance to block is within max reach
-			if (hitBlockId !== undefined && blockPos !== undefined) {
+			if (hitBlockId !== undefined && voxelWorldPos !== undefined) {
 				const eyePosition = player.character.transform.position.add(new Vector3(0, 1.5, 0));
-				const sqrDistanceToBlock = eyePosition.sub(blockPos).sqrMagnitude;
+				const sqrDistanceToBlock = eyePosition.sub(voxelWorldPos).sqrMagnitude;
 				// Add 1.5 unit tolerance to account for: network character mismatch + crouch offset + small buffer
 				const maxReachWithTolerance = BlockUtil.maxBlockReach + 1.5;
 				if (sqrDistanceToBlock > maxReachWithTolerance * maxReachWithTolerance) {
@@ -116,7 +117,7 @@ export default class BlockHitManager extends AirshipSingleton {
 				0,
 			);
 
-			this.DestroyBlockServer(world, hitBlockId, voxelData, blockPos, player.character, true);
+			this.DestroyBlockServer(world, hitBlockId, voxelData, voxelWorldPos, player.character, true);
 		});
 	}
 
@@ -205,26 +206,26 @@ export default class BlockHitManager extends AirshipSingleton {
 		loadedWorld: LoadedWorld,
 		blockId: number,
 		voxelData: number,
-		position: Vector3,
+		voxelWorldPos: Vector3,
 		character: Character | undefined,
 		priority = true,
 	) {
-		let containedPositions: Vector3[] = [position];
+		let containedPositions: Vector3[] = [voxelWorldPos];
 		const blockItemType = ItemManager.Get().GetItemTypeFromVoxelId(blockId);
 		if (blockItemType !== undefined && BlockUtil.HasContainedVoxels(blockItemType)) {
 			const rot = VoxelWorld.GetVoxelDataRotation(voxelData);
-			containedPositions = BlockUtil.GetContainedVoxels(blockItemType, position, rot);
+			containedPositions = BlockUtil.GetContainedVoxels(blockItemType, voxelWorldPos, rot);
 		}
 
 		for (const containedPosition of containedPositions) {
 			BlockDataManager.Get().UnregisterBlockData(containedPosition);
-			loadedWorld.voxelWorld.WriteVoxelAt(containedPosition, 0, priority);
+			loadedWorld.voxelWorld.WriteVoxelAt(containedPosition.sub(loadedWorld.offset), 0, priority);
 		}
-		this.onBlockDestroyedServer.Fire(loadedWorld.networkIdentity.netId, position, blockId, character);
+		this.onBlockDestroyedServer.Fire(loadedWorld.networkIdentity.netId, voxelWorldPos, blockId, character);
 
 		this.destroyBlockNetSig.server.FireAllClients(
 			loadedWorld.networkIdentity.netId,
-			[position],
+			[voxelWorldPos],
 			[voxelData],
 			character?.id,
 		);
