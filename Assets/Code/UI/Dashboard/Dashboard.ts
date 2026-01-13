@@ -18,6 +18,7 @@ export default class Dashboard extends AirshipSingleton {
 	public onlinePlayerContent: RectTransform;
 	public teleportHomeButton: Button;
 	public permissionsButton: Button;
+	public onlinePlayersText: TMP_Text;
 
 	public teleportNetSig = new NetworkSignal<[targetPlayerUid: string]>("Dashboard:TeleportToPlayer");
 	public teleportHomeNetSig = new NetworkSignal<[]>("Dashboard:TeleportHome");
@@ -86,6 +87,8 @@ export default class Dashboard extends AirshipSingleton {
 
 			// Update local player to be last
 			this.uidToOnlinePlayer.get(Game.localPlayer.userId)?.transform.SetAsLastSibling();
+
+			this.onlinePlayersText.text = `Online Players (${Airship.Players.GetPlayers().size()})`;
 
 			return () => {
 				this.uidToOnlinePlayer.delete(player.userId);

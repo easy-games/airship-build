@@ -48,7 +48,7 @@ export default class WorldManager extends AirshipSingleton {
 	@Server()
 	private StartServer() {
 		Airship.Players.onPlayerDisconnected.Connect((player) => {
-			const world = this.GetLoadedWorldFromPlayer(player);
+			const world = this.GetLoadedWorldOwnedByPlayer(player);
 			if (world) {
 				world.ExitWorld(player);
 				this.exitWorldNetSig.server.FireAllClients(player.userId, world.networkIdentity.netId);
@@ -170,9 +170,9 @@ export default class WorldManager extends AirshipSingleton {
 		if (player.character) {
 			player.character.Despawn();
 		}
-		const spawnPos = loadedWorld.transform.position.add(new Vector3(0.5, 14, 0.5));
-		const character = player.SpawnCharacter(spawnPos, {
-			lookDirection: loadedWorld.transform.forward,
+		const spawnLoc = loadedWorld.GetSpawnLocation();
+		const character = player.SpawnCharacter(spawnLoc.position, {
+			lookDirection: spawnLoc.forward,
 		});
 		this.uidToCurrentLoadedWorldMap.set(player.userId, loadedWorld);
 		loadedWorld.EnterWorld(player);
