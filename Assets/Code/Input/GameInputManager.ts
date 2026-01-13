@@ -12,6 +12,7 @@ export default class GameInputManager extends AirshipSingleton {
 			hidden: true,
 		});
 		Airship.Input.CreateAction(ActionId.SelectBlock, Binding.MouseButton(MouseButton.MiddleButton));
+		Airship.Input.CreateAction(ActionId.Dashboard, Binding.Key(Key.Tab));
 
 		Airship.Settings.AddToggle(SettingId.BW2_Placement, false);
 	}

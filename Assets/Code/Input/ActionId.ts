@@ -5,4 +5,5 @@ export enum ActionId {
 	BreakBlock = "BreakBlock",
 	DropItem = "DropItem",
 	SelectBlock = "SelectBlock",
+	Dashboard = "Dashboard",
 }

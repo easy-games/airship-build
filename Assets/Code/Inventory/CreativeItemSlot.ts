@@ -39,7 +39,7 @@ export default class CreativeItemSlot extends AirshipBehaviour {
 				if (hov === HoverState.ENTER) {
 					this.window.SetTooltip(this);
 					AudioManager.PlayClipGlobal(
-						Asset.LoadAsset("Assets/AirshipPackages/@Easy/Core/Sound/UI_Hover_01.wav"),
+						Asset.LoadAsset("Assets/AirshipPackages/@Easy/Core/Sound/UI_Notch.wav"),
 					);
 				} else {
 					this.window.ClearTooltip();
