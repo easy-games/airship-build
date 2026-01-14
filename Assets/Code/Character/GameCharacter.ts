@@ -6,7 +6,12 @@ export default class GameCharacter extends AirshipBehaviour {
 	private lockedRotation: boolean = false;
 	private unlockedRotationValue: number;
 
-	override Start(): void {}
+	override Start(): void {
+		if (this.character.IsLocalCharacter()) {
+			this.character.SetHeldSlot(1);
+			this.character.SetHeldSlot(0);
+		}
+	}
 
 	override OnDestroy(): void {}
 

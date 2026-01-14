@@ -299,7 +299,7 @@ export default class BlockHitManager extends AirshipSingleton {
 		if (elapsedTime >= lenientCooldown) {
 			if (registerNewAction) {
 				(asServer ? this.lastActionTickServer : this.lastActionTickClient).set(player, tick);
-				if (player.IsLocalPlayer() && !Game.IsServer) {
+				if (player.IsLocalPlayer()) {
 					this.localTimeSinceLastUse = 0;
 				}
 			}

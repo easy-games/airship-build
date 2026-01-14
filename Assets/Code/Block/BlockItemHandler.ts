@@ -220,6 +220,7 @@ export default class BlockItemHandler extends ItemHandler {
 			this.blockId,
 			WorldManager.Get().currentLoadedWorld.networkIdentity.netId,
 		);
+		VibrationManager.Play(VibrationFeedbackType.Medium);
 	}
 
 	public OnUnequip(): void {

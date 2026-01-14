@@ -141,6 +141,7 @@ export class BlockBreakerItemHandler extends ItemHandler {
 				damageNegated,
 				true,
 			);
+			VibrationManager.Play(VibrationFeedbackType.Medium);
 		}
 	}
 

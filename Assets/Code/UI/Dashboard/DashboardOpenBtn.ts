@@ -8,6 +8,7 @@ export default class DashboardOpenBtn extends AirshipBehaviour {
 		this.button.onClick.Connect(() => {
 			SoundUtil.PlayClick();
 			Dashboard.Get().Open();
+			VibrationManager.Play(VibrationFeedbackType.Heavy);
 		});
 	}
 
