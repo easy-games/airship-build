@@ -9,7 +9,7 @@ export default class SaveCommand extends ChatCommand {
 	}
 
 	public async Execute(player: Player, args: string[]): Promise<void> {
-		const world = WorldManager.Get().GetLoadedWorldFromPlayer(player);
+		const world = WorldManager.Get().GetLoadedWorldOwnedByPlayer(player);
 		if (world) {
 			player.SendMessage("Saving world...");
 			try {

@@ -175,6 +175,10 @@ export default class WorldManager extends AirshipSingleton {
 
 		// return offset to available list
 		this.availableOffsets.push(offset);
+		const idx = this.loadedWorlds.indexOf(world);
+		if (idx >= 0) {
+			this.loadedWorlds.remove(idx);
+		}
 	}
 
 	@Server()
