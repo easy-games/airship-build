@@ -2270,11 +2270,7 @@ MonoBehaviour:
   metadata:
     name: AirshipScreenSafeArea
     singleton: 0
-    decorators:
-    - name: RequireComponent
-      parameters:
-      - type: object
-        serializedValue: '"RectTransform"'
+    decorators: []
     properties:
     - name: safeArea
       type: object
@@ -3904,11 +3900,7 @@ MonoBehaviour:
   metadata:
     name: AirshipScreenSafeArea
     singleton: 0
-    decorators:
-    - name: RequireComponent
-      parameters:
-      - type: object
-        serializedValue: '"RectTransform"'
+    decorators: []
     properties:
     - name: safeArea
       type: object
@@ -5261,6 +5253,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1914019222}
   - component: {fileID: 1914019223}
+  - component: {fileID: 1914019224}
   m_Layer: 0
   m_Name: HudManager
   m_TagString: Untagged
@@ -5359,6 +5352,73 @@ MonoBehaviour:
       serializedValue: 
       serializedObject: {fileID: 1446396374}
       modified: 1
+    displayIcon: {fileID: 0}
+    displayName: 
+--- !u!114 &1914019224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1914019221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa4feffba88dce746a2607f0ec6233b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: c8562365-c781-4cf6-8c31-a3aa2e0ed6c7
+  script: {fileID: -1313622129650720927, guid: 8aeebf4e4f2f94e52ae9acf46eea7a4a, type: 3}
+  scriptPath: Assets/Code/Hud/MobileHudManager.lua
+  forceContext: 0
+  metadata:
+    name: MobileHudManager
+    singleton: 0
+    decorators: []
+    properties:
+    - name: overlayButtonContainer
+      type: object
+      objectType: RectTransform
+      items:
+        type: 
+        objectType: 
+        serializedItems: []
+        objectRefs: []
+      refPath: 
+      fileRef: 
+      jsDocs:
+        text: []
+        tags: []
+      decorators:
+      - name: Header
+        parameters:
+        - type: string
+          serializedValue: '"References"'
+      nullable: 0
+      serializedValue: 
+      serializedObject: {fileID: 0}
+      modified: 0
+    - name: mobileButtonPrefab
+      type: object
+      objectType: GameObject
+      items:
+        type: 
+        objectType: 
+        serializedItems: []
+        objectRefs: []
+      refPath: 
+      fileRef: 
+      jsDocs:
+        text: []
+        tags: []
+      decorators:
+      - name: Header
+        parameters:
+        - type: string
+          serializedValue: '"Prefabs"'
+      nullable: 0
+      serializedValue: 
+      serializedObject: {fileID: 0}
+      modified: 0
     displayIcon: {fileID: 0}
     displayName: 
 --- !u!1 &1946625744
