@@ -10,6 +10,7 @@ export default class LoadedWorld extends AirshipBehaviour {
 	public networkIdentity: NetworkIdentity;
 	public playersInWorld: Player[] = [];
 	public ownerUid: string;
+	public buildPermissionUids = new Array<string>();
 
 	@NonSerialized() public worldId: string;
 	@NonSerialized() public offset: Vector3;
@@ -18,10 +19,11 @@ export default class LoadedWorld extends AirshipBehaviour {
 		this.voxelWorld.voxelBlocks = WorldManager.Get().voxelBlocks;
 	}
 
-	public InitClient(worldId: string, offset: Vector3, ownerUserId: string): void {
+	public InitClient(worldId: string, offset: Vector3, ownerUserId: string, buildPermissionUids: string[]): void {
 		this.worldId = worldId;
 		this.offset = offset;
 		this.ownerUid = ownerUserId;
+		this.buildPermissionUids = buildPermissionUids;
 	}
 
 	public InitServer(worldProfile: WorldProfile, offset: Vector3): void {
@@ -29,6 +31,15 @@ export default class LoadedWorld extends AirshipBehaviour {
 		this.worldId = this.worldProfile.id;
 		this.offset = offset;
 		this.ownerUid = this.worldProfile.ownerUid;
+		this.buildPermissionUids = worldProfile.buildPermissionUids;
+	}
+
+	public HasBuildPermission(player: Player): boolean {
+		return this.IsOwner(player) || this.buildPermissionUids.includes(player.userId);
+	}
+
+	public IsInWorldBounds(worldPosition: Vector3): boolean {
+		return worldPosition.WithY(0).sub(this.offset.WithY(0)).magnitude <= 250;
 	}
 
 	public EnterWorld(player: Player): void {

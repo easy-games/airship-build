@@ -114,6 +114,15 @@ export class BlockBreakerItemHandler extends ItemHandler {
 
 		const info = BlockBreakerItemHandler.GetTargetVoxelPositionAndRaycastInfo();
 		if (info) {
+			let damageNegated = false;
+			const world = WorldManager.Get().currentLoadedWorld;
+			if (!world.HasBuildPermission(Game.localPlayer)) {
+				damageNegated = true;
+			}
+			if (!world.IsInWorldBounds(info.voxelWorldPosition)) {
+				damageNegated = true;
+			}
+
 			BlockHitManager.Get().hitBlockNetSig.client.FireServer(
 				info.voxelWorldPosition,
 				info.raycastResult.point,
@@ -129,7 +138,7 @@ export class BlockBreakerItemHandler extends ItemHandler {
 				info.raycastResult.point,
 				info.raycastResult.normal,
 				blockId,
-				false,
+				damageNegated,
 				true,
 			);
 		}

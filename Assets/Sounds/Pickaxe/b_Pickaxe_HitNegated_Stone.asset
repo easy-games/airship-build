@@ -7,7 +7,7 @@ AudioContainerElement:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: b_Pickaxe_HitNegated_Stone_02_{277373244209111641}
-  m_AudioClip: {fileID: 8300000, guid: f79e2daa5ad60ce4e96e52db6f2a528d, type: 3}
+  m_AudioClip: {fileID: 8300000, guid: d4e4917a350ad410096a7e752404471a, type: 3}
   m_Volume: 0
   m_Enabled: 1
 --- !u!1233149941 &525799789650362163
@@ -17,7 +17,7 @@ AudioContainerElement:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: b_Pickaxe_HitNegated_Stone_01_{525799789650362163}
-  m_AudioClip: {fileID: 8300000, guid: 9180543fcd01beb40ae94af7b5417458, type: 3}
+  m_AudioClip: {fileID: 8300000, guid: dd48c6ae13b4342a38bfeba40256625c, type: 3}
   m_Volume: 0
   m_Enabled: 1
 --- !u!1233149941 &5707896424422655363
@@ -27,7 +27,7 @@ AudioContainerElement:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: b_Pickaxe_HitNegated_Stone_03_{5707896424422655363}
-  m_AudioClip: {fileID: 8300000, guid: 4f4bc754a4c95da469fbf1460bb7b75b, type: 3}
+  m_AudioClip: {fileID: 8300000, guid: 9990d8bf179a446a4b825371e43e5358, type: 3}
   m_Volume: 0
   m_Enabled: 1
 --- !u!1307931743 &6418180475301049370
@@ -50,7 +50,7 @@ AudioRandomContainer:
   - {fileID: 277373244209111641}
   - {fileID: 5707896424422655363}
   - {fileID: 8277919946303381484}
-  m_AvoidRepeatingLast: 1
+  m_AvoidRepeatingLast: 0
   m_PlaybackMode: 2
   m_TriggerMode: 0
   m_AutomaticTriggerMode: 1
@@ -66,6 +66,6 @@ AudioContainerElement:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: b_Pickaxe_HitNegated_Stone_04_{8277919946303381484}
-  m_AudioClip: {fileID: 8300000, guid: 4d4db321264905748a49bbe074d6e1c7, type: 3}
+  m_AudioClip: {fileID: 8300000, guid: 2526dfd49ba1f4a658f50ba50e522df9, type: 3}
   m_Volume: 0
   m_Enabled: 0

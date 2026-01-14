@@ -111,7 +111,7 @@ MonoBehaviour:
       decorators: []
       nullable: 0
       serializedValue: 
-      serializedObject: {fileID: 0}
-      modified: 0
+      serializedObject: {fileID: 6418180475301049370, guid: 5b1618eb2e08746f5b472bd4a67c9f2b, type: 2}
+      modified: 1
     displayIcon: {fileID: 0}
     displayName: 

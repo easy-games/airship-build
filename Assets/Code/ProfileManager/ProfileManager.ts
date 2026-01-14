@@ -38,6 +38,14 @@ export default class ProfileManager extends AirshipSingleton {
 		});
 	}
 
+	private ReconcileWorldProfile(worldProfile: WorldProfile): void {
+		if (!worldProfile.buildPermissionUids) {
+			worldProfile.buildPermissionUids = [];
+		}
+	}
+
+	private ReconcilePlayerProfile(playerProfile: PlayerProfile): void {}
+
 	private async LoadPlayer(player: Player): Promise<void> {
 		let profile: PlayerProfile;
 		if (Game.IsEditor()) {
@@ -48,6 +56,7 @@ export default class ProfileManager extends AirshipSingleton {
 				const data = await Platform.Server.DataStore.GetKey<PlayerProfile>(`Player:${player.userId}`);
 				if (data) {
 					profile = data;
+					this.ReconcilePlayerProfile(profile);
 				} else {
 					profile = this.MakeNewPlayerProfile(player);
 				}
@@ -69,10 +78,21 @@ export default class ProfileManager extends AirshipSingleton {
 			const wp = await Platform.Server.DataStore.GetKey<WorldProfile>(`World:${profile.worldIds[0]}`);
 			if (!wp) {
 				// player.SendMessage(ChatColor.Red("Failed to load world."));
-				Game.BroadcastMessage(ChatColor.Red("Failed to load world for player: " + player.username));
+				Game.BroadcastMessage(
+					ChatColor.Red(
+						ChatColor.Bold(
+							"Failed to load " +
+								player.username +
+								"'s world. They may need to type " +
+								ChatColor.Yellow("/delworld") +
+								" to reset their world.",
+						),
+					),
+				);
 				return;
 			}
 			worldProfile = wp;
+			this.ReconcileWorldProfile(worldProfile);
 		}
 
 		this.onProfileLoaded.Fire(player, profile);
@@ -97,6 +117,7 @@ export default class ProfileManager extends AirshipSingleton {
 			createTime: os.time(),
 			ownerUid: owner.userId,
 			lastSaveTime: os.time(),
+			buildPermissionUids: [],
 		};
 	}
 

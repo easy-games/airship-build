@@ -47,11 +47,18 @@ export default class Dashboard extends AirshipSingleton {
 				player.SendMessage(ChatColor.Red("Unable to teleport to " + targetPlayer.username));
 				return;
 			}
-			player.character.Teleport(
-				targetPlayer.character.transform.position,
-				targetPlayer.character.transform.forward,
-			);
-			player.SendMessage(ChatColor.Green("Teleported to " + targetPlayer.username));
+
+			const targetWorld = WorldManager.Get().GetLoadedWorldFromPlayer(targetPlayer);
+			if (!targetWorld) {
+				player.SendMessage(ChatColor.Red(targetPlayer.username + " is not in a world."));
+				return;
+			}
+			WorldManager.Get().MovePlayerToLoadedWorld(player, targetWorld, {
+				targetLocation: {
+					position: targetPlayer.character.transform.position,
+					forward: targetPlayer.character.transform.forward,
+				},
+			});
 		});
 
 		this.teleportHomeNetSig.server.OnClientEvent((player) => {
@@ -62,6 +69,7 @@ export default class Dashboard extends AirshipSingleton {
 		});
 
 		Airship.Players.ObservePlayers((player) => {
+			if (player.IsBot()) return;
 			player.SendMessage(
 				"Welcome to " +
 					ChatColor.Aqua(ChatColor.Bold("The Build Server")) +
@@ -85,6 +93,10 @@ export default class Dashboard extends AirshipSingleton {
 		});
 		Airship.Menu.SetTabListEnabled(false);
 
+		const UpdatePlayerCountText = () => {
+			this.onlinePlayersText.text = `Online Players (${Airship.Players.GetPlayers().size()})`;
+		};
+
 		this.onlinePlayerContent.gameObject.ClearChildren();
 		Airship.Players.ObservePlayers((player) => {
 			if (player.userId === "loading") return;
@@ -99,11 +111,12 @@ export default class Dashboard extends AirshipSingleton {
 			// Update local player to be last
 			this.uidToOnlinePlayer.get(Game.localPlayer.userId)?.transform.SetAsLastSibling();
 
-			this.onlinePlayersText.text = `Online Players (${Airship.Players.GetPlayers().size()})`;
+			UpdatePlayerCountText();
 
 			return () => {
 				this.uidToOnlinePlayer.delete(player.userId);
 				Destroy(onlinePlayerComp.gameObject);
+				UpdatePlayerCountText();
 			};
 		});
 

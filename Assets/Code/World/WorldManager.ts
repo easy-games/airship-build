@@ -18,11 +18,12 @@ export default class WorldManager extends AirshipSingleton {
 
 	public uidToCurrentLoadedWorldMap = new Map<string, LoadedWorld>();
 
+	private addLoadedWorldNetSig = new NetworkSignal<
+		[worldNetId: number, offset: Vector3, worldId: string, ownerUserId: string, buildPermissionUids: string[]]
+	>("WorldManager:AddLoadedWorld");
+
 	private enterWorldNetSig = new NetworkSignal<[userId: string, worldNetId: number]>("WorldManager:EnterWorld");
 	private exitWorldNetSig = new NetworkSignal<[userId: string, worldNetId: number]>("WorldManager:ExitWorld");
-	private addLoadedWorldNetSig = new NetworkSignal<
-		[worldNetId: number, offset: Vector3, worldId: string, ownerUserId: string]
-	>("WorldManager:AddLoadedWorld");
 	private removeLoadedWorldNetSig = new NetworkSignal<[worldNetId: number]>("WorldManager:RemoveLoadedWorld");
 
 	private loadedWorlds: LoadedWorld[] = [];
@@ -61,11 +62,13 @@ export default class WorldManager extends AirshipSingleton {
 
 	@Client()
 	private StartClient() {
-		this.addLoadedWorldNetSig.client.OnServerEvent((worldNetId, offset, worldId, ownerUserId) => {
-			const loadedWorld = this.WaitForLoadedWorldFromNetId(worldNetId);
-			loadedWorld.InitClient(worldId, offset, ownerUserId);
-			this.loadedWorlds.push(loadedWorld);
-		});
+		this.addLoadedWorldNetSig.client.OnServerEvent(
+			(worldNetId, offset, worldId, ownerUserId, buildPermissionUids) => {
+				const loadedWorld = this.WaitForLoadedWorldFromNetId(worldNetId);
+				loadedWorld.InitClient(worldId, offset, ownerUserId, buildPermissionUids);
+				this.loadedWorlds.push(loadedWorld);
+			},
+		);
 
 		this.enterWorldNetSig.client.OnServerEvent((userId, worldNetId) => {
 			const loadedWorld = this.WaitForLoadedWorldFromNetId(worldNetId);
@@ -142,6 +145,7 @@ export default class WorldManager extends AirshipSingleton {
 			loadedWorld.offset,
 			loadedWorld.worldId,
 			loadedWorld.ownerUid,
+			loadedWorld.buildPermissionUids,
 		);
 
 		return loadedWorld;
@@ -166,19 +170,32 @@ export default class WorldManager extends AirshipSingleton {
 	}
 
 	@Server()
-	public MovePlayerToLoadedWorld(player: Player, loadedWorld: LoadedWorld): void {
-		if (player.character) {
-			player.character.Despawn();
+	public MovePlayerToLoadedWorld(
+		player: Player,
+		loadedWorld: LoadedWorld,
+		config?: {
+			targetLocation?: {
+				position: Vector3;
+				forward: Vector3;
+			};
+		},
+	): void {
+		const spawnLoc = config?.targetLocation ?? loadedWorld.GetSpawnLocation();
+		if (player.character?.IsAlive()) {
+			player.character.Teleport(spawnLoc.position, spawnLoc.forward);
+		} else {
+			player.character?.Despawn();
+			player.SpawnCharacter(spawnLoc.position, {
+				lookDirection: spawnLoc.forward,
+			});
 		}
-		const spawnLoc = loadedWorld.GetSpawnLocation();
-		const character = player.SpawnCharacter(spawnLoc.position, {
-			lookDirection: spawnLoc.forward,
-		});
+		if (!player.character) return;
+
 		this.uidToCurrentLoadedWorldMap.set(player.userId, loadedWorld);
 		loadedWorld.EnterWorld(player);
 		this.enterWorldNetSig.server.FireAllClients(player.userId, loadedWorld.networkIdentity.netId);
 
-		const inv = character.inventory;
+		const inv = player.character.inventory;
 		inv.AddItem(new ItemStack(ItemType.EmeraldPickaxe));
 		inv.AddItem(new ItemStack(ItemType.Dirt));
 		inv.AddItem(new ItemStack(ItemType.Stone));

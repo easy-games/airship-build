@@ -4,4 +4,5 @@ export interface WorldProfile {
 	createTime: number;
 	lastSaveTime: number;
 	ownerUid: string;
+	buildPermissionUids: string[];
 }

@@ -36,6 +36,6 @@ export default class CacheManager extends AirshipSingleton {
 
 	private UpdateCamera(): void {
 		this.localCharacterPosition = Game.localPlayer.character?.transform.position;
-		this.mainCameraPosition = Airship.Camera.cameraRig!.mainCamera.transform.position;
+		this.mainCameraPosition = Airship.Camera.cameraRig?.mainCamera.transform.position || Vector3.zero;
 	}
 }

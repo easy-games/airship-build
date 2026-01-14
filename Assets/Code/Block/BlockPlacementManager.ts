@@ -193,6 +193,7 @@ export default class BlockPlacementManager extends AirshipSingleton {
 	}
 
 	public CanPlaceBlockAtPosition(
+		player: Player,
 		loadedWorld: LoadedWorld,
 		worldPos: Vector3,
 		blockId: number,
@@ -202,6 +203,16 @@ export default class BlockPlacementManager extends AirshipSingleton {
 		if (BlockUtil.VoxelDataToBlockId(world.GetVoxelAt(worldPos.sub(loadedWorld.offset))) !== 0) {
 			// note: this will always happen in shared.
 			if (logFailure) print(`Cannot place: inside existing block pos=${worldPos} blockId=${blockId}`);
+			return false;
+		}
+
+		if (!loadedWorld.IsInWorldBounds(worldPos)) {
+			if (logFailure) print("Cannot place: outside of world bounds.");
+			return false;
+		}
+
+		if (!loadedWorld.HasBuildPermission(player)) {
+			if (logFailure) print("Cannot place: no permission.");
 			return false;
 		}
 
@@ -255,7 +266,7 @@ export default class BlockPlacementManager extends AirshipSingleton {
 
 		worldPos = BlockUtil.FloorPos(worldPos);
 
-		if (!this.CanPlaceBlockAtPosition(loadedWorld, worldPos, blockId, false)) {
+		if (!this.CanPlaceBlockAtPosition(player, loadedWorld, worldPos, blockId, false)) {
 			return false;
 		}
 

@@ -32,7 +32,8 @@ export default class BlockHitManager extends AirshipSingleton {
 	public blockDamagedNS = new NetworkSignal<
 		[
 			placerConnId: number | undefined,
-			voxelPosition: Vector3,
+			worldNetId: number,
+			voxelWorldPosition: Vector3,
 			hitPosition: Vector3,
 			hitNormal: Vector3,
 			block: number | undefined,
@@ -79,6 +80,9 @@ export default class BlockHitManager extends AirshipSingleton {
 			const world = WorldManager.Get().GetLoadedWorldFromPlayer(player);
 			if (!world) return;
 
+			if (!world.HasBuildPermission(player)) return;
+			if (!world.IsInWorldBounds(voxelWorldPos)) return;
+
 			const redirectedPosition = BlockUtil.GetRedirectedBlockPosition(voxelWorldPos.sub(world.offset));
 			const voxelData = world.voxelWorld.GetVoxelAt(redirectedPosition);
 			const hitBlockId = BlockUtil.VoxelDataToBlockId(voxelData);
@@ -86,7 +90,7 @@ export default class BlockHitManager extends AirshipSingleton {
 			// Make sure we aren't on cooldown
 			if (!this.ValidateActionCooldown(player, AirshipSimulationManager.Instance.tick, true, true)) {
 				// warn("client trying to swing while being on cooldown: " + player.username);
-				return false;
+				return;
 			}
 
 			// Validate distance to block is within max reach
@@ -96,7 +100,7 @@ export default class BlockHitManager extends AirshipSingleton {
 				// Add 1.5 unit tolerance to account for: network character mismatch + crouch offset + small buffer
 				const maxReachWithTolerance = BlockUtil.maxBlockReach + 1.5;
 				if (sqrDistanceToBlock > maxReachWithTolerance * maxReachWithTolerance) {
-					return false;
+					return;
 				}
 
 				// Validate block is exposed to air
@@ -105,11 +109,12 @@ export default class BlockHitManager extends AirshipSingleton {
 				// }
 			}
 
-			//Replicate to observers
+			// Replicate to observers
 			BlockHitManager.Get().blockDamagedNS.server.FireExcept(
 				player,
 				player.connectionId,
-				redirectedPosition,
+				world.networkIdentity.netId,
+				redirectedPosition.add(world.offset),
 				hitPoint,
 				normal,
 				hitBlockId,
@@ -124,7 +129,10 @@ export default class BlockHitManager extends AirshipSingleton {
 	public StartClient() {
 		// Observers listen to block hits
 		this.blockDamagedNS.client.OnServerEvent(
-			(connectionId, voxelPosition, hitPosition, hitNormal, blockId, damageDealt, newHealth) => {
+			(connectionId, worldNetId, voxelWorldPosition, hitPosition, hitNormal, blockId, damageDealt, newHealth) => {
+				const world = WorldManager.Get().WaitForLoadedWorldFromNetId(worldNetId);
+				const voxelPosition = voxelWorldPosition.sub(world.offset);
+
 				const blockDamager = connectionId ? Airship.Players.FindByConnectionId(connectionId) : undefined;
 				if (!blockDamager) {
 					// Missing damager
@@ -137,20 +145,18 @@ export default class BlockHitManager extends AirshipSingleton {
 					return;
 				}
 
-				const vw = WorldManager.Get().currentWorld;
-
-				//Local event for block damage
+				// Local event for block damage
 				if (blockId) {
 					this.onBlockDamage.Fire(new BlockDamageEvent(voxelPosition, blockDamager, blockId));
 					this.DestroyBlockClient(
 						blockId,
-						vw.GetVoxelAt(voxelPosition),
+						world.voxelWorld.GetVoxelAt(voxelPosition),
 						voxelPosition,
 						blockDamager.character,
 					);
 				}
 
-				//Can only play the correct effects if we have a character and can look up their item
+				// Can only play the correct effects if we have a character and can look up their item
 				if (blockDamager.character) {
 					this.DamageBlockClientObserver(
 						blockDamager.character,

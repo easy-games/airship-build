@@ -7,7 +7,7 @@ AudioContainerElement:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: b_Pickaxe_HitNegated_Wood_03_{-4265247958024216184}
-  m_AudioClip: {fileID: 8300000, guid: 6bc5221b6e37623439ee99bed2498ffd, type: 3}
+  m_AudioClip: {fileID: 8300000, guid: 6024a92c6b4de4103909690c65b057c7, type: 3}
   m_Volume: 0
   m_Enabled: 1
 --- !u!1233149941 &5737392014652499908
@@ -17,7 +17,7 @@ AudioContainerElement:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: b_Pickaxe_HitNegated_Wood_04_{5737392014652499908}
-  m_AudioClip: {fileID: 8300000, guid: 527b37e36cb6efb4f993a5d06c0ceb13, type: 3}
+  m_AudioClip: {fileID: 8300000, guid: 6c5e673674f8e4b668e6bba00f1c3dd6, type: 3}
   m_Volume: 0
   m_Enabled: 0
 --- !u!1233149941 &5910080345656238746
@@ -27,7 +27,7 @@ AudioContainerElement:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: b_Pickaxe_HitNegated_Wood_02_{5910080345656238746}
-  m_AudioClip: {fileID: 8300000, guid: 27039084820285a448c6f2c96f9d176f, type: 3}
+  m_AudioClip: {fileID: 8300000, guid: e5aa8fb66bb2642928de2c096fe5d7e2, type: 3}
   m_Volume: 0
   m_Enabled: 1
 --- !u!1307931743 &6418180475301049370
@@ -50,7 +50,7 @@ AudioRandomContainer:
   - {fileID: 5910080345656238746}
   - {fileID: -4265247958024216184}
   - {fileID: 5737392014652499908}
-  m_AvoidRepeatingLast: 1
+  m_AvoidRepeatingLast: 0
   m_PlaybackMode: 2
   m_TriggerMode: 0
   m_AutomaticTriggerMode: 1
@@ -66,6 +66,6 @@ AudioContainerElement:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: b_Pickaxe_HitNegated_Wood_01_{6749320687499752170}
-  m_AudioClip: {fileID: 8300000, guid: 427c9f273e7020f4182216e6a8369ff0, type: 3}
+  m_AudioClip: {fileID: 8300000, guid: 45b2601677b05408e8ba9de1c82a60fe, type: 3}
   m_Volume: 0
   m_Enabled: 1

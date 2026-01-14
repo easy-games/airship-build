@@ -685,6 +685,9 @@ export default class BlockItemHandler extends ItemHandler {
 		const world = WorldManager.Get().currentLoadedWorld;
 		if (world.voxelWorld.GetVoxelAt(worldPos.sub(world.offset))) return false;
 
+		if (!world.HasBuildPermission(Game.localPlayer)) return false;
+		if (!world.IsInWorldBounds(worldPos)) return false;
+
 		const localPlayerPos = Game.localPlayer.character?.transform.position;
 		if (localPlayerPos) {
 			const itemData = this.GetItemData();
