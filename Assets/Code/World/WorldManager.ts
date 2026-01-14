@@ -197,21 +197,19 @@ export default class WorldManager extends AirshipSingleton {
 			player.character.Teleport(spawnLoc.position, spawnLoc.forward);
 		} else {
 			player.character?.Despawn();
-			player.SpawnCharacter(spawnLoc.position, {
+			const character = player.SpawnCharacter(spawnLoc.position, {
 				lookDirection: spawnLoc.forward,
 			});
+			const inv = character.inventory;
+			inv.AddItem(new ItemStack(ItemType.EmeraldPickaxe));
+			inv.AddItem(new ItemStack(ItemType.Dirt));
+			inv.AddItem(new ItemStack(ItemType.Stone));
+			inv.AddItem(new ItemStack(ItemType.Obsidian));
 		}
-		if (!player.character) return;
 
 		this.uidToCurrentLoadedWorldMap.set(player.userId, loadedWorld);
 		loadedWorld.EnterWorld(player);
 		this.enterWorldNetSig.server.FireAllClients(player.userId, loadedWorld.networkIdentity.netId);
-
-		const inv = player.character.inventory;
-		inv.AddItem(new ItemStack(ItemType.EmeraldPickaxe));
-		inv.AddItem(new ItemStack(ItemType.Dirt));
-		inv.AddItem(new ItemStack(ItemType.Stone));
-		inv.AddItem(new ItemStack(ItemType.Obsidian));
 	}
 
 	public WaitForWorldLoaded(): void {}
