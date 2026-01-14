@@ -154,10 +154,15 @@ export default class WorldManager extends AirshipSingleton {
 	@Server()
 	public async UnloadWorld(world: LoadedWorld, save: boolean): Promise<void> {
 		if (save) {
-			try {
-				await world.SaveAsync();
-			} catch (err) {
-				Debug.LogError(err);
+			for (let i = 0; i < 3; i++) {
+				try {
+					const success = await world.SaveAsync();
+					if (success) {
+						break;
+					}
+				} catch (err) {
+					Debug.LogError(err);
+				}
 			}
 		}
 
