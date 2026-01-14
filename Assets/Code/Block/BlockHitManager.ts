@@ -149,6 +149,7 @@ export default class BlockHitManager extends AirshipSingleton {
 				if (blockId) {
 					this.onBlockDamage.Fire(new BlockDamageEvent(voxelPosition, blockDamager, blockId));
 					this.DestroyBlockClient(
+						world,
 						blockId,
 						world.voxelWorld.GetVoxelAt(voxelPosition),
 						voxelPosition,
@@ -177,6 +178,7 @@ export default class BlockHitManager extends AirshipSingleton {
 	}
 
 	private DestroyBlockClient(
+		world: LoadedWorld,
 		blockId: number,
 		voxelData: number,
 		position: Vector3,
@@ -193,12 +195,15 @@ export default class BlockHitManager extends AirshipSingleton {
 
 		// if we're hosting these will be deleted on the "server" side
 		if (!Game.IsHosting()) {
-			const vw = WorldManager.Get().currentWorld;
 			for (const containedPos of containedPositions) {
 				if (destroyOnlyImmediatelyUpdatesCollisions) {
-					vw.WriteTemporaryVoxelCollisionAt(containedPos, 0);
+					world.voxelWorld.WriteTemporaryVoxelCollisionAt(containedPos, 0);
 				}
-				vw.WriteVoxelAt(containedPos, 0, destroyOnlyImmediatelyUpdatesCollisions ? false : priority);
+				world.voxelWorld.WriteVoxelAt(
+					containedPos,
+					0,
+					destroyOnlyImmediatelyUpdatesCollisions ? false : priority,
+				);
 			}
 		}
 
