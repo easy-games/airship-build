@@ -162,6 +162,9 @@ export default class WorldManager extends AirshipSingleton {
 					}
 				} catch (err) {
 					Debug.LogError(err);
+					if (i < 2) {
+						task.wait(0.5);
+					}
 				}
 			}
 		}
