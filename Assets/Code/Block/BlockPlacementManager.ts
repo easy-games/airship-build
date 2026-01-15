@@ -375,6 +375,10 @@ export default class BlockPlacementManager extends AirshipSingleton {
 		priority: boolean,
 		rotation?: Quaternion,
 	) {
+		if (world.gameObject.IsDestroyed()) {
+			Debug.LogError("Tried to WriteVoxelAndContainedVoxels on a destroyed world.");
+			return;
+		}
 		if (rotation) {
 			const flip = BlockUtil.QuaternionToFlipBits(rotation);
 			voxelData = BlockUtil.SetVoxelFlippedBits(voxelData, flip);
