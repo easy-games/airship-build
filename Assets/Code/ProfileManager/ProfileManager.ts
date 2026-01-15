@@ -14,6 +14,7 @@ export default class ProfileManager extends AirshipSingleton {
 
 	override Start(): void {
 		if (Game.IsServer()) {
+			Airship.Players.joinMessagesEnabled = false;
 			Airship.Players.ObservePlayers((player) => {
 				task.spawn(async () => {
 					await this.LoadPlayer(player);
@@ -56,9 +57,14 @@ export default class ProfileManager extends AirshipSingleton {
 				const data = await Platform.Server.DataStore.GetKey<PlayerProfile>(`Player:${player.userId}`);
 				if (data) {
 					profile = data;
+					Game.BroadcastMessage(ChatColor.Aqua(player.username) + ChatColor.Gray(" joined the server."));
 					this.ReconcilePlayerProfile(profile);
 				} else {
 					profile = this.MakeNewPlayerProfile(player);
+					Game.BroadcastMessage(
+						ChatColor.Aqua(player.username) +
+							ChatColor.Gray(" joined the server. " + ChatColor.Green("(new!)")),
+					);
 				}
 			} catch (err) {
 				Debug.LogError("Failed to load player profile for " + player.username + ": " + err);
