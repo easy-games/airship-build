@@ -15,5 +15,11 @@ export default class GameInputManager extends AirshipSingleton {
 		Airship.Input.CreateAction(ActionId.Dashboard, Binding.Key(Key.Tab));
 
 		Airship.Settings.AddToggle(SettingId.BW2_Placement, false);
+
+		Airship.Settings.AddToggle(SettingId.PostProcessing, true);
+		const globalVolume = GameObject.Find("GlobalVolume");
+		Airship.Settings.ObserveToggle(SettingId.PostProcessing, (val) => {
+			globalVolume.SetActive(val);
+		});
 	}
 }
