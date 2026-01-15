@@ -29,7 +29,7 @@ export const MAX_BLOCKS_PER_SECOND = 14;
 
 export default class BlockPlacementManager extends AirshipSingleton {
 	public maxVoidBridgeLen = 6;
-	public redirectId: number;
+
 	/** lastCommandId is used to map the block placement to this client's timeline */
 	public blockAddedNS = new NetworkSignal<
 		[
@@ -62,12 +62,6 @@ export default class BlockPlacementManager extends AirshipSingleton {
 	override Start(): void {
 		if (Game.IsClient()) this.StartClient();
 		if (Game.IsServer()) this.StartServer();
-
-		task.spawn(() => {
-			WorldManager.Get().WaitForWorldLoaded();
-			this.redirectId =
-				WorldManager.Get().currentWorld.voxelBlocks.GetBlockIdFromStringId("@Easy/VoxelWorld:Redirect");
-		});
 
 		// const blockBuildBreakCrosshairSetting = "Block Build/Break Crosshair Enabled";
 		// Airship.Settings.AddToggle(blockBuildBreakCrosshairSetting, true);
@@ -311,7 +305,11 @@ export default class BlockPlacementManager extends AirshipSingleton {
 	}
 
 	public ClientPredictBlockPlace(voxelPos: Vector3, blockId: number): (() => void) | undefined {
-		WorldManager.Get().currentWorld.WriteVoxelAt(voxelPos, blockId, true);
+		const world = WorldManager.Get().currentLoadedWorld;
+		world.voxelWorld.WriteVoxelAt(voxelPos, blockId, true);
+		if (blockId === WorldManager.Get().grassBlockId) {
+			world.voxelWorld.WriteVoxelColorAt(voxelPos, new Color(0, 1, 1, 1), true);
+		}
 		// Predict block data of breakable. This could be made a more precise prediciton if needed (for example predicting redirect)
 		BlockDataManager.Get().RegisterBlockData(voxelPos, GetBlockData({ breakable: true })!);
 
@@ -388,6 +386,10 @@ export default class BlockPlacementManager extends AirshipSingleton {
 		}
 
 		world.voxelWorld.WriteVoxelAt(worldPos.sub(world.offset), voxelData, priority);
+		const blockId = VoxelWorld.GetVoxelDataId(voxelData);
+		if (blockId === WorldManager.Get().grassBlockId) {
+			world.voxelWorld.WriteVoxelColorAt(worldPos.sub(world.offset), new Color(0, 0, 0, 0), false);
+		}
 
 		const blockItem = ItemManager.Get().GetItemTypeFromVoxelId(BlockUtil.VoxelDataToBlockId(voxelData));
 		if (blockItem) {
@@ -395,7 +397,7 @@ export default class BlockPlacementManager extends AirshipSingleton {
 			for (const v of containedVoxels) {
 				if (v.sub(worldPos).magnitude < 0.001) continue; // Don't create a redirect block at root
 
-				world.voxelWorld.WriteVoxelAt(v.sub(world.offset), this.redirectId, priority);
+				world.voxelWorld.WriteVoxelAt(v.sub(world.offset), WorldManager.Get().redirectId, priority);
 				const blockData = GetBlockData({ breakable: true, redirect: worldPos });
 				if (blockData) {
 					BlockDataManager.Get().RegisterBlockData(v, blockData);

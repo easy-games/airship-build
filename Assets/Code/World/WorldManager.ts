@@ -17,6 +17,9 @@ export default class WorldManager extends AirshipSingleton {
 	public starterSaveFile: WorldSaveFile;
 	public voxelBlocks: VoxelBlocks;
 
+	@NonSerialized() public redirectId: number;
+	@NonSerialized() public grassBlockId = -1;
+
 	public uidToCurrentLoadedWorldMap = new Map<string, LoadedWorld>();
 
 	private addLoadedWorldNetSig = new NetworkSignal<
@@ -43,6 +46,10 @@ export default class WorldManager extends AirshipSingleton {
 		// if (Game.IsServer()) {
 		// 	this.currentWorld.LoadWorldFromSaveFile(this.currentWorld.voxelWorldFile);
 		// }
+		this.voxelBlocks.Reload(false);
+		this.redirectId = this.voxelBlocks.GetBlockIdFromStringId("@Easy/VoxelWorld:Redirect");
+		this.grassBlockId = this.voxelBlocks.GetBlockIdFromStringId("@Easy/VoxelWorld:Grass");
+
 		if (Game.IsClient()) this.StartClient();
 		if (Game.IsServer()) this.StartServer();
 	}
@@ -228,8 +235,8 @@ export default class WorldManager extends AirshipSingleton {
 			});
 			const inv = character.inventory;
 			inv.AddItem(new ItemStack(ItemType.EmeraldPickaxe));
-			inv.AddItem(new ItemStack(ItemType.Dirt));
-			inv.AddItem(new ItemStack(ItemType.Stone));
+			inv.AddItem(new ItemStack(ItemType.Grass));
+			inv.AddItem(new ItemStack(ItemType.Slate));
 			inv.AddItem(new ItemStack(ItemType.Obsidian));
 		}
 

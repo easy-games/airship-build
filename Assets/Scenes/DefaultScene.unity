@@ -1049,24 +1049,6 @@ MonoBehaviour:
       serializedValue: 6
       serializedObject: {fileID: 0}
       modified: 0
-    - name: redirectId
-      type: number
-      objectType: 
-      items:
-        type: 
-        objectType: 
-        serializedItems: []
-        objectRefs: []
-      refPath: 
-      fileRef: 
-      jsDocs:
-        text: []
-        tags: []
-      decorators: []
-      nullable: 0
-      serializedValue: 
-      serializedObject: {fileID: 0}
-      modified: 0
     - name: selectionOutline
       type: object
       objectType: GameObject
@@ -3713,7 +3695,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -93380.555, y: -36140.64}
+  m_AnchoredPosition: {x: -241445.75, y: -93445.79}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1280867642
@@ -6679,7 +6661,7 @@ MonoBehaviour:
   useSimplifiedVoxels: 0
   useCameraAsFocusPosition: 1
   autoLoad: 0
-  voxelWorldFile: {fileID: 11400000, guid: 2f2bb5e6df7314507bf9ecd4e1f8ba24, type: 2}
+  voxelWorldFile: {fileID: 11400000, guid: 15b826a7bd4c997468fedbb4f3ffd971, type: 2}
   worldNetworker: {fileID: 1916166190489360493}
   chunksFolder: {fileID: 0}
   lightsFolder: {fileID: 0}
