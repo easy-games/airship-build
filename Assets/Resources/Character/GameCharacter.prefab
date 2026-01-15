@@ -21,6 +21,10 @@ PrefabInstance:
       value: Assets/AirshipPackages/@Easy/Core/Shared/Character/Animation/CharacterAnimation.lua
       objectReference: {fileID: 0}
     - target: {fileID: 7270479773071441371, guid: 4bfcf38072e582e42b941b472d5f3dcb, type: 3}
+      propertyPath: verticalFlySpeed
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270479773071441371, guid: 4bfcf38072e582e42b941b472d5f3dcb, type: 3}
       propertyPath: groundCollisionLayerMask.m_Bits
       value: 131329
       objectReference: {fileID: 0}
