@@ -75,7 +75,8 @@ export default class Dashboard extends AirshipSingleton {
 					ChatColor.Aqua(ChatColor.Bold("The Build Server")) +
 					ChatColor.White(
 						"! This is your private world where all progress is saved. Reset world by typing " +
-							ChatColor.Yellow("/delworld"),
+							ChatColor.Yellow("/delworld") +
+							". Double jump to fly!",
 					),
 			);
 		});
