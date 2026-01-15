@@ -2821,6 +2821,24 @@ MonoBehaviour:
       serializedValue: 
       serializedObject: {fileID: 0}
       modified: 0
+    - name: loadedWorlds
+      type: Array
+      objectType: 
+      items:
+        type: AirshipBehaviour
+        objectType: LoadedWorld
+        serializedItems: []
+        objectRefs: []
+      refPath: 
+      fileRef: Code/World/LoadedWorld.ts
+      jsDocs:
+        text: []
+        tags: []
+      decorators: []
+      nullable: 0
+      serializedValue: 
+      serializedObject: {fileID: 0}
+      modified: 0
     displayIcon: {fileID: 0}
     displayName: 
 --- !u!1001 &870239198
@@ -3695,7 +3713,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -76085.04, y: -29446.836}
+  m_AnchoredPosition: {x: -93380.555, y: -36140.64}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1280867642
@@ -3845,7 +3863,7 @@ Light:
   serializedVersion: 11
   m_Type: 1
   m_Color: {r: 1, g: 0.9951782, b: 0.8915094, a: 1}
-  m_Intensity: 1
+  m_Intensity: 1.35
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
