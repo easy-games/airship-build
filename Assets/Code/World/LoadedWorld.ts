@@ -117,6 +117,19 @@ export default class LoadedWorld extends AirshipBehaviour {
 		return true;
 	}
 
+	public SetBuildPermission(uid: string, hasPermission: boolean): void {
+		if (hasPermission) {
+			if (!this.buildPermissionUids.includes(uid)) {
+				this.buildPermissionUids.push(uid);
+			}
+		} else {
+			const idx = this.buildPermissionUids.indexOf(uid);
+			if (idx >= 0) {
+				this.buildPermissionUids.remove(idx);
+			}
+		}
+	}
+
 	override Start(): void {}
 
 	override OnDestroy(): void {}

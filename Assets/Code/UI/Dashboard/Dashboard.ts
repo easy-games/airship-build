@@ -9,6 +9,7 @@ import { ActionId } from "Code/Input/ActionId";
 import SoundUtil from "Code/Misc/SoundUtil";
 import WorldManager from "Code/World/WorldManager";
 import DashboardOnlinePlayer from "./DashboardOnlinePlayer";
+import PermissionsPage from "./Permissions/PermissionsPage";
 
 export default class Dashboard extends AirshipSingleton {
 	public canvas: Canvas;
@@ -19,9 +20,13 @@ export default class Dashboard extends AirshipSingleton {
 	public teleportHomeButton: Button;
 	public permissionsButton: Button;
 	public onlinePlayersText: TMP_Text;
+	public permissionsPage: PermissionsPage;
 
 	public teleportNetSig = new NetworkSignal<[targetPlayerUid: string]>("Dashboard:TeleportToPlayer");
 	public teleportHomeNetSig = new NetworkSignal<[]>("Dashboard:TeleportHome");
+	public setBuildPermissionNetSig = new NetworkSignal<[uid: string, hasPermission: boolean]>(
+		"Dashboard:SetBuildPermission",
+	);
 
 	private uidToOnlinePlayer = new Map<string, DashboardOnlinePlayer>();
 
@@ -31,6 +36,7 @@ export default class Dashboard extends AirshipSingleton {
 
 	protected Awake(): void {
 		this.canvas.enabled = false;
+		this.permissionsPage.gameObject.SetActive(false);
 	}
 
 	override Start(): void {
@@ -66,6 +72,18 @@ export default class Dashboard extends AirshipSingleton {
 			if (world) {
 				WorldManager.Get().MovePlayerToLoadedWorld(player, world);
 			}
+		});
+
+		this.setBuildPermissionNetSig.server.OnClientEvent((player, uid, hasPermission) => {
+			const world = WorldManager.Get().GetLoadedWorldOwnedByPlayer(player);
+			if (!world) return;
+
+			world.SetBuildPermission(uid, hasPermission);
+			WorldManager.Get().buildPermissionChangedNetSig.server.FireAllClients(
+				uid,
+				world.networkIdentity.netId,
+				hasPermission,
+			);
 		});
 
 		Airship.Players.ObservePlayers((player) => {
@@ -131,7 +149,8 @@ export default class Dashboard extends AirshipSingleton {
 		});
 
 		this.permissionsButton.onClick.Connect(() => {
-			SoundUtil.PlayError();
+			SoundUtil.PlayClick();
+			this.OpenPermissionPage();
 		});
 	}
 
@@ -151,6 +170,25 @@ export default class Dashboard extends AirshipSingleton {
 		NativeTween.AnchoredPositionX(this.window, -10, 0.18).SetEaseQuadOut();
 
 		this.openBin.Add(Mouse.AddUnlocker());
+	}
+
+	public OpenPermissionPage(): void {
+		if (!this.isOpen) {
+			this.Open();
+		}
+		this.permissionsPage.gameObject.SetActive(true);
+		const rect = this.permissionsPage.transform as RectTransform;
+		rect.anchoredPosition = new Vector2(600, 0);
+		NativeTween.AnchoredPositionX(rect, 0, 0.18).SetEaseQuadOut();
+
+		AppManager.OpenCustom(
+			() => {
+				NativeTween.AnchoredPositionX(rect, 600, 0.18).SetEaseQuadIn();
+			},
+			{
+				addToStack: true,
+			},
+		);
 	}
 
 	private Close(): void {

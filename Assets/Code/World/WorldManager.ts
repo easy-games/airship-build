@@ -18,6 +18,9 @@ export default class WorldManager extends AirshipSingleton {
 	public starterSaveFile: WorldSaveFile;
 	public voxelBlocks: VoxelBlocks;
 
+	/** LoadedWorld owned by local player */
+	public localOwnedWorld: LoadedWorld | undefined;
+
 	@NonSerialized() public redirectId: number;
 	@NonSerialized() public grassBlockId = -1;
 
@@ -30,6 +33,11 @@ export default class WorldManager extends AirshipSingleton {
 	private enterWorldNetSig = new NetworkSignal<[userId: string, worldNetId: number]>("WorldManager:EnterWorld");
 	private exitWorldNetSig = new NetworkSignal<[userId: string, worldNetId: number]>("WorldManager:ExitWorld");
 	private removeLoadedWorldNetSig = new NetworkSignal<[worldNetId: number]>("WorldManager:RemoveLoadedWorld");
+
+	/** Sent to all clients whenever build permission changes on a world for a player */
+	public buildPermissionChangedNetSig = new NetworkSignal<[uid: string, worldNetId: number, hasPermission: boolean]>(
+		"WorldManager:WorldPermissionChanged",
+	);
 
 	public loadedWorlds: LoadedWorld[] = [];
 
@@ -86,6 +94,10 @@ export default class WorldManager extends AirshipSingleton {
 			const loadedWorld = this.WaitForLoadedWorldFromNetId(dto[0]);
 			loadedWorld.InitClient(dto);
 			this.loadedWorlds.push(loadedWorld);
+
+			if (loadedWorld.IsOwner(Game.localPlayer)) {
+				this.localOwnedWorld = loadedWorld;
+			}
 		});
 
 		this.enterWorldNetSig.client.OnServerEvent((userId, worldNetId) => {
@@ -111,8 +123,17 @@ export default class WorldManager extends AirshipSingleton {
 				const loadedWorld = this.WaitForLoadedWorldFromNetId(dto[0]);
 				loadedWorld.InitClient(dto);
 				this.loadedWorlds.push(loadedWorld);
+
+				if (loadedWorld.IsOwner(Game.localPlayer)) {
+					this.localOwnedWorld = loadedWorld;
+				}
 			});
 		}
+
+		this.buildPermissionChangedNetSig.client.OnServerEvent((uid, worldNetId, hasPermission) => {
+			const loadedWorld = this.WaitForLoadedWorldFromNetId(worldNetId);
+			loadedWorld.SetBuildPermission(uid, hasPermission);
+		});
 	}
 
 	/**
@@ -263,6 +284,13 @@ export default class WorldManager extends AirshipSingleton {
 	}
 
 	public WaitForWorldLoaded(): void {}
+
+	public WaitForLocalOwnedWorld(): LoadedWorld {
+		while (this.localOwnedWorld === undefined) {
+			task.wait();
+		}
+		return this.localOwnedWorld;
+	}
 
 	override OnDestroy(): void {}
 }
