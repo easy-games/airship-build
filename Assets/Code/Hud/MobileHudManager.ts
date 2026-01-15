@@ -39,7 +39,7 @@ export default class MobileHudManager extends AirshipSingleton {
 			const character = Game.localPlayer.character;
 			if (!character) return;
 
-			if (!character.heldItem?.itemDef.data?.blockBreaker) {
+			if (!character.GetHeldItem()?.itemDef.data?.blockBreaker) {
 				// find block breaker item
 				for (let i = 0; i <= 8; i++) {
 					if (character.inventory.GetItem(i)?.itemDef.data?.blockBreaker) {
@@ -62,7 +62,7 @@ export default class MobileHudManager extends AirshipSingleton {
 			const character = Game.localPlayer.character;
 			if (!character) return;
 
-			if (!character.heldItem?.itemDef.data?.block) {
+			if (!character.GetHeldItem()?.itemDef.data?.block) {
 				// find block breaker item
 				for (let i = 0; i <= 8; i++) {
 					if (character.inventory.GetItem(i)?.itemDef.data?.block) {

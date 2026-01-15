@@ -9,7 +9,6 @@ import { MapUtil } from "@Easy/Core/Shared/Util/MapUtil";
 import { Signal } from "@Easy/Core/Shared/Util/Signal";
 import BlockSoundManager from "Code/BlockSound/BlockSoundManager";
 import ItemManager from "Code/Item/ItemManager";
-import { ItemType } from "Code/Item/ItemType";
 import LoadedWorld from "Code/World/LoadedWorld";
 import WorldManager from "Code/World/WorldManager";
 import BlockDataManager from "./BlockDataManager";
@@ -260,7 +259,7 @@ export default class BlockHitManager extends AirshipSingleton {
 		registerNewAction: boolean,
 		asServer: boolean,
 	): boolean {
-		const itemData = player?.character?.heldItem?.itemDef.data?.blockBreaker;
+		const itemData = player?.character?.GetHeldItem()?.itemDef.data?.blockBreaker;
 		if (!itemData) {
 			return false;
 		}
@@ -348,7 +347,6 @@ export default class BlockHitManager extends AirshipSingleton {
 		//Play animation on the character
 		character.animationHelper.PlayAnimation(this.swingAnim, CharacterAnimationLayer.UPPER_BODY_1, 0);
 
-		const heldItemType = character.heldItem?.itemType as ItemType;
 		const src = AudioManager.PlayClipAtPosition(this.swingSound, character.model.transform.position);
 		src?.transform.SetParent(character.model.transform);
 

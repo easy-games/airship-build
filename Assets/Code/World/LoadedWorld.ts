@@ -1,4 +1,4 @@
-import { Platform } from "@Easy/Core/Shared/Airship";
+import { Airship, Platform } from "@Easy/Core/Shared/Airship";
 import { Player } from "@Easy/Core/Shared/Player/Player";
 import { WorldProfile } from "Code/ProfileManager/WorldProfile";
 import WorldManager from "./WorldManager";
@@ -11,6 +11,7 @@ export default class LoadedWorld extends AirshipBehaviour {
 	public playersInWorld: Player[] = [];
 	public ownerUid: string;
 	public buildPermissionUids = new Array<string>();
+	public isUnloading = false;
 
 	@NonSerialized() public worldId: string;
 	@NonSerialized() public offset: Vector3;
@@ -32,6 +33,14 @@ export default class LoadedWorld extends AirshipBehaviour {
 		this.offset = offset;
 		this.ownerUid = this.worldProfile.ownerUid;
 		this.buildPermissionUids = worldProfile.buildPermissionUids;
+	}
+
+	public IsOwnerOnline() {
+		return this.GetOwnerPlayer() !== undefined;
+	}
+
+	public GetOwnerPlayer(): Player | undefined {
+		return Airship.Players.FindByUserId(this.ownerUid);
 	}
 
 	public HasBuildPermission(player: Player): boolean {
@@ -70,7 +79,14 @@ export default class LoadedWorld extends AirshipBehaviour {
 
 	@Server()
 	public async SaveAsync(): Promise<boolean> {
-		if (!this.worldProfile) return false;
+		if (!this.worldProfile) {
+			Debug.LogError("Tried to save world but it had no world profile.");
+			return false;
+		}
+		if (this.isUnloading) {
+			Debug.LogError("Tried to save world while it's unloading. Cancelling save.");
+			return false;
+		}
 
 		const startTime = os.clock();
 		const saveData = this.voxelWorld.EncodeToString();
@@ -85,6 +101,7 @@ export default class LoadedWorld extends AirshipBehaviour {
 			return false;
 		}
 
+		print(`Saved World:${this.worldId}`);
 		return true;
 	}
 

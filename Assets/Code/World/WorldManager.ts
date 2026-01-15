@@ -4,6 +4,7 @@ import { ItemStack } from "@Easy/Core/Shared/Inventory/ItemStack";
 import { NetworkSignal } from "@Easy/Core/Shared/Network/NetworkSignal";
 import { Player } from "@Easy/Core/Shared/Player/Player";
 import { NetworkUtil } from "@Easy/Core/Shared/Util/NetworkUtil";
+import { SetInterval } from "@Easy/Core/Shared/Util/Timer";
 import { ItemType } from "Code/Item/ItemType";
 import { WorldProfile } from "Code/ProfileManager/WorldProfile";
 import LoadedWorld from "./LoadedWorld";
@@ -26,7 +27,7 @@ export default class WorldManager extends AirshipSingleton {
 	private exitWorldNetSig = new NetworkSignal<[userId: string, worldNetId: number]>("WorldManager:ExitWorld");
 	private removeLoadedWorldNetSig = new NetworkSignal<[worldNetId: number]>("WorldManager:RemoveLoadedWorld");
 
-	private loadedWorlds: LoadedWorld[] = [];
+	public loadedWorlds: LoadedWorld[] = [];
 
 	private availableOffsets = new Array<Vector3>();
 
@@ -48,13 +49,24 @@ export default class WorldManager extends AirshipSingleton {
 
 	@Server()
 	private StartServer() {
-		Airship.Players.onPlayerDisconnected.Connect((player) => {
+		Airship.Players.onPlayerDisconnected.Connect(async (player) => {
 			const world = this.GetLoadedWorldOwnedByPlayer(player);
 			if (world) {
 				world.ExitWorld(player);
 				this.exitWorldNetSig.server.FireAllClients(player.userId, world.networkIdentity.netId);
-				if (world.playersInWorld.size() === 0) {
-					this.UnloadWorld(world, true);
+				this.UnloadWorld(world, true);
+			}
+		});
+
+		// Autosave
+		SetInterval(60, async () => {
+			for (const world of this.loadedWorlds) {
+				if (world.IsOwnerOnline()) {
+					try {
+						await world.SaveAsync();
+					} catch (err) {
+						Debug.LogError(err);
+					}
 				}
 			}
 		});
@@ -168,6 +180,20 @@ export default class WorldManager extends AirshipSingleton {
 				}
 			}
 		}
+		world.isUnloading = true;
+
+		// Move players back to their own worlds
+		for (const player of world.playersInWorld) {
+			if (world.IsOwner(player)) continue;
+			const ownedWorld = this.GetLoadedWorldOwnedByPlayer(player);
+			if (ownedWorld) {
+				task.spawn(() => {
+					this.MovePlayerToLoadedWorld(player, ownedWorld);
+				});
+			} else {
+				Debug.LogError("Unsure where to move player during world unload: " + player.username);
+			}
+		}
 
 		const offset = world.offset;
 		this.removeLoadedWorldNetSig.server.FireAllClients(world.networkIdentity.netId);
@@ -205,6 +231,13 @@ export default class WorldManager extends AirshipSingleton {
 			inv.AddItem(new ItemStack(ItemType.Dirt));
 			inv.AddItem(new ItemStack(ItemType.Stone));
 			inv.AddItem(new ItemStack(ItemType.Obsidian));
+		}
+
+		// leave existing world
+		const existingWorld = this.GetLoadedWorldFromPlayer(player);
+		if (existingWorld) {
+			existingWorld.ExitWorld(player);
+			this.exitWorldNetSig.server.FireAllClients(player.userId, existingWorld.networkIdentity.netId);
 		}
 
 		this.uidToCurrentLoadedWorldMap.set(player.userId, loadedWorld);
