@@ -17,6 +17,7 @@ type ItemHandlerConstructor = { new (): ItemHandler };
 const DISABLED_BLOCKS = [
 	"Redirect",
 	"DefaultGrass",
+	"Grass1",
 	"DefaultDirt",
 	"Chest",
 	"Slime",

@@ -282,11 +282,11 @@ export default class BlockPlacementManager extends AirshipSingleton {
 			return false;
 		}
 
-		const heldBlockId = voxelWorld.voxelBlocks.GetBlockIdFromStringId(blockType);
-		if (blockId !== heldBlockId) {
-			print("Cannot place: requested to place different block then in hand");
-			return false;
-		}
+		// const heldBlockId = voxelWorld.voxelBlocks.GetBlockIdFromStringId(blockType);
+		// if (blockId !== heldBlockId) {
+		// 	print("Cannot place: requested to place different block then in hand");
+		// 	return false;
+		// }
 
 		const event = this.onBlockPlace.Fire(new BlockPlaceEvent(worldPos, player, blockId));
 		if (event.IsCancelled()) {
