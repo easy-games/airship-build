@@ -276,11 +276,11 @@ export default class BlockPlacementManager extends AirshipSingleton {
 			return false;
 		}
 
-		const blockType = heldItem.itemDef.data?.block?.voxelName;
-		if (!blockType) {
-			print("Cannot place: not holding a voxel block");
-			return false;
-		}
+		// const blockType = heldItem.itemDef.data?.block?.voxelName;
+		// if (!blockType) {
+		// 	print("Cannot place: not holding a voxel block");
+		// 	return false;
+		// }
 
 		// const heldBlockId = voxelWorld.voxelBlocks.GetBlockIdFromStringId(blockType);
 		// if (blockId !== heldBlockId) {

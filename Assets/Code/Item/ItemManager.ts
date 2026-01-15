@@ -17,7 +17,7 @@ type ItemHandlerConstructor = { new (): ItemHandler };
 const DISABLED_BLOCKS = [
 	"Redirect",
 	"DefaultGrass",
-	"Grass1",
+	"Grass 1",
 	"DefaultDirt",
 	"Chest",
 	"Slime",
@@ -165,6 +165,7 @@ export default class ItemManager extends AirshipSingleton {
 			"Sand",
 			"Grass - Blossom",
 		]);
+		this.SetBlockMaterial(BlockMaterialType.Sand, ["Sand"]);
 		this.SetBlockMaterial(BlockMaterialType.Ceramic, ["Ceramic"]);
 		this.SetBlockMaterial(BlockMaterialType.Obsidian, ["Obsidian"]);
 		this.SetBlockMaterial(BlockMaterialType.Wool, [

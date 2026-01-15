@@ -52,9 +52,7 @@ export default class BlockItemHandler extends ItemHandler {
 		const worldManager = WorldManager.Get();
 
 		if (itemDef.data?.block?.voxelName) {
-			this.blockId = worldManager.currentWorld.voxelBlocks.SearchForBlockIdByString(
-				itemDef.data!.block!.voxelName,
-			);
+			this.blockId = worldManager.currentWorld.voxelBlocks.GetBlockIdFromStringId(itemDef.data!.block!.voxelName);
 		}
 	}
 
