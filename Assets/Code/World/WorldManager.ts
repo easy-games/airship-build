@@ -1,13 +1,14 @@
 import { Airship } from "@Easy/Core/Shared/Airship";
 import { Game } from "@Easy/Core/Shared/Game";
 import { ItemStack } from "@Easy/Core/Shared/Inventory/ItemStack";
+import { NetworkFunction } from "@Easy/Core/Shared/Network/NetworkFunction";
 import { NetworkSignal } from "@Easy/Core/Shared/Network/NetworkSignal";
 import { Player } from "@Easy/Core/Shared/Player/Player";
 import { NetworkUtil } from "@Easy/Core/Shared/Util/NetworkUtil";
 import { SetInterval } from "@Easy/Core/Shared/Util/Timer";
 import { ItemType } from "Code/Item/ItemType";
 import { WorldProfile } from "Code/ProfileManager/WorldProfile";
-import LoadedWorld from "./LoadedWorld";
+import LoadedWorld, { LoadedWorldDto } from "./LoadedWorld";
 
 export default class WorldManager extends AirshipSingleton {
 	/** World the player is currently inside. */
@@ -22,9 +23,9 @@ export default class WorldManager extends AirshipSingleton {
 
 	public uidToCurrentLoadedWorldMap = new Map<string, LoadedWorld>();
 
-	private addLoadedWorldNetSig = new NetworkSignal<
-		[worldNetId: number, offset: Vector3, worldId: string, ownerUserId: string, buildPermissionUids: string[]]
-	>("WorldManager:AddLoadedWorld");
+	private addLoadedWorldNetSig = new NetworkSignal<[LoadedWorldDto]>("WorldManager:AddLoadedWorld");
+
+	private getLoadedWorldsNetFunc = new NetworkFunction<[], [LoadedWorldDto[]]>("WorldManager:GetLoadedWorlds");
 
 	private enterWorldNetSig = new NetworkSignal<[userId: string, worldNetId: number]>("WorldManager:EnterWorld");
 	private exitWorldNetSig = new NetworkSignal<[userId: string, worldNetId: number]>("WorldManager:ExitWorld");
@@ -81,13 +82,11 @@ export default class WorldManager extends AirshipSingleton {
 
 	@Client()
 	private StartClient() {
-		this.addLoadedWorldNetSig.client.OnServerEvent(
-			(worldNetId, offset, worldId, ownerUserId, buildPermissionUids) => {
-				const loadedWorld = this.WaitForLoadedWorldFromNetId(worldNetId);
-				loadedWorld.InitClient(worldId, offset, ownerUserId, buildPermissionUids);
-				this.loadedWorlds.push(loadedWorld);
-			},
-		);
+		this.addLoadedWorldNetSig.client.OnServerEvent((dto) => {
+			const loadedWorld = this.WaitForLoadedWorldFromNetId(dto[0]);
+			loadedWorld.InitClient(dto);
+			this.loadedWorlds.push(loadedWorld);
+		});
 
 		this.enterWorldNetSig.client.OnServerEvent((userId, worldNetId) => {
 			const loadedWorld = this.WaitForLoadedWorldFromNetId(worldNetId);
@@ -96,6 +95,24 @@ export default class WorldManager extends AirshipSingleton {
 				loadedWorld.EnterWorld(player);
 			}
 		});
+
+		this.exitWorldNetSig.client.OnServerEvent((userId, worldNetId) => {
+			const loadedWorld = this.WaitForLoadedWorldFromNetId(worldNetId);
+			const player = Airship.Players.FindByUserId(userId);
+			if (player) {
+				loadedWorld.ExitWorld(player);
+			}
+		});
+
+		const existingWorlds = this.getLoadedWorldsNetFunc.client.FireServer();
+		for (const dto of existingWorlds) {
+			if (this.loadedWorlds.find((w) => w.networkIdentity.netId === dto[0])) continue;
+			task.spawn(() => {
+				const loadedWorld = this.WaitForLoadedWorldFromNetId(dto[0]);
+				loadedWorld.InitClient(dto);
+				this.loadedWorlds.push(loadedWorld);
+			});
+		}
 	}
 
 	/**
@@ -133,7 +150,6 @@ export default class WorldManager extends AirshipSingleton {
 		}
 		const offset = this.availableOffsets[0];
 		this.availableOffsets.remove(0);
-		print("Selected offset: " + offset);
 
 		const go = Instantiate(this.playerWorldPrefab);
 		if (ownerPlayer) {
@@ -159,13 +175,7 @@ export default class WorldManager extends AirshipSingleton {
 		}
 
 		this.loadedWorlds.push(loadedWorld);
-		this.addLoadedWorldNetSig.server.FireAllClients(
-			loadedWorld.networkIdentity.netId,
-			loadedWorld.offset,
-			loadedWorld.worldId,
-			loadedWorld.ownerUid,
-			loadedWorld.buildPermissionUids,
-		);
+		this.addLoadedWorldNetSig.server.FireAllClients(loadedWorld.MakeDto());
 
 		return loadedWorld;
 	}

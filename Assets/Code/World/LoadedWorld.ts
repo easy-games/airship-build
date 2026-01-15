@@ -3,6 +3,14 @@ import { Player } from "@Easy/Core/Shared/Player/Player";
 import { WorldProfile } from "Code/ProfileManager/WorldProfile";
 import WorldManager from "./WorldManager";
 
+export type LoadedWorldDto = [
+	worldNetId: number,
+	offset: Vector3,
+	worldId: string,
+	ownerUserId: string,
+	buildPermissionUids: string[],
+];
+
 export default class LoadedWorld extends AirshipBehaviour {
 	/** Only available on server. */
 	@NonSerialized() public worldProfile: WorldProfile | undefined;
@@ -16,15 +24,19 @@ export default class LoadedWorld extends AirshipBehaviour {
 	@NonSerialized() public worldId: string;
 	@NonSerialized() public offset: Vector3;
 
+	public MakeDto(): LoadedWorldDto {
+		return [this.networkIdentity.netId, this.offset, this.worldId, this.ownerUid, this.buildPermissionUids];
+	}
+
 	protected Awake(): void {
 		this.voxelWorld.voxelBlocks = WorldManager.Get().voxelBlocks;
 	}
 
-	public InitClient(worldId: string, offset: Vector3, ownerUserId: string, buildPermissionUids: string[]): void {
-		this.worldId = worldId;
-		this.offset = offset;
-		this.ownerUid = ownerUserId;
-		this.buildPermissionUids = buildPermissionUids;
+	public InitClient(dto: LoadedWorldDto): void {
+		this.offset = dto[1];
+		this.worldId = dto[2];
+		this.ownerUid = dto[3];
+		this.buildPermissionUids = dto[4];
 	}
 
 	public InitServer(worldProfile: WorldProfile, offset: Vector3): void {
