@@ -29,6 +29,10 @@ const DISABLED_BLOCKS = [
 	"Wood - Post - Vertical - Cherry",
 	"Wood - Post - Dark",
 	"Wood - Post - Horizontal - Cherry",
+	"Wood - Post - Vertical - Cherry",
+	"Test Block 1",
+	"Test Block 2",
+	"Test Block 3",
 ];
 
 // ********************************* //
