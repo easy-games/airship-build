@@ -2944,7 +2944,11 @@ MonoBehaviour:
   metadata:
     name: AirshipScreenSafeArea
     singleton: 0
-    decorators: []
+    decorators:
+    - name: RequireComponent
+      parameters:
+      - type: object
+        serializedValue: '"RectTransform"'
     properties:
     - name: safeArea
       type: object
@@ -5440,7 +5444,11 @@ MonoBehaviour:
   metadata:
     name: AirshipScreenSafeArea
     singleton: 0
-    decorators: []
+    decorators:
+    - name: RequireComponent
+      parameters:
+      - type: object
+        serializedValue: '"RectTransform"'
     properties:
     - name: safeArea
       type: object

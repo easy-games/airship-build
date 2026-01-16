@@ -28,6 +28,7 @@ export default class PermissionsPage extends AirshipBehaviour {
 				this.permissionPlayerPrefab,
 				this.content,
 			).GetAirshipComponent<PermissionPlayer>()!;
+			this.uidToPermissionPlayer.set(uid, permissionPlayer);
 			permissionPlayer.InitOfflinePlayer(uid);
 			permissionPlayer.SetHasBuildPermission(true);
 		}

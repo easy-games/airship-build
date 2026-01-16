@@ -86,6 +86,11 @@ export default class WorldManager extends AirshipSingleton {
 				}
 			}
 		});
+
+		this.getLoadedWorldsNetFunc.server.SetCallback((player) => {
+			const dtos = this.loadedWorlds.map((l) => l.MakeDto());
+			return dtos;
+		});
 	}
 
 	@Client()

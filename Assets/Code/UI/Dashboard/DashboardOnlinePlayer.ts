@@ -1,4 +1,5 @@
 import { Airship } from "@Easy/Core/Shared/Airship";
+import { Game } from "@Easy/Core/Shared/Game";
 import { Player } from "@Easy/Core/Shared/Player/Player";
 import { Bin } from "@Easy/Core/Shared/Util/Bin";
 import { CanvasAPI, HoverState } from "@Easy/Core/Shared/Util/CanvasAPI";
@@ -32,6 +33,7 @@ export default class DashboardOnlinePlayer extends AirshipBehaviour {
 	}
 
 	override Start(): void {
+		if (!Game.IsClient()) return;
 		this.bin.Add(
 			this.button.onClick.Connect(() => {
 				if (this.player.IsLocalPlayer()) return;

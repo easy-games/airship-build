@@ -14,7 +14,7 @@ export default class WorldsCommand extends ChatCommand {
 		for (const world of WorldManager.Get().loadedWorlds) {
 			player.SendMessage(
 				`  ${i}. ${world.GetOwnerPlayer()?.username ?? "Unknown"} ${world.worldId}. Perms: ${
-					world.HasBuildPermission(player) || world.IsOwner(player) ? ChatColor.Yellow("Yes") : "No"
+					world.HasBuildPermission(player) || world.IsOwner(player) ? ChatColor.Green("Yes") : "No"
 				}`,
 			);
 			i++;
