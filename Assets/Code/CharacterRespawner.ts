@@ -14,7 +14,7 @@ export default class CharacterRespawner extends AirshipSingleton {
 				character?.Despawn();
 
 				if (character?.player) {
-					const world = WorldManager.Get().GetLoadedWorldFromPlayer(character.player);
+					const world = WorldManager.Get().GetCurrentLoadedWorldFromPlayer(character.player);
 					if (world) {
 						WorldManager.Get().MovePlayerToLoadedWorld(character.player, world);
 					}
@@ -29,7 +29,7 @@ export default class CharacterRespawner extends AirshipSingleton {
 		for (const character of Airship.Characters.GetCharacters()) {
 			if (character.transform.position.y <= this.voidYHeight) {
 				if (character.player) {
-					const world = WorldManager.Get().GetLoadedWorldFromPlayer(character.player);
+					const world = WorldManager.Get().GetCurrentLoadedWorldFromPlayer(character.player);
 					if (world) {
 						const loc = world.GetSpawnLocation();
 						character.Teleport(loc.position, loc.forward);

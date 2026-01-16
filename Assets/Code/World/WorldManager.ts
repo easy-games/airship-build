@@ -141,7 +141,7 @@ export default class WorldManager extends AirshipSingleton {
 	 * @param player
 	 * @returns
 	 */
-	public GetLoadedWorldFromPlayer(player: Player): LoadedWorld | undefined {
+	public GetCurrentLoadedWorldFromPlayer(player: Player): LoadedWorld | undefined {
 		if (this.uidToCurrentLoadedWorldMap.has(player.userId)) {
 			return this.uidToCurrentLoadedWorldMap.get(player.userId);
 		}
@@ -181,6 +181,15 @@ export default class WorldManager extends AirshipSingleton {
 		loadedWorld.InitServer(worldProfile, offset);
 		go.transform.position = offset;
 		NetworkServer.Spawn(go);
+
+		// Test code to give real player permission in bot worlds
+		if (ownerPlayer?.IsBot()) {
+			for (const player of Airship.Players.GetPlayers()) {
+				if (player === ownerPlayer) continue;
+				print("giving build perm to " + player.userId);
+				loadedWorld.SetBuildPermission(player.userId, true);
+			}
+		}
 
 		if (Game.IsEditor()) {
 			worldProfile.saveFileData =
@@ -272,7 +281,7 @@ export default class WorldManager extends AirshipSingleton {
 		}
 
 		// leave existing world
-		const existingWorld = this.GetLoadedWorldFromPlayer(player);
+		const existingWorld = this.GetCurrentLoadedWorldFromPlayer(player);
 		if (existingWorld) {
 			existingWorld.ExitWorld(player);
 			this.exitWorldNetSig.server.FireAllClients(player.userId, existingWorld.networkIdentity.netId);

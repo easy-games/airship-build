@@ -76,7 +76,7 @@ export default class BlockHitManager extends AirshipSingleton {
 		this.hitBlockNetSig.server.OnClientEvent((player, voxelWorldPos, hitPoint, normal) => {
 			if (!player.character) return;
 
-			const world = WorldManager.Get().GetLoadedWorldFromPlayer(player);
+			const world = WorldManager.Get().GetCurrentLoadedWorldFromPlayer(player);
 			if (!world) return;
 
 			if (!world.HasBuildPermission(player)) return;

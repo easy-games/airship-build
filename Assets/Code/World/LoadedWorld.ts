@@ -1,4 +1,5 @@
 import { Airship, Platform } from "@Easy/Core/Shared/Airship";
+import { Game } from "@Easy/Core/Shared/Game";
 import { Player } from "@Easy/Core/Shared/Player/Player";
 import { WorldProfile } from "Code/ProfileManager/WorldProfile";
 import WorldManager from "./WorldManager";
@@ -66,6 +67,7 @@ export default class LoadedWorld extends AirshipBehaviour {
 	public EnterWorld(player: Player): void {
 		this.playersInWorld.push(player);
 		if (player.IsLocalPlayer()) {
+			print(`You entered world: ${this.worldId}. Build perms: ${this.HasBuildPermission(Game.localPlayer)}`);
 			WorldManager.Get().currentWorld = this.voxelWorld;
 			WorldManager.Get().currentLoadedWorld = this;
 		}

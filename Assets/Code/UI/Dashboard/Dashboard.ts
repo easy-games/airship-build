@@ -54,7 +54,7 @@ export default class Dashboard extends AirshipSingleton {
 				return;
 			}
 
-			const targetWorld = WorldManager.Get().GetLoadedWorldFromPlayer(targetPlayer);
+			const targetWorld = WorldManager.Get().GetCurrentLoadedWorldFromPlayer(targetPlayer);
 			if (!targetWorld) {
 				player.SendMessage(ChatColor.Red(targetPlayer.username + " is not in a world."));
 				return;
