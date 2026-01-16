@@ -1,6 +1,7 @@
 import { Airship, Platform } from "@Easy/Core/Shared/Airship";
 import { Game } from "@Easy/Core/Shared/Game";
 import { AppManager } from "@Easy/Core/Shared/Util/AppManager";
+import inspect from "@Easy/Core/Shared/Util/Inspect";
 import SoundUtil from "Code/Misc/SoundUtil";
 import WorldManager from "Code/World/WorldManager";
 import PermissionPlayer from "./PermissionPlayer";
@@ -36,6 +37,7 @@ export default class PermissionsPage extends AirshipBehaviour {
 		// Fetch usernames for all the offline players in build list
 		task.spawn(async () => {
 			const data = await Platform.Client.User.GetUsersById(world.buildPermissionUids, false);
+			print("users: " + inspect(data.array));
 			for (const user of data.array) {
 				const permissionPlayer = this.GetPermissionPlayer(user.uid);
 				permissionPlayer?.SetUsername(user.username);
