@@ -64,7 +64,7 @@ export default class BlockItemHandler extends ItemHandler {
 			// this.bin.Add(HudManager.Get().crosshairDisablers.Add(1));
 			this.bin.Add(
 				OnLateUpdate.ConnectWithPriority(SignalPriority.MONITOR, (dt) => {
-					this.UpdatePlacementPositionAndRefreshInidcators(dt);
+					this.UpdatePlacementPositionAndRefreshIndicators(dt);
 				}),
 			);
 			this.bin.Add(
@@ -236,7 +236,7 @@ export default class BlockItemHandler extends ItemHandler {
 		this.ignoreTouchSet.clear();
 	}
 
-	protected UpdatePlacementPositionAndRefreshInidcators(dt: number): void {
+	protected UpdatePlacementPositionAndRefreshIndicators(dt: number): void {
 		if (this.isLocal) {
 			this.CalculatePlacementPosition();
 			// this.RefreshIndicator();

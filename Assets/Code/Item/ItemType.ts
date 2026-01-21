@@ -44,4 +44,5 @@ export enum ItemType {
 	Thatch = "Thatch",
 
 	EmeraldPickaxe = "EmeraldPickaxe",
+	SelectionTool = "SelectionTool",
 }

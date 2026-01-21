@@ -8,6 +8,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -1624083086148811293, guid: 4bfcf38072e582e42b941b472d5f3dcb, type: 3}
+      propertyPath: script
+      value: 
+      objectReference: {fileID: -8502596097384394428, guid: 231b41c7c69568446b98353c21d6785d, type: 3}
+    - target: {fileID: 606316830658707215, guid: 4bfcf38072e582e42b941b472d5f3dcb, type: 3}
+      propertyPath: script
+      value: 
+      objectReference: {fileID: 3379845904423814631, guid: b265ca149231a634a8b651b688c7a486, type: 3}
     - target: {fileID: 7088081142443290682, guid: 4bfcf38072e582e42b941b472d5f3dcb, type: 3}
       propertyPath: script
       value: 

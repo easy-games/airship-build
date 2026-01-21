@@ -7,6 +7,7 @@ import { BlockBreakerItemHandler } from "Code/Block/BlockBreakerItemHandler";
 import BlockItemHandler from "Code/Block/BlockItemHandler";
 import { BlockUtil } from "Code/Block/BlockUtil";
 import GameCharacter from "Code/Character/GameCharacter";
+import { SelectionToolItemHandler } from "Code/Edit/Tool/SelectionToolItemHandler";
 import ItemHandler from "Code/ItemHandler/ItemHandler";
 import WorldManager from "Code/World/WorldManager";
 import { BlockMaterialType } from "./BlockMaterialType";
@@ -30,15 +31,19 @@ const DISABLED_BLOCKS = [
 	"Wood - Post - Dark",
 	"Wood - Post - Horizontal - Cherry",
 	"Wood - Post - Vertical - Cherry",
-	"Test Block 1",
-	"Test Block 2",
-	"Test Block 3",
+	// "Test Block 1",
+	// "Test Block 2",
+	// "Test Block 3",
 ];
 
 // ********************************* //
 // **** PUT ITEM HANDLERS HERE ***** //
 // ********************************* //
-const itemHandlerConstructors: ItemHandlerConstructor[] = [BlockItemHandler, BlockBreakerItemHandler];
+const itemHandlerConstructors: ItemHandlerConstructor[] = [
+	BlockItemHandler,
+	BlockBreakerItemHandler,
+	SelectionToolItemHandler,
+];
 
 export default class ItemManager extends AirshipSingleton {
 	@NonSerialized() public itemTypeToItemHandlerConstructor = new Map<ItemType, ItemHandlerConstructor>();
@@ -196,6 +201,11 @@ export default class ItemManager extends AirshipSingleton {
 				blockBreaker: { damagePerHit: 7, secsPerHit: 0.25 },
 				description: "Fitted with a polished emerald head, designed to maximize break speed.",
 			},
+		});
+
+		Airship.Inventory.RegisterItem(ItemType.SelectionTool, {
+			displayName: "Selection Tool",
+			image: "Assets/Resources/ItemRenders/SelectionTool.png",
 		});
 	}
 

@@ -167,10 +167,10 @@ export class BlockBreakerItemHandler extends ItemHandler {
 		}
 	}
 
-	public static GetTargetVoxelPositionAndRaycastInfo():
-		| { voxelWorldPosition: Vector3; raycastResult: BlockRaycastResult }
-		| undefined {
-		const raycastResult = BlockUtil.RaycastForBlock();
+	public static GetTargetVoxelPositionAndRaycastInfo(
+		maxDistance?: number,
+	): { voxelWorldPosition: Vector3; raycastResult: BlockRaycastResult } | undefined {
+		const raycastResult = BlockUtil.RaycastForBlock(maxDistance);
 		const hitBlockPos = raycastResult?.point.sub(raycastResult.normal.mul(0.1));
 		if (!raycastResult || !hitBlockPos) {
 			return;

@@ -37,7 +37,7 @@ export class BlockUtil {
 		return this.maxBlockReach;
 	}
 
-	public static RaycastForBlock(): BlockRaycastResult | undefined {
+	public static RaycastForBlock(maxDistance?: number): BlockRaycastResult | undefined {
 		const localChar = Game.localPlayer.character;
 		if (!localChar) return;
 
@@ -53,7 +53,7 @@ export class BlockUtil {
 		}
 
 		// const cameraRay = CameraReferences.mainCamera!.ViewportPointToRay(new Vector3(0.5, 0.5, 0));
-		const dist = this.GetBlockReach();
+		const dist = maxDistance !== undefined ? maxDistance : this.GetBlockReach();
 		const layer = CacheManager.Get().voxelWorldLayerMask;
 		const [hit, point, normal, collider] = Physics.Raycast(originPos, direction, dist, layer);
 		if (hit) {
