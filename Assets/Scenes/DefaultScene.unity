@@ -4510,7 +4510,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -25407.992, y: -9833.546}
+  m_AnchoredPosition: {x: -66341.56, y: -25675.893}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1280867642
@@ -7138,7 +7138,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 465.86206, y: 40}
+  m_AnchoredPosition: {x: 1216.4363, y: 180}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1919611607
@@ -7987,7 +7987,6 @@ MonoBehaviour:
   atlasWidthTextures: 15
   pointFiltering: 0
   blockDefinitionLists:
-  - {fileID: 11400000, guid: 3b00e01234fed9d46856dd9cd2db5b3f, type: 2}
   - {fileID: 11400000, guid: d01adb5a4176c48b0972ae497cf95576, type: 2}
 --- !u!4 &2137796877
 Transform:

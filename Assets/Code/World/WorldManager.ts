@@ -6,6 +6,7 @@ import { NetworkSignal } from "@Easy/Core/Shared/Network/NetworkSignal";
 import { Player } from "@Easy/Core/Shared/Player/Player";
 import { NetworkUtil } from "@Easy/Core/Shared/Util/NetworkUtil";
 import { SetInterval } from "@Easy/Core/Shared/Util/Timer";
+import EditManager from "Code/Edit/EditManager";
 import { ItemType } from "Code/Item/ItemType";
 import { WorldProfile } from "Code/ProfileManager/WorldProfile";
 import LoadedWorld, { LoadedWorldDto } from "./LoadedWorld";
@@ -168,6 +169,12 @@ export default class WorldManager extends AirshipSingleton {
 		return loadedWorld;
 	}
 
+	public GetLoadedWorldFromNetId(netId: number): LoadedWorld | undefined {
+		const id = NetworkUtil.GetNetworkIdentity(netId);
+		const loadedWorld = id?.gameObject.GetAirshipComponent<LoadedWorld>();
+		return loadedWorld;
+	}
+
 	@Server()
 	public LoadWorldFromProfile(worldProfile: WorldProfile, ownerPlayer?: Player): LoadedWorld | undefined {
 		if (this.availableOffsets.size() === 0) {
@@ -280,7 +287,10 @@ export default class WorldManager extends AirshipSingleton {
 			});
 			const inv = character.inventory;
 			inv.AddItem(new ItemStack(ItemType.EmeraldPickaxe));
-			inv.AddItem(new ItemStack(ItemType.SelectionTool));
+			if (Game.IsEditor()) {
+				inv.AddItem(new ItemStack(ItemType.SelectionTool));
+			}
+
 			inv.AddItem(new ItemStack(ItemType.Grass));
 			inv.AddItem(new ItemStack(ItemType.Slate));
 			inv.AddItem(new ItemStack(ItemType.Obsidian));
@@ -291,6 +301,10 @@ export default class WorldManager extends AirshipSingleton {
 		if (existingWorld) {
 			existingWorld.ExitWorld(player);
 			this.exitWorldNetSig.server.FireAllClients(player.userId, existingWorld.networkIdentity.netId);
+		}
+
+		if (existingWorld !== loadedWorld) {
+			EditManager.Get().ClearSelection(player);
 		}
 
 		this.uidToCurrentLoadedWorldMap.set(player.userId, loadedWorld);

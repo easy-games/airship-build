@@ -1,4 +1,5 @@
 import { Airship } from "@Easy/Core/Shared/Airship";
+import { AudioManager } from "@Easy/Core/Shared/Audio/AudioManager";
 import { Game } from "@Easy/Core/Shared/Game";
 import { InputActionEvent } from "@Easy/Core/Shared/Input/InputActionEvent";
 import { ItemDef } from "@Easy/Core/Shared/Item/ItemDefinitionTypes";
@@ -48,11 +49,19 @@ export class SelectionToolItemHandler extends ItemHandler {
 			if (pos === "pos1") {
 				pos1 = info.voxelWorldPosition;
 				pos2 = edit.localEditSelection?.pos2 ?? pos1;
-				Game.localPlayer.SendMessage("Selection pos1 set to " + pos1);
+				Game.localPlayer.SendMessage("Set pos1.");
+				AudioManager.PlayGlobal("Assets/AirshipPackages/@Easy/Core/Sound/UI_Switch.wav", {
+					pitch: 1,
+					volumeScale: 0.7,
+				});
 			} else {
 				pos2 = info.voxelWorldPosition;
 				pos1 = edit.localEditSelection?.pos1 ?? pos2;
-				Game.localPlayer.SendMessage("Selection pos2 set to " + pos2);
+				Game.localPlayer.SendMessage("Set pos2.");
+				AudioManager.PlayGlobal("Assets/AirshipPackages/@Easy/Core/Sound/UI_Switch.wav", {
+					pitch: 1.2,
+					volumeScale: 0.7,
+				});
 			}
 			edit.SetLocalEditSelection(pos1, pos2);
 		}
