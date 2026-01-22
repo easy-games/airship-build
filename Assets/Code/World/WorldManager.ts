@@ -287,9 +287,7 @@ export default class WorldManager extends AirshipSingleton {
 			});
 			const inv = character.inventory;
 			inv.AddItem(new ItemStack(ItemType.EmeraldPickaxe));
-			if (Game.IsEditor()) {
-				inv.AddItem(new ItemStack(ItemType.SelectionTool));
-			}
+			inv.SetItem(8, new ItemStack(ItemType.SelectionTool));
 
 			inv.AddItem(new ItemStack(ItemType.Grass));
 			inv.AddItem(new ItemStack(ItemType.Slate));
