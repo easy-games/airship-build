@@ -3,6 +3,7 @@ import { AudioManager } from "@Easy/Core/Shared/Audio/AudioManager";
 import { Game } from "@Easy/Core/Shared/Game";
 import { InputActionEvent } from "@Easy/Core/Shared/Input/InputActionEvent";
 import { ItemDef } from "@Easy/Core/Shared/Item/ItemDefinitionTypes";
+import { ChatColor } from "@Easy/Core/Shared/Util/ChatColor";
 import { OnLateUpdate } from "@Easy/Core/Shared/Util/Timer";
 import { BlockBreakerItemHandler } from "Code/Block/BlockBreakerItemHandler";
 import { ActionId } from "Code/Input/ActionId";
@@ -10,6 +11,8 @@ import { ItemType } from "Code/Item/ItemType";
 import ItemHandler from "Code/ItemHandler/ItemHandler";
 import EditManager from "../EditManager";
 import SelectionToolRefs from "./SelectionToolRefs";
+
+let hasSentHelpMessage = false;
 
 export class SelectionToolItemHandler extends ItemHandler {
 	private refs = SelectionToolRefs.Get();
@@ -34,6 +37,21 @@ export class SelectionToolItemHandler extends ItemHandler {
 			this.bin.Add(Airship.Input.OnDown(ActionId.SelectionPos2)).Connect((e) => {
 				this.HandleSelectionPos("pos2", e);
 			});
+
+			if (!hasSentHelpMessage) {
+				hasSentHelpMessage = true;
+				Game.localPlayer.SendMessage(
+					ChatColor.Yellow(
+						"This is the selection tool. Use Left/Right click to make a selection. Then use " +
+							ChatColor.Aqua("/set <block>") +
+							" to fill. You can also use " +
+							ChatColor.Aqua("/undo") +
+							" and " +
+							ChatColor.Aqua("/redo") +
+							".",
+					),
+				);
+			}
 		}
 	}
 	private HandleSelectionPos(pos: "pos1" | "pos2", e: InputActionEvent) {
