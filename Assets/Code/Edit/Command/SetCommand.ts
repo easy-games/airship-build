@@ -46,6 +46,11 @@ export class SetCommand extends EditBaseCommand {
 			return blockId;
 		});
 
+		if (positions.size() > 5_000) {
+			player.SendMessage(ChatColor.Red("Too many blocks in selection."));
+			return;
+		}
+
 		EditManager.Get().AddEditHistory(player, new EditAction().WithGroupEdit(world, positions, oldData, newData));
 		EditManager.Get().SetOnExpensiveCooldown(player);
 
